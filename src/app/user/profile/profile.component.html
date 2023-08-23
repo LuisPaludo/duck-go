@@ -1,0 +1,41 @@
+<div class="container p-4">
+  <div class="row d-flex justify-content-center">
+    <div class="col-6 col-md-2">
+      <div class="">
+        <img src="{{user?.profile_photo}}" class="img-thumbnail rounded float-start" />
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="col col-md-5">
+      <p class="text-center fw-bold fs-5">{{user?.username | titlecase}}</p>
+      <p class="text-center fw-bold fs-5">Pontuação Atual: {{total_points}} Pontos</p>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+      <hr class="border border-primary border-2" />
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col">
+          <a routerLink="dados" class="btn btn-primary w-100">Dados</a>
+        </div>
+        <div class="col">
+          <a routerLink="historico" class="btn btn-success w-100">Histórico</a>
+        </div>
+        <div class="col">
+          <a routerLink="meus-cupons" class="btn btn-danger w-100">Meus Cupons</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-6">
+      <hr class="border border-primary border-2" />
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+</div>

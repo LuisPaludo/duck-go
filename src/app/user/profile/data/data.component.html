@@ -1,0 +1,206 @@
+<div class="row d-flex justify-content-center">
+  <form action="" [formGroup]="profile">
+    <div class="row d-flex justify-content-center pt-1 pb-3">
+      <div class="col-md-6">
+        <label for="rua" class="form-label">Foto de Perfil</label>
+        <div class="row">
+          <input type="file" class="form-control" formControlName="foto" (change)="onFileChange($event)"/>
+        </div>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6 fs-2 fw-bold py-2">Dados do Usuário:</div>
+    </div>
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="nome" class="form-label">Nome</label>
+        <input
+          id="nome"
+          name="nome"
+          type="text"
+          class="form-control"
+          formControlName="nome"
+          [ngClass]="{
+            'is-invalid':
+              this.profile.get('nome')?.invalid &&
+              (this.profile.get('nome')?.touched ||
+                this.profile.get('nome')?.dirty)
+          }"
+        />
+        <div
+          *ngIf="
+            this.profile.get('nome')?.invalid &&
+            (this.profile.get('nome')?.touched || this.profile.get('nome')?.dirty)
+          "
+          class="invalid-feedback"
+        >
+          O campo não pode estar vazio.
+        </div>
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="sobrenome" class="form-label">Sobrenome</label>
+        <input
+          id="sobrenome"
+          name="sobrenome"
+          type="text"
+          class="form-control"
+          formControlName="sobrenome"
+          [ngClass]="{
+            'is-invalid':
+              this.profile.get('sobrenome')?.invalid &&
+              (this.profile.get('sobrenome')?.touched ||
+                this.profile.get('sobrenome')?.dirty)
+          }"
+        />
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="email" class="form-label">E-mail</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          class="form-control"
+          formControlName="email"
+          [ngClass]="{
+            'is-invalid':
+              this.profile.get('email')?.invalid &&
+              (this.profile.get('email')?.touched ||
+                this.profile.get('email')?.dirty)
+          }"
+        />
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="cpf" class="form-label">CPF</label>
+        <input
+          id="cpf"
+          name="cpf"
+          type="cpf"
+          class="form-control"
+          formControlName="cpf"
+          [ngClass]="{
+            'is-invalid':
+              this.profile.get('cpf')?.invalid &&
+              (this.profile.get('cpf')?.touched ||
+                this.profile.get('cpf')?.dirty)
+          }"
+        />
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="cep" class="form-label">CEP</label>
+        <input
+          type="text"
+          name="cep"
+          id="cep"
+          class="form-control"
+          formControlName="cep"
+          [ngClass]="{
+            'is-invalid':
+              this.profile.get('cep')?.invalid &&
+              (this.profile.get('cep')?.touched ||
+                this.profile.get('cep')?.dirty)
+          }"
+        />
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="cidade" class="form-label">Cidade</label>
+        <input
+          type="text"
+          name="cidade"
+          id="cidade"
+          class="form-control"
+          formControlName="cidade"
+          [ngClass]="{
+            'is-invalid':
+              this.profile.get('cidade')?.invalid &&
+              (this.profile.get('cidade')?.touched ||
+                this.profile.get('cidade')?.dirty)
+          }"
+        />
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="uf" class="form-label">Estado</label>
+        <input
+          type="text"
+          name="uf"
+          id="uf"
+          class="form-control"
+          formControlName="uf"
+          [ngClass]="{
+            'is-invalid':
+              this.profile.get('uf')?.invalid &&
+              (this.profile.get('uf')?.touched ||
+                this.profile.get('uf')?.dirty)
+          }"
+        />
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="rua" class="form-label">Rua</label>
+        <input
+          type="text"
+          name="rua"
+          id="rua"
+          class="form-control"
+          formControlName="rua"
+          [ngClass]="{
+            'is-invalid':
+              this.profile.get('rua')?.invalid &&
+              (this.profile.get('rua')?.touched ||
+                this.profile.get('rua')?.dirty)
+          }"
+        />
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center mt-2">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-6 d-flex justify-content-center">
+            <button *ngIf="!userEditing" class="btn btn-info" (click)="edit()">
+              Editar
+            </button>
+            <button
+              *ngIf="userEditing"
+              class="btn btn-primary"
+              (click)="save()"
+            >
+              Salvar
+            </button>
+          </div>
+          <div class="col-6 d-flex justify-content-center">
+            <button *ngIf="!userEditing" class="btn btn-primary">
+              Trocar Senha
+            </button>
+            <button
+              *ngIf="userEditing"
+              class="btn btn-danger"
+              (click)="cancel()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,562 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="check-circle-fill" viewBox="0 0 16 16">
+    <path
+      d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+    />
+  </symbol>
+</svg>
+
+<form
+  *ngIf="!showTerms"
+  [formGroup]="form"
+  (ngSubmit)="onSubmit()"
+  action=""
+  class="container mt-1 px-5 px-5 py-3"
+>
+  <div class="row">
+    <div class="col h2 text-center pb-5">Cadastro de Usuário</div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <label for="username" class="form-label">Nome de Usuário</label>
+      <input
+        id="username"
+        name="username"
+        type="text"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('username')?.invalid &&
+            (this.form.get('username')?.touched ||
+              this.form.get('username')?.dirty),
+          'is-valid':
+            this.form.get('username')?.valid &&
+            (this.form.get('username')?.touched ||
+              this.form.get('username')?.dirty)
+        }"
+        formControlName="username"
+      />
+      <div
+        *ngIf="
+          this.form.get('username')?.invalid &&
+          (this.form.get('username')?.touched ||
+            this.form.get('username')?.dirty)
+        "
+        class="invalid-feedback"
+      >
+        O nome de usuário deve conter apenas letras e números.
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="nome" class="form-label">Nome</label>
+      <input
+        id="nome"
+        name="nome"
+        type="text"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('nome')?.invalid &&
+            (this.form.get('nome')?.touched || this.form.get('nome')?.dirty),
+          'is-valid':
+            this.form.get('nome')?.valid &&
+            (this.form.get('nome')?.touched || this.form.get('nome')?.dirty)
+        }"
+        formControlName="nome"
+      />
+      <div
+        *ngIf="
+          this.form.get('nome')?.invalid &&
+          (this.form.get('nome')?.touched || this.form.get('nome')?.dirty)
+        "
+        class="invalid-feedback"
+      >
+        O campo de nome não pode estar vazio.
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="sobrenome" class="form-label">Sobrenome</label>
+      <input
+        id="sobrenome"
+        name="sobrenome"
+        type="text"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('sobrenome')?.invalid &&
+            (this.form.get('sobrenome')?.touched ||
+              this.form.get('sobrenome')?.dirty),
+          'is-valid':
+            this.form.get('sobrenome')?.valid &&
+            (this.form.get('sobrenome')?.touched ||
+              this.form.get('sobrenome')?.dirty)
+        }"
+        formControlName="sobrenome"
+      />
+      <div
+        *ngIf="
+          this.form.get('sobrenome')?.invalid &&
+          (this.form.get('sobrenome')?.touched ||
+            this.form.get('sobrenome')?.dirty)
+        "
+        class="invalid-feedback"
+      >
+        O campo de sobrenome não pode estar vazio.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+      <label for="senha" class="form-label">Senha</label>
+      <input
+        id="senha"
+        type="password"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('senha')?.invalid &&
+            (this.form.get('senha')?.touched || this.form.get('senha')?.dirty),
+          'is-valid':
+            this.form.get('senha')?.valid &&
+            (this.form.get('senha')?.touched || this.form.get('senha')?.dirty)
+        }"
+        formControlName="senha"
+      />
+      <div
+        *ngIf="
+          this.form.get('senha')?.invalid &&
+          !this.form.get('senha')?.errors?.maxlength &&
+          !this.form.get('senha')?.errors?.minlength
+        "
+        class="invalid-feedback"
+      >
+        A senha deve conter:
+        <ul>
+          <li>A senha deve conter letras e números</li>
+          <li>Pelo menos um Caractere Especial (@,!. etc)</li>
+          <li>No mínimo 8 dígitos</li>
+          <li>No máximo 20 dígitos</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <label for="confSenha" class="form-label">Confirmação de Senha</label>
+      <input
+        id="confSenha"
+        type="password"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('confSenha')?.invalid &&
+            (this.form.get('confSenha')?.touched ||
+              this.form.get('confSenha')?.dirty),
+          'is-valid':
+            this.form.get('confSenha')?.valid &&
+            (this.form.get('confSenha')?.touched ||
+              this.form.get('confSenha')?.dirty)
+        }"
+        formControlName="confSenha"
+      />
+      <div
+        *ngIf="
+          this.form.get('confSenha')?.invalid &&
+          !this.form.get('confSenha')?.errors?.maxlength &&
+          !this.form.get('confSenha')?.errors?.minlength
+        "
+        class="invalid-feedback"
+      >
+        As senhas digitadas não coincidem.
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <label for="email" class="form-label">E-mail</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('email')?.invalid &&
+            (this.form.get('email')?.touched || this.form.get('email')?.dirty),
+          'is-valid':
+            this.form.get('email')?.valid &&
+            (this.form.get('email')?.touched || this.form.get('email')?.dirty)
+        }"
+        formControlName="email"
+      />
+      <div
+        *ngIf="
+          this.form.get('email')?.invalid &&
+          (this.form.get('email')?.touched || this.form.get('email')?.dirty)
+        "
+        class="invalid-feedback"
+      >
+        Por favor, digite um e-mail válido.
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <label for="cpf" class="form-label">CPF</label>
+      <input
+        id="cpf"
+        name="cpf"
+        type="cpf"
+        class="form-control"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('cpf')?.invalid &&
+            (this.form.get('cpf')?.touched || this.form.get('cpf')?.dirty),
+          'is-valid':
+            this.form.get('cpf')?.valid &&
+            (this.form.get('cpf')?.touched || this.form.get('cpf')?.dirty)
+        }"
+        formControlName="cpf"
+      />
+      <div
+        *ngIf="
+          this.form.get('cpf')?.invalid &&
+          (this.form.get('cpf')?.touched || this.form.get('cpf')?.dirty)
+        "
+        class="invalid-feedback"
+      >
+        Por favor, digite um CPF válido.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2">
+      <label for="cep" class="form-label">CEP</label>
+      <input
+        type="text"
+        name="cep"
+        id="cep"
+        class="form-control"
+        formControlName="cep"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('cep')?.invalid &&
+            (this.form.get('cep')?.touched || this.form.get('cep')?.dirty),
+          'is-valid':
+            this.form.get('cep')?.valid &&
+            (this.form.get('cep')?.touched || this.form.get('cep')?.dirty)
+        }"
+      />
+      <div
+        *ngIf="
+          this.form.get('cep')?.invalid &&
+          (this.form.get('cep')?.touched || this.form.get('cep')?.dirty)
+        "
+        class="invalid-feedback"
+      >
+        Digite um CEP válido.
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <label for="data_nascimento" class="form-label"
+        >Data de Nascimento:</label
+      >
+      <input
+        type="date"
+        name="data_nascimento"
+        id="data_nascimento"
+        class="form-control"
+        formControlName="data_nascimento"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('data_nascimento')?.invalid &&
+            (this.form.get('data_nascimento')?.touched ||
+              this.form.get('data_nascimento')?.dirty),
+          'is-valid':
+            this.form.get('data_nascimento')?.valid &&
+            (this.form.get('data_nascimento')?.touched ||
+              this.form.get('data_nascimento')?.dirty)
+        }"
+      />
+      <div
+        *ngIf="
+          this.form.get('data_nascimento')?.invalid &&
+          (this.form.get('data_nascimento')?.touched ||
+            this.form.get('data_nascimento')?.dirty)
+        "
+        class="invalid-feedback"
+      >
+        Selecione sua data de Nascimento.
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <label for="cidade" class="form-label">Cidade</label>
+      <input
+        type="text"
+        name="cidade"
+        id="cidade"
+        class="form-control"
+        formControlName="cidade"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('cidade')?.invalid &&
+            (this.form.get('cidade')?.touched ||
+              this.form.get('cidade')?.dirty),
+          'is-valid':
+            this.form.get('cidade')?.valid &&
+            (this.form.get('cidade')?.touched || this.form.get('cidade')?.dirty)
+        }"
+      />
+      <div
+        *ngIf="
+          this.form.get('cidade')?.invalid &&
+          (this.form.get('cidade')?.touched || this.form.get('cidade')?.dirty)
+        "
+        class="invalid-feedback"
+      >
+        Digite uma Cidade.
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <label for="rua" class="form-label">Rua</label>
+      <input
+        type="text"
+        name="rua"
+        id="rua"
+        class="form-control"
+        formControlName="rua"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('rua')?.invalid &&
+            (this.form.get('rua')?.touched || this.form.get('rua')?.dirty),
+          'is-valid':
+            this.form.get('rua')?.valid &&
+            (this.form.get('rua')?.touched || this.form.get('rua')?.dirty)
+        }"
+      />
+      <div
+        *ngIf="
+          this.form.get('rua')?.invalid &&
+          (this.form.get('rua')?.touched || this.form.get('rua')?.dirty)
+        "
+        class="invalid-feedback"
+      >
+        Digite um Logradouro.
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <label for="uf" class="form-label">UF</label>
+      <select
+        title="UF"
+        name="uf"
+        id="uf"
+        class="form-select"
+        formControlName="uf"
+        [ngClass]="{
+          'is-invalid':
+            this.form.get('uf')?.invalid &&
+            (this.form.get('uf')?.touched || this.form.get('uf')?.dirty),
+          'is-valid':
+            this.form.get('uf')?.valid &&
+            (this.form.get('uf')?.touched || this.form.get('uf')?.dirty)
+        }"
+      >
+        <option value="{{ i }}" *ngFor="let UF of estados; let i = index">
+          {{ UF.sigla }}
+        </option>
+      </select>
+      <div
+        *ngIf="
+          this.form.get('uf')?.invalid &&
+          (this.form.get('uf')?.touched || this.form.get('uf')?.dirty)
+        "
+        class="invalid-feedback"
+      >
+        Selecione um estado.
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          value=""
+          id="flexCheckDefault"
+          formControlName="termos"
+          [ngClass]="{
+            'is-invalid':
+              this.form.get('termos')?.invalid &&
+              (this.form.get('termos')?.touched ||
+                this.form.get('termos')?.dirty),
+            'is-valid':
+              this.form.get('termos')?.valid &&
+              (this.form.get('termos')?.touched ||
+                this.form.get('termos')?.dirty)
+          }"
+        />
+        <label class="form-check-label" for="flexCheckDefault">
+          Concordo com os
+          <a
+            id="terms-link"
+            class="link-underline-primary"
+            (click)="termsandconditions()"
+            >Termos e Condições</a
+          >.
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row my-3">
+    <div class="col-md d-flex justify-content-center flex-column">
+      <div
+        *ngIf="verifyEmailSent"
+        class="alert alert-success h-25 d-flex align-items-center"
+        role="alert"
+      >
+        Um e-mail de verificação foi enviado! Verifique sua caixa de entrada.
+      </div>
+      <div
+        *ngIf="emailAlreadyRegistered"
+        class="alert alert-danger h-25 d-flex align-items-center"
+        role="alert"
+      >
+        O e-mail fornecido já foi registrado! Verifique sua caixa de entrada.
+      </div>
+      <div
+        *ngIf="usernameAlreadyRegistered"
+        class="alert alert-danger h-25 d-flex align-items-center"
+        role="alert"
+      >
+        O nome de usuário já está cadastrado, por favor, escolha outro nome.
+      </div>
+      <button
+        type="submit"
+        [disabled]="buttonDisable"
+        class="btn btn-success w-md-50 w-100 h-md-50 mt-2 mt-md-0"
+        (click)="salvar()"
+      >
+        Cadastrar
+      </button>
+    </div>
+  </div>
+</form>
+
+<div *ngIf="showTerms" class="container mt-5">
+  <h1 class="mb-4">Termos e Condições do Jogo Duck GO!</h1>
+
+  <p>
+    Ao se cadastrar no Duck GO! e utilizar nossos serviços, você concorda com os
+    seguintes termos e condições:
+  </p>
+
+  <h2 class="mt-4">Cadastro</h2>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      O usuário deve fornecer informações verdadeiras e atualizadas ao se
+      registrar.
+    </li>
+    <li class="list-group-item">
+      É proibida a criação de contas com informações falsas ou de terceiros.
+    </li>
+    <li class="list-group-item">
+      A senha criada no cadastro é de responsabilidade exclusiva do usuário. O
+      Duck GO! não se responsabiliza por acessos indevidos resultantes de
+      compartilhamento, perda ou roubo de senhas.
+    </li>
+    <li class="list-group-item">
+      O endereço de e-mail fornecido será usado para comunicações oficiais do
+      Duck GO!
+    </li>
+  </ul>
+
+  <h2 class="mt-4">Exploração dos Locais de Caça</h2>
+  <p>
+    Os pontos turísticos listados são apenas sugestões de locais para a caça de
+    QR Codes. O Duck GO! não se responsabiliza por qualquer incidente ou
+    problema que possa ocorrer nesses locais.
+  </p>
+
+  <h2 class="mt-4">Caça aos QR Codes e Pontuações</h2>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      O usuário deve estar ciente de seu ambiente ao procurar e escanear os QR
+      Codes para garantir sua segurança e a dos demais.
+    </li>
+    <li class="list-group-item">
+      QR Codes danificados, alterados ou reproduzidos de fontes não oficiais do
+      jogo não serão válidos.
+    </li>
+    <li class="list-group-item">
+      A pontuação será atribuída apenas quando o usuário estiver conectado à sua
+      conta.
+    </li>
+  </ul>
+
+  <h2 class="mt-4">Resgate de Pontos</h2>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Os pontos são pessoais e intransferíveis.</li>
+    <li class="list-group-item">
+      Os pontos acumulados têm validade de 1 ano a partir da data em que foram
+      adquiridos.
+    </li>
+    <li class="list-group-item">
+      O Duck GO! reserva-se o direito de alterar ou encerrar programas de
+      recompensa a qualquer momento, com aviso prévio de 30 dias.
+    </li>
+  </ul>
+
+  <h2 class="mt-4">Restrições e Limitações</h2>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      Os usuários só podem escanear um novo QR Code a cada 5 minutos.
+    </li>
+    <li class="list-group-item">
+      Existe um limite máximo de 30 pontos que podem ser ganhos por semana.
+    </li>
+    <li class="list-group-item">
+      O Duck GO! pode implementar medidas de prevenção contra atividades
+      fraudulentas e pode suspender ou banir usuários que violem essas regras.
+    </li>
+  </ul>
+
+  <h2 class="mt-4">Responsabilidades e Indenizações</h2>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      O Duck GO! não se responsabiliza por qualquer dano, lesão ou prejuízo que
+      os usuários possam sofrer ao jogar.
+    </li>
+    <li class="list-group-item">
+      Os usuários concordam em indenizar e isentar o Duck GO! de quaisquer
+      reivindicações ou demandas resultantes de negligência, atos ou omissões do
+      usuário, ou violações destes termos.
+    </li>
+  </ul>
+
+  <h2 class="mt-4">Mudanças nos Termos e Condições</h2>
+  <p>
+    O Duck GO! reserva-se o direito de alterar estes termos e condições a
+    qualquer momento, com aviso prévio de 30 dias.
+  </p>
+
+  <div class="alert alert-info mt-4" role="alert">
+    Ao clicar em "Cadastrar", você confirma que leu, entendeu e aceita os termos
+    e condições acima.
+  </div>
+
+  <div class="row">
+    <div class="col d-flex justify-content-center">
+      <a class="btn btn-success" (click)="accept()">Aceitar</a>
+    </div>
+    <div class="col d-flex justify-content-center">
+      <a class="btn btn-danger" (click)="recuse()">Recusar</a>
+    </div>
+  </div>
+</div>

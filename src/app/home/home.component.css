@@ -1,0 +1,10 @@
+#bStart
+{
+  width: 250px;
+  height: 250px;
+  border-radius: 50% !important;
+}
+
+.accessButton{
+  font-size: 15px;
+}

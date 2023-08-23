@@ -1,0 +1,34 @@
+<div *ngIf="isLoading" class="d-flex justify-content-center">
+  <div class="spinner-border text-primary" role="status">
+    <span class="sr-only"></span>
+  </div>
+</div>
+
+<div *ngIf="!isLoading" class="container d-flex justify-content-center">
+  <div *ngIf="!hasError" class="card text-center border-success mb-3" style="max-width: 20rem">
+    <div class="card-header bg-success text-white">Verificação de E-mail</div>
+    <div class="card-body">
+      <h4 class="card-title">Sucesso!</h4>
+      <p class="card-text">
+        Seu e-mail foi verificado com sucesso. Obrigado por confirmar!
+      </p>
+    </div>
+    <div class="card-footer">
+      <a routerLink="/login" class="btn btn-success">Continuar para o Login</a>
+    </div>
+  </div>
+
+  <div *ngIf="hasError" class="card text-center border-danger mb-3" style="max-width: 20rem">
+    <div class="card-header bg-danger text-white">Verificação de E-mail</div>
+    <div class="card-body">
+      <h4 class="card-title">Erro</h4>
+      <p class="card-text">
+        Ocorreu um erro ao verificar seu e-mail. Por favor, tente novamente ou
+        entre em contato com o suporte.
+      </p>
+    </div>
+    <div class="card-footer">
+      <a routerLink="" class="btn btn-danger">Página Inicial</a>
+    </div>
+  </div>
+</div>

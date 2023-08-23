@@ -1,0 +1,81 @@
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6 fs-2 fw-bold py-2">Meus Cupons:</div>
+</div>
+
+<div class="row d-flex justify-content-center">
+  <div class="col-md-6">
+    <div
+      *ngFor="let prize of redeemedPrizes"
+      style="height: 8rem"
+      class="row border border-2 rounded p-2 mb-3"
+    >
+      <div class="col-3 d-flex justify-content-center align-items-center">
+        <img
+          src="http://127.0.0.1:8000/{{ prize.prize.logo }}"
+          alt=""
+          srcset=""
+          class="img-thumbnail"
+        />
+      </div>
+      <div class="col-5">
+        <div class="fw-bold fs-5">
+          {{ prize.prize.name }}
+        </div>
+        <div class="overflow-auto" style="overflow-wrap: break-word;">
+          {{ prize.prize.description }}
+        </div>
+      </div>
+      <div class="col-4 d-flex justify-content-center align-items-center">
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-bs-toggle="modal"
+          data-bs-target="#confirmationModal"
+          (click)="getQrCode(prize.prize.id)"
+        >
+          Gerar Qr Code
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="confirmationModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">QRCode</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="modal-body d-flex justify-content-center">
+        <img src="{{ qrCode }}" alt="" srcset="" />
+        <div class="d-flex justify-content-center">
+          <div *ngIf="loader" class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="cleanData()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

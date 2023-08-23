@@ -1,0 +1,100 @@
+<button *ngIf="!showAll" class="btn btn-primary mt-3 mx-3" (click)="goBack()">
+  Voltar
+</button>
+
+<div *ngIf="showAll" class="px-3">
+  <div
+    *ngFor="let location of locations"
+    class="container border border-3 border-primary rounded my-5"
+  >
+    <div class="row p-3" (click)="redirect(location.id)">
+      <div
+        class="col-5 col-md-2 border border-2 border-warning rounded object-fit-contain p-0 overflow-hidden"
+      >
+        <img
+          src="{{ location.locations_photo }}"
+          alt=""
+          class="overflow-hidden position-relative top-50 start-50 translate-middle"
+          width="500px" height="250px"
+        />
+      </div>
+      <div class="col-7 col-md-10">
+        <a
+          class="text-decoration-none d-flex justify-content-center pb-2 text-primary"
+          >{{ location.name }}</a
+        >
+        <p>{{ location.resume }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div
+    *ngIf="!showAll"
+    class="p-3 container border border-3 border-primary rounded my-5"
+  >
+
+    <div class="container fw-bold fs-5 text-center pb-5">
+      {{ location.name }}
+    </div>
+    <div class="container lh-lg">{{ location.description }}</div>
+    <div class="container py-3">
+      <a
+        class="icon-link icon-link-hover"
+        style="--bs-link-hover-color-rgb: 25, 135, 84"
+        href="{{location.map_link}}"
+      >
+        Leve-me até lá
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-geo-alt-fill"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"
+          />
+        </svg>
+      </a>
+    </div>
+    <div class="container pb-5">
+      <a
+        target="_blank"
+        class="icon-link icon-link-hover"
+        style="--bs-link-hover-color-rgb: 25, 135, 84"
+        href="{{ location.location_link }}"
+      >
+        Mais informações do local com o TripAdvisor
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-info-circle"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+          />
+          <path
+            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"
+          />
+        </svg>
+      </a>
+    </div>
+    <div class="container d-flex flex-column">
+
+          <img src="{{location.photo_1}}" alt="" class="h-25 img-fluid border rounded py-3">
+
+          <img src="{{location.photo_2}}" alt="" class="h-25 img-fluid border rounded pb-3">
+
+          <img src="{{location.photo_3}}" alt="" class="h-25 img-fluid border rounded">
+
+    </div>
+
+  </div>
+
+</div>

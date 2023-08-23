@@ -1,0 +1,172 @@
+<div *ngIf="!sendEmail" class="container p-4">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 col">
+      <div class="card">
+        <h5 class="card-header">Login</h5>
+        <div class="card-body">
+          <form
+            action=""
+            [formGroup]="login"
+            (ngSubmit)="onSubmit()"
+            action=""
+            class=""
+          >
+            <label for="email" class="form-label">E-mail</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  this.login.get('email')?.invalid &&
+                  (this.login.get('email')?.touched ||
+                    this.login.get('email')?.dirty)
+              }"
+              formControlName="email"
+            />
+            <div
+              *ngIf="
+                this.login.get('email')?.invalid &&
+                (this.login.get('email')?.touched ||
+                  this.login.get('email')?.dirty)
+              "
+              class="invalid-feedback"
+            >
+              E-mail não cadastrado.
+            </div>
+
+            <label for="senha" class="form-label">Senha</label>
+            <input
+              id="senha"
+              type="password"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid':
+                  this.login.get('senha')?.invalid &&
+                  (this.login.get('senha')?.touched ||
+                    this.login.get('senha')?.dirty)
+              }"
+              formControlName="senha"
+            />
+            <div
+              *ngIf="this.login.get('senha')?.invalid"
+              class="invalid-feedback"
+            >
+              Senha inválida.
+            </div>
+            <div
+              *ngIf="verifyEmail"
+              class="alert alert-danger d-flex align-items-center mt-3"
+              role="alert"
+            >
+              <span
+                >E-mail não verificado.
+                <a
+                  (click) = "redirect()"
+                  class="text-danger-emphasis"
+                  >Gostaria de reenviar o e-mail de verificão?</a
+                ></span
+              >
+            </div>
+            <div
+              *ngIf="incorrect"
+              class="alert alert-danger d-flex align-items-center mt-3"
+              role="alert"
+            >
+              Usuário ou senha incorretos
+            </div>
+            <div
+              *ngIf="success"
+              class="alert alert-success mt-3 d-flex align-items-center"
+              role="alert"
+            >
+              Login feito com sucesso!
+            </div>
+            <button
+              type="submit"
+              [disabled]="buttonDisable"
+              class="btn btn-primary mt-2"
+            >
+              Entrar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="sendEmail" class="container p-4">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 col">
+      <div class="card">
+        <h5 class="card-header">Reenviar E-mail de Verificação:</h5>
+        <div class="card-body">
+          <form
+            [formGroup]="resend"
+            class=""
+          >
+            <label for="email" class="form-label"
+              >Digite o e-mail cadastrado:</label
+            >
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="form-control my-2"
+              [ngClass]="{
+                'is-invalid':
+                  this.resend.get('email')?.invalid &&
+                  (this.resend.get('email')?.touched ||
+                    this.resend.get('email')?.dirty)
+              }"
+              formControlName="email"
+            />
+            <div
+              *ngIf="
+                this.resend.get('email')?.invalid &&
+                (this.resend.get('email')?.touched ||
+                  this.resend.get('email')?.dirty)
+              "
+              class="invalid-feedback"
+            >
+              Insira seu e-mail.
+            </div>
+            <div
+              *ngIf="resendSuccess"
+              class="alert alert-success mt-3 d-flex align-items-center"
+              role="alert"
+            >
+              Se o e-mail constar em nosso banco de dados, você recebera em
+              breve o novo e-mail de confirmação.
+            </div>
+            <div class="row">
+              <div class="col">
+                <button
+                  type="submit"
+                  [disabled]="buttonSend"
+                  (click)="send()"
+                  class="btn btn-success mt-2"
+                >
+                  Enviar
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  type="submit"
+                  [disabled]="buttonBack"
+                  (click)="redirect()"
+                  class="btn btn-primary mt-2"
+                >
+                  Voltar
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
