@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, ReplaySubject, catchError, map, of, switchMap, tap, throwError } from 'rxjs';
+import { Urls } from '../utils/urls';
 
 @Injectable({
   providedIn: 'root',
@@ -21,9 +22,7 @@ export class AuthenticationService {
 
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  private verifyUrl: string = 'http://127.0.0.1:8000/accounts/token/verify/';
-  private refreshUrl: string = 'http://127.0.0.1:8000/accounts/token/refresh/';
-  private logoutUrl: string = 'http://127.0.0.1:8000/accounts/logout/';
+  private urls: Urls = new Urls;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -33,7 +32,7 @@ export class AuthenticationService {
       token: accessToken,
     };
 
-    return this.http.post(this.verifyUrl, postData, {
+    return this.http.post(this.urls.verifyUrl, postData, {
       headers: this.httpHeaders,
     });
   }
@@ -48,7 +47,7 @@ export class AuthenticationService {
       };
       console.log('Tentou dar refresh')
       return this.http
-        .post(this.refreshUrl, postData, {
+        .post(this.urls.refreshUrl, postData, {
           headers: this.httpHeaders,
         })
         .pipe(
@@ -94,7 +93,7 @@ export class AuthenticationService {
     this.logoutInProgress = true;
 
     this.http
-      .post(this.logoutUrl, '', {
+      .post(this.urls.logoutUrl, '', {
         headers: this.httpHeaders,
       })
       .subscribe({

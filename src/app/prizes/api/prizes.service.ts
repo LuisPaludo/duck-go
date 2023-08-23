@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ApiPointsService } from 'src/app/home/api/api-points.service';
 import { Prizes } from '../models/prizes';
+import { Urls } from 'src/app/utils/urls';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PrizesService {
-  private prizeUrl: string = 'http://127.0.0.1:8000/premios/';
-  private redeemUrl: string = 'http://127.0.0.1:8000/resgatar/';
+
+  private urls:Urls = new Urls();
 
   isGetting: boolean = false;
   isPosting: boolean = false;
@@ -25,7 +26,7 @@ export class PrizesService {
 
     const httpHeaders = this.apiPoints.generateHeaders();
 
-    return this.http.get<Prizes[]>(this.prizeUrl, {
+    return this.http.get<Prizes[]>(this.urls.prizeUrl, {
       headers: httpHeaders,
     });
   }
@@ -43,7 +44,7 @@ export class PrizesService {
       prize: id,
     }
 
-    this.http.post(this.redeemUrl,postData,{
+    this.http.post(this.urls.redeemUrl,postData,{
       headers: httpHeaders,
     }).subscribe({
       next: (data) => {

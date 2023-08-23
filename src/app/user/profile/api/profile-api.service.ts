@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription, catchError, tap, throwError } from 'rxjs';
 import { ApiService } from 'src/app/api/api.service';
 import { User } from '../models/user';
+import { Urls } from 'src/app/utils/urls';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileApiService {
-  private userUrl: string = 'http://127.0.0.1:8000/accounts/user/';
-  private userInfoUrl: string = 'http://127.0.0.1:8000/user-info/';
-  private userHistoryUrl: string = 'http://127.0.0.1:8000/historico/';
+
+  private urls:Urls = new Urls();
 
   public userDataSubject = new BehaviorSubject<User>(null);
   public userData$ = this.userDataSubject.asObservable();
@@ -42,7 +42,7 @@ export class ProfileApiService {
     this.isLoadingSubject.next(true);
 
     return this.http
-      .get<User>(this.userUrl, { headers: verifiedHttpHeaders })
+      .get<User>(this.urls.userUrl, { headers: verifiedHttpHeaders })
       .pipe(
         tap((user) => {
           this.userDataSubject.next(user);

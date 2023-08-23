@@ -5,12 +5,14 @@ import { ApiService } from 'src/app/api/api.service';
 import { ProfileApiService } from '../../api/profile-api.service';
 import { userPatchModel } from '../../models/userPatchModel';
 import { User } from '../../models/user';
+import { Urls } from 'src/app/utils/urls';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserDataApiService {
-  private postUrl: string = 'http://127.0.0.1:8000/accounts/user/';
+
+  private urls:Urls = new Urls();
 
   verified: boolean = false;
   isLoading: boolean = false;
@@ -58,7 +60,7 @@ export class UserDataApiService {
     }
 
     this.http
-      .put(this.postUrl, formData, {
+      .put(this.urls.postUrl, formData, {
         headers: VerifiedHttpHeaders,
       })
       .subscribe({

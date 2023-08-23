@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Urls } from 'src/app/utils/urls';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RegisterApiService {
-  locationUrl: string = 'http://127.0.0.1:8000/accounts/registration/';
+
+  private urls: Urls = new Urls();
+
   httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   estados: { sigla: string; nome: string }[] = [
@@ -43,7 +46,6 @@ export class RegisterApiService {
   constructor(private http: HttpClient) {}
 
   registerNewUser(userData): Observable<any> {
-
     const postData = {
       username: userData.username,
       email: userData.email,
@@ -60,7 +62,7 @@ export class RegisterApiService {
       accepted_terms: userData.termos,
     };
 
-    return this.http.post(this.locationUrl, postData, {
+    return this.http.post(this.urls.registerUrl, postData, {
       headers: this.httpHeaders,
     });
   }

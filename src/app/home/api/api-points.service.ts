@@ -12,29 +12,30 @@ import { GeoPoint } from '../models/GeoPoint';
 import { PointData } from '../models/PointData';
 import { UserHistory } from '../models/history';
 import { HistoryPost } from '../models/historypost';
+import { Urls } from 'src/app/utils/urls';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiPointsService {
-  private searchUrl: string = 'http://127.0.0.1:8000/turistic-points/?search=';
-  private historyUrl: string = 'http://127.0.0.1:8000/history/';
+
+  private urls: Urls = new Urls();
 
   public userHistorySubject = new BehaviorSubject<UserHistory[]>(null);
   public userHistory$ = this.userHistorySubject.asObservable();
 
-  public getPointSuccess:boolean = false;
-  public manyGetPoints:boolean = false;
+  public getPointSuccess: boolean = false;
+  public manyGetPoints: boolean = false;
 
   postRequest: boolean = false;
   isLoading: boolean = false;
   isSaving: boolean = false;
   isGettingPoints: boolean = false;
 
-  public locationName:string;
-  public locationDescription:string;
-  public locationPhoto:string;
-  public locationPoints:number;
+  public locationName: string;
+  public locationDescription: string;
+  public locationPhoto: string;
+  public locationPoints: number;
 
   user: GeoPoint;
   center: GeoPoint;
@@ -51,7 +52,7 @@ export class ApiPointsService {
 
     const VerifiedHttpHeaders = this.generateHeaders();
 
-    let fullUrl = this.searchUrl + qrIdNumber;
+    let fullUrl = this.urls.searchUrl + qrIdNumber;
 
     this.http
       .get(fullUrl, {
@@ -82,16 +83,6 @@ export class ApiPointsService {
               // this.locationPoints = locationData[0].points;
 
               this.savePoints(points, 0, 'add', locationName);
-
-              // this.getUserHistory().subscribe({
-              //   next: (userData: UserHistory[]) => {
-              //     let total_points = 0;
-              //     if (userData.length !== 0) {
-              //       total_points = userData[userData.length - 1].total_points;
-              //     }
-
-              //   },
-              // });
             }
           } else {
             console.error('Código inválido');
@@ -172,18 +163,18 @@ export class ApiPointsService {
     postData.description = 'Ponto Turístico -> ' + name;
 
     this.http
-      .post(this.historyUrl, postData, {
+      .post(this.urls.historyUrl, postData, {
         headers: VerifiedHttpHeaders,
       })
       .subscribe({
-        next: (info:HistoryPost) => {
+        next: (info: HistoryPost) => {
           this.locationPoints = info.points;
           this.getPointSuccess = true;
           this.isSaving = false;
         },
         error: (e) => {
           this.isSaving = false;
-          if(e.status === 429) {
+          if (e.status === 429) {
             this.manyGetPoints = true;
           }
         },
@@ -193,7 +184,7 @@ export class ApiPointsService {
   getUserHistory(): Observable<any> {
     const VerifiedHttpHeaders = this.generateHeaders();
 
-    return this.http.get(this.historyUrl, {
+    return this.http.get(this.urls.historyUrl, {
       headers: VerifiedHttpHeaders,
     });
   }

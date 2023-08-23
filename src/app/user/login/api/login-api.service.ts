@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Urls } from 'src/app/utils/urls';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginApiService {
-  loginUrl: string = 'http://127.0.0.1:8000/accounts/login/';
-  resendUrl: string =
-    'http://127.0.0.1:8000/accounts/registration/resend-email/';
+
+  private urls: Urls = new Urls();
 
   httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -21,7 +21,7 @@ export class LoginApiService {
       password: userData.senha,
     };
 
-    return this.http.post(this.loginUrl, postData, {
+    return this.http.post(this.urls.loginUrl, postData, {
       headers: this.httpHeaders,
     });
   }
@@ -31,7 +31,7 @@ export class LoginApiService {
       email: userData.email,
     };
 
-    return this.http.post(this.resendUrl, postData, {
+    return this.http.post(this.urls.resendUrl, postData, {
       headers: this.httpHeaders,
     });
   }
