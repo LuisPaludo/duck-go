@@ -30,12 +30,14 @@ export class CupounsComponent implements OnInit {
     this.apiRedeemedPrizes.getQrCode(prize).subscribe({
       next: (data) => {
         this.qrCode = data[0].qr_code;
-        this.loader = false;
       },
       error: (e) => {
         console.log(e);
-        this.loader = false;
+
       },
+      complete: () => {
+        this.loader = false;
+      }
     });
   }
 

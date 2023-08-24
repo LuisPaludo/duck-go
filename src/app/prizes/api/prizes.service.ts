@@ -31,7 +31,7 @@ export class PrizesService {
     });
   }
 
-  redeemPrize(id:number): void {
+  redeemPrize(id:number): Observable<any> {
     if (this.isPosting) {
       return
     }
@@ -44,21 +44,8 @@ export class PrizesService {
       prize: id,
     }
 
-    this.http.post(this.urls.redeemUrl,postData,{
+    return this.http.post(this.urls.redeemUrl,postData,{
       headers: httpHeaders,
-    }).subscribe({
-      next: (data) => {
-        this.isPosting = false;
-      },
-      error: (e) => {
-        this.isPosting = false;
-        if(e instanceof HttpErrorResponse && e.status === 400) {
-          console.log('Cupom já cadastrado')
-        }
-        if( e instanceof HttpErrorResponse && e.status === 402) {
-          console.log('Usuário não possui pontos suficientes')
-        }
-      }
     })
 
   }

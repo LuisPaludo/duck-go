@@ -82,7 +82,14 @@ export class AuthenticationService {
         }
         return of(false);
       }),
-      catchError(() => of(false))
+      catchError((e) => {
+        if(e.status === 401) {
+          return of(false)
+        } else {
+          return of(true)
+        }
+        }
+        )
     );
   }
 

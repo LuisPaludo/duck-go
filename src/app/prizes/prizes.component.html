@@ -1,38 +1,114 @@
-<div class="row d-flex justify-content-center">
-  <div class="col-md-6 row">
+<div class="row d-flex justify-content-center py-5 w-100 m-0">
+  <div class="col-md-6">
     <div
       *ngFor="let prize of prizes"
-      class="card col-md-4"
-      style="width: 13rem"
+      class="container border border-2 rounded mb-3 shadow-sm bg-white"
     >
-      <img
-        style="height: 6rem"
-        src="{{ prize.logo }}"
-        class="card-img-top"
-        alt="..."
-      />
-      <div class="card-body">
-        <h5 class="card-title">{{ prize.name }}</h5>
-        <p class="card-text">
-          {{ prize.description }}
-        </p>
+      <div class="row p-4">
+        <div class="col-3 d-flex justify-content-center align-items-center p-0">
+          <img
+            src="{{ prize.logo }}"
+            alt="Logo"
+            class="img-fluid rounded-circle"
+            style="object-fit: contain; max-height: 10rem"
+          />
+        </div>
+        <div class="col-9 d-flex flex-column justify-content-between">
+          <div class="fw-bold fs-5 mb-2">
+            {{ prize.name }}
+          </div>
+          <div
+            class="mb-2 text-wrap"
+            style="max-height: 6rem; overflow: auto; overflow-wrap: break-word"
+          >
+            <!-- Ajustei o max-height aqui -->
+            {{ prize.description }}
+          </div>
+          <div class="text-wrap">
+            <span class="fw-bold">Cupom gerado por: </span>
+            {{ prize.generated_by }}
+          </div>
+        </div>
       </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          Desconto de: {{ prize.discount_value }}%
-        </li>
-        <li class="list-group-item">
-          Cupom gerado por: {{ prize.generated_by }}
-        </li>
-        <li class="list-group-item">Categoria: {{ prize.category }}</li>
-        <li class="list-group-item fw-bold">
-          Custo: {{ prize.cost_in_points }} pontos
-        </li>
-      </ul>
-      <div class="card-body d-flex justify-content-center">
-        <a class="btn btn-success card-link" (click)="redeem(prize.id)"
-          >Resgatar</a
+      <!-- Se você tiver informações adicionais para colocar, pode usar a div abaixo -->
+      <div class="row border bg-info-subtle">
+        <div
+          class="col-5 d-flex justify-content-center align-items-center fw-semibold"
         >
+          Valor do Cupom:
+        </div>
+        <div
+          class="col-4 d-flex justify-content-center align-items-center fw-bolder text-danger"
+        >
+          {{ prize.cost_in_points }} Pontos
+        </div>
+        <div class="col-3 d-flex justify-content-center align-items-center">
+          <button
+            class="btn btn-success"
+            (click)="confirmation(prize.name, prize.cost_in_points, prize.id)"
+            data-bs-toggle="modal"
+            data-bs-target="#confirmationModal"
+          >
+            Resgatar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="confirmationModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  (hidden.bs.modal)="clearData()"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning-subtle">
+        <h1 class="modal-title fs-5 fw-bolder" id="exampleModalLabel">
+          Confirmação de Resgate no Duck GO!
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="modal-body d-flex justify-content-center">
+        <div *ngIf="!loader&&!success&&!e400&&!e402" style="overflow-wrap: break-word">
+          <span class="fw-bolder">Ei, aventureiro!</span> Lembre-se de que, uma vez que você troque seus pontos preciosos, não poderá voltar atrás. Está certo de que deseja resgatar o item
+          <span class="fw-bolder text-primary">{{ prizeName }}</span> por
+          <span class="fw-bolder text-danger">{{ prizeCost }} Pontos</span> no mundo de Duck GO!?
+        </div>
+        <div *ngIf="!loader&&success" style="overflow-wrap: break-word">
+          <span class="fw-bolder text-success">Eba! Você resgatou o cupom com sucesso no Duck GO!</span>
+        </div>
+        <div *ngIf="!loader&&e400" style="overflow-wrap: break-word">
+          <span class="fw-bolder text-danger">Ops! Parece que você já resgatou este cupom. No Duck GO!, cada aventureiro só pode ter um cupom de cada tipo!</span>
+        </div>
+        <div *ngIf="!loader&&e402" style="overflow-wrap: break-word">
+          <span class="fw-bolder text-warning">Ah, não! Você precisa de mais pontos para pegar este item no Duck GO! Continue jogando e acumule mais pontos!</span>
+        </div>
+        <div *ngIf="loader" class="d-flex justify-content-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button *ngIf="end" type="button" class="btn btn-secondary" [disabled]="loader" data-bs-dismiss="modal" (click)="clearData()">
+          Retornar ao Jogo
+        </button>
+        <button *ngIf="!end" type="button" class="btn btn-secondary" [disabled]="loader" data-bs-dismiss="modal" (click)="clearData()">
+          Talvez Mais Tarde
+        </button>
+        <button *ngIf="!end" type="button" class="btn btn-success" [disabled]="loader" (click)="redeem(prizeId)">
+          Tenho Certeza!
+        </button>
       </div>
     </div>
   </div>
