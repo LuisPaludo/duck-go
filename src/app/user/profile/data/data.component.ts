@@ -6,9 +6,10 @@ import { CepValidator } from 'src/app/utils/cep_validator';
 import { ProfileApiService } from '../api/profile-api.service';
 import { User } from '../models/user';
 import { Subscription, filter, switchMap } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserDataApiService } from './api/user-data-api.service';
 import { CepModel } from '../models/cep';
+import { PhonePipe } from 'src/app/utils/pipe/phone/phone.pipe';
 
 @Component({
   selector: 'app-data',
@@ -19,8 +20,11 @@ export class DataComponent implements OnInit {
   profile!: FormGroup;
   userGet: boolean = false;
   userEditing: boolean = false;
+  isPartner: boolean = false;
 
-  private userSubscription: Subscription;
+  emailInvalid: boolean = false;
+  numberInvalid:boolean = false;
+
   private cepSubscription: Subscription;
   selectedFile: File = null;
 
@@ -59,31 +63,36 @@ export class DataComponent implements OnInit {
     private formBuilder: FormBuilder,
     private profileApi: ProfileApiService,
     private http: HttpClient,
-    private apiPatchUser: UserDataApiService
+    public apiPatchUser: UserDataApiService,
+    private phone: PhonePipe
   ) {
     this.profile = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       nome: ['', [Validators.required]],
+      empresa: [''],
       sobrenome: ['', [Validators.required]],
       cpf: ['', [Validators.required, CpfValidator.cpf]],
+      cnpj: [''],
       cep: ['', [Validators.required, CepValidator.cep]],
       rua: ['', Validators.required],
       cidade: ['', Validators.required],
       uf: ['', Validators.required],
       foto: [''],
+      contato_email: ['', Validators.email],
+      contato_numero: [''],
     });
     this.profile.disable();
   }
 
   ngOnInit(): void {
-
     this.profileApi.userData$.subscribe({
       next: (data) => {
-        if(data){
+        if (data) {
+          this.isPartner = data.is_partner;
           this.patchForm(data);
         }
-      }
-    })
+      },
+    });
   }
 
   subscribeForms(): void {
@@ -95,7 +104,7 @@ export class DataComponent implements OnInit {
           this.http.get<any>(`https://viacep.com.br/ws/${valor}/json/`)
         )
       )
-      .subscribe((data:CepModel) => {
+      .subscribe((data: CepModel) => {
         if (data.erro) {
           this.handleCepError();
           return;
@@ -145,9 +154,13 @@ export class DataComponent implements OnInit {
       sobrenome: data.last_name,
       cpf: data.cpf,
       cep: data.cep,
+      cnpj: data.cnpj,
       cidade: data.address_cidade,
       uf: data.address_UF,
       rua: data.addres_rua,
+      empresa: data.company_name,
+      contato_numero: this.phone.transform(data.number_contact),
+      contato_email: data.email_contact,
     });
   }
 
@@ -161,26 +174,51 @@ export class DataComponent implements OnInit {
     this.userEditing = true;
     this.profile.enable();
     this.profile.get(['email']).disable();
+    if (this.isPartner) {
+      this.profile.disable();
+      this.profile.get(['nome']).enable();
+      this.profile.get(['contato_email']).enable();
+      this.profile.get(['contato_numero']).enable();
+      this.profile.get(['foto']).enable();
+    }
     this.subscribeForms();
   }
 
   save() {
     if (this.profile.valid) {
-      this.apiPatchUser.updateUserData(this.profile.getRawValue(),this.selectedFile);
-      this.userEditing = false;
-      this.profile.disable();
-      if (this.cepSubscription) {
-        this.cepSubscription.unsubscribe();
-      }
+      this.apiPatchUser
+        .updateUserData(this.profile.getRawValue(), this.selectedFile, this.isPartner)
+        .subscribe({
+          next: (data: User) => {
+            this.apiPatchUser.postRequest = false;
+            this.apiPatchUser.isLoading = false;
+            this.emailInvalid = false;
+            this.numberInvalid = false;
+            this.profileApi.userDataSubject.next(data);
+            this.userEditing = false;
+            this.profile.disable();
+          },
+          error: (e: HttpErrorResponse) => {
+            this.apiPatchUser.isLoading = false;
+            if (e.status === 400) {
+              if (e.error.email_contact) {
+                this.emailInvalid = true;
+              }
+              if (e.error.number_contact) {
+                this.numberInvalid = true;
+              }
+            }
+            if (e.status === 401) {
+              console.error('Token inválido e Refresh Token inválidos');
+            }
+          },
+          complete: () => {},
+        });
     }
   }
 
   cancel() {
     this.userEditing = false;
-    // this.patchForm(this.profileApi.api.user);
-    if (this.cepSubscription) {
-      this.cepSubscription.unsubscribe();
-    }
     this.profile.disable();
   }
 }

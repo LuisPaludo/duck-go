@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import { ApiService } from 'src/app/api/api.service';
 import { ProfileApiService } from '../../api/profile-api.service';
 import { userPatchModel } from '../../models/userPatchModel';
@@ -24,14 +24,13 @@ export class UserDataApiService {
 
   constructor(
     private http: HttpClient,
-    private api: ApiService,
     private profileApi: ProfileApiService
   ) {}
 
-  updateUserData(data:userPatchModel, selectedFile:File):void {
+  updateUserData(data:userPatchModel, selectedFile:File, isPartner:boolean):Observable<any> {
 
     if (this.isLoading) {
-      return;
+      return of(false);
     }
 
     this.postRequest = true;
@@ -55,34 +54,20 @@ export class UserDataApiService {
     formData.append('address_cidade', data.cidade);
     formData.append('data_nascimento', this.profileApi.user.data_nascimento);
 
+    if(isPartner) {
+      formData.append('company_name', data.empresa);
+      formData.append('email_contact', data.contato_email);
+      formData.append('number_contact', data.contato_numero);
+    }
+    
     if (data.foto) {
       formData.append('profile_photo', selectedFile, selectedFile.name);
     }
 
-    this.http
+    return this.http
       .put(this.urls.postUrl, formData, {
         headers: VerifiedHttpHeaders,
       })
-      .subscribe({
-        next: (data:User) => {
-          console.info("Dados do usuário atualizados, chamando função para pegar os dados do servidor")
-          this.postRequest = false;
-          this.isLoading = false;
-          this.profileApi.userDataSubject.next(data);
-        },
-        error: (e) => {
-          this.isLoading = false;
-          if (e.status === 400) {
-            console.error('Dados enviados incorretos ' )
-          }
-          if (e.status === 401) {
-          } else {
-            console.error('Token inválido e Refresh Token inválidos');
-          }
-        },
-        complete: () => {
 
-        }
-      });
   }
 }

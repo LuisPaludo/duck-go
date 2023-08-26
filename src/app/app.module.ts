@@ -18,6 +18,8 @@ import { TokenInterceptor } from './interceptor/token-interceptor.interceptor';
 import { VerifyEmailComponent } from './user/register/verify-email/verify-email.component';
 import { PrizesComponent } from './prizes/prizes.component';
 import { CupounsComponent } from './user/profile/cupouns/cupouns.component';
+import { PhonePipe } from './utils/pipe/phone/phone.pipe';
+import { PartnerGuideComponent } from './partner-guide/partner-guide.component';
 
 @NgModule({
   declarations: [
@@ -34,16 +36,23 @@ import { CupounsComponent } from './user/profile/cupouns/cupouns.component';
     VerifyEmailComponent,
     PrizesComponent,
     CupounsComponent,
+    PhonePipe,
+    PartnerGuideComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true
-  }],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
+    PhonePipe,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

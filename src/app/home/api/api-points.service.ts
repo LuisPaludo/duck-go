@@ -26,6 +26,7 @@ export class ApiPointsService {
 
   public getPointSuccess: boolean = false;
   public manyGetPoints: boolean = false;
+  public awayFromPoint:boolean = false;
 
   postRequest: boolean = false;
   isLoading: boolean = false;
@@ -74,15 +75,13 @@ export class ApiPointsService {
               longitude: coords.longitude,
             };
 
-            const result = this.isWithinRadius(this.user, this.center, 1000);
+            const result = this.isWithinRadius(this.user, this.center, 60);
 
             if (result) {
-              this.locationName = locationData[0].name;
-              this.locationDescription = locationData[0].description;
-              this.locationPhoto = locationData[0].photo;
-              // this.locationPoints = locationData[0].points;
-
-              this.savePoints(points, 0, 'add', locationName);
+              this.savePoints(points, locationName);
+            }
+            else {
+              this.awayFromPoint = true;
             }
           } else {
             console.error('Código inválido');
@@ -133,8 +132,6 @@ export class ApiPointsService {
 
   savePoints(
     points: number,
-    total_points: number,
-    action: string,
     name: string
   ): void {
     if (this.isSaving) {
@@ -144,18 +141,6 @@ export class ApiPointsService {
     this.isSaving = true;
 
     const VerifiedHttpHeaders = this.generateHeaders();
-
-    if (action === 'add') {
-      total_points = points + total_points;
-    } else if (action === 'reduce') {
-      if (total_points < points) {
-        this.isSaving = false;
-        throwError(() =>
-          console.error('Usuário não posui pontos suficientes para a operação.')
-        );
-      }
-      total_points = total_points - points;
-    }
 
     const postData: HistoryPost = new HistoryPost();
 

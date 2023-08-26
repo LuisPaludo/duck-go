@@ -18,6 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private verification: Subscription;
 
+  public isPartner:boolean = false;
+
   constructor(private api: AuthenticationService, private router: Router, private apiPoints: ApiPointsService) {}
 
   ngOnInit() {
@@ -33,6 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.subscription = this.router.events.subscribe((ev) => {
       if (ev instanceof NavigationEnd) {
+        this.isPartner = localStorage.getItem('isPartner') === 'true';
         this.apiPoints.manyGetPoints = false;
         this.apiPoints.getPointSuccess = false;
         this.verification = this.api.userAuthenticated.subscribe({

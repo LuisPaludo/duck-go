@@ -106,7 +106,16 @@
           <li class="nav-item">
             <a
               data-bs-dismiss="offcanvas"
-              *ngIf="userVerified"
+              *ngIf="userVerified&&isPartner"
+              class="nav-link active pe-md-5 text-secondary"
+              routerLink="/perfil"
+              >Perfil da Empresa</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              data-bs-dismiss="offcanvas"
+              *ngIf="userVerified&&!isPartner"
               class="nav-link active pe-md-5 text-secondary"
               routerLink="/perfil"
               >Perfil do Usuário</a
@@ -114,10 +123,20 @@
           </li>
           <li class="nav-item">
             <a
+            *ngIf="!isPartner"
               data-bs-dismiss="offcanvas"
               class="nav-link active pe-md-5 text-secondary"
               routerLink="/como-jogar"
               >Como Jogar</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              *ngIf="isPartner"
+              data-bs-dismiss="offcanvas"
+              class="nav-link active pe-md-5 text-secondary"
+              routerLink="/guia-parceiros"
+              >Guia Para Parceiros</a
             >
           </li>
           <li class="nav-item">

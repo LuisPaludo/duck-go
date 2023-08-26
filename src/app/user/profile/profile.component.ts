@@ -4,6 +4,7 @@ import { ProfileApiService } from './api/profile-api.service';
 import { User } from './models/user';
 import { ApiPointsService } from 'src/app/home/api/api-points.service';
 import { UserHistory } from 'src/app/home/models/history';
+import { AuthenticationService } from 'src/app/api/authentication-service.service';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     public profileApi: ProfileApiService,
-    private pointsApi: ApiPointsService
+    private pointsApi: ApiPointsService,
+    private api: AuthenticationService
   ) {}
 
   ngOnInit(): void {
@@ -30,6 +32,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
           next: (data) => {
             if (data) {
               this.user = data;
+              this.api.isPartner.next(data.is_partner);
+              if (data.is_partner) {
+                localStorage.setItem('isPartner', 'true');
+              }
             }
           },
         });

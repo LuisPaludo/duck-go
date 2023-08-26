@@ -14,6 +14,7 @@ import { NegateAuthGuard } from './guard/negate-auth.guard';
 import { VerifyEmailComponent } from './user/register/verify-email/verify-email.component';
 import { PrizesComponent } from './prizes/prizes.component';
 import { CupounsComponent } from './user/profile/cupouns/cupouns.component';
+import { PartnerGuideComponent } from './partner-guide/partner-guide.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
   {
     path: 'como-jogar',
     component: HowtoplayComponent,
+  },
+  {
+    path:'guia-parceiros',
+    component: PartnerGuideComponent,
   },
   {
     path: 'perfil',

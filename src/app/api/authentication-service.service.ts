@@ -14,20 +14,23 @@ export class AuthenticationService {
   public refreshFailed = false;
   private refreshTokenSubject: ReplaySubject<any> = new ReplaySubject(1);
 
-  public userAuthenticated: ReplaySubject<boolean> =
-    new ReplaySubject<boolean>(1);
+  public userAuthenticated: ReplaySubject<boolean> = new ReplaySubject<boolean>(
+    1
+  );
   public currentToken: BehaviorSubject<string | null> = new BehaviorSubject<
     string | null
   >(localStorage.getItem('token'));
 
+  public isPartner: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+  public isPartner$ = this.isPartner.asObservable();
+
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  private urls: Urls = new Urls;
+  private urls: Urls = new Urls();
 
   constructor(private http: HttpClient, private router: Router) {}
 
   verifyToken(accessToken: string): Observable<any> {
-
     const postData = {
       token: accessToken,
     };
@@ -45,7 +48,6 @@ export class AuthenticationService {
       const postData = {
         refresh: refreshToken,
       };
-      console.log('Tentou dar refresh')
       return this.http
         .post(this.urls.refreshUrl, postData, {
           headers: this.httpHeaders,
@@ -59,9 +61,8 @@ export class AuthenticationService {
           }),
           catchError((error) => {
             this.refreshTokenInProgress = false;
-            console.log('Caiu aqui')
             this.localLogout();
-            return throwError(() => error)
+            return throwError(() => error);
           })
         );
     } else {
@@ -83,13 +84,12 @@ export class AuthenticationService {
         return of(false);
       }),
       catchError((e) => {
-        if(e.status === 401) {
-          return of(false)
+        if (e.status === 401) {
+          return of(false);
         } else {
-          return of(true)
+          return of(true);
         }
-        }
-        )
+      })
     );
   }
 
@@ -109,19 +109,21 @@ export class AuthenticationService {
           this.currentToken.next(null);
           this.logoutInProgress = false;
           this.userAuthenticated.next(false);
+          this.isPartner.next(false);
           this.router.navigate(['']);
         },
         error: (e) => {
-          console.log('erro no logout')
+          console.log('erro no logout');
         },
       });
   }
 
-  localLogout():void {
+  localLogout(): void {
     localStorage.clear();
     this.currentToken.next(null);
     this.logoutInProgress = false;
     this.userAuthenticated.next(false);
+    this.isPartner.next(false);
     this.router.navigate(['']);
   }
 }

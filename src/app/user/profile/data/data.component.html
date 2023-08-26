@@ -4,16 +4,29 @@
       <div class="col-md-6">
         <label for="rua" class="form-label">Foto de Perfil</label>
         <div class="row">
-          <input type="file" class="form-control" formControlName="foto" (change)="onFileChange($event)"/>
+          <input
+            type="file"
+            class="form-control"
+            formControlName="foto"
+            (change)="onFileChange($event)"
+          />
         </div>
       </div>
     </div>
     <div class="row d-flex justify-content-center">
-      <div class="col-md-6 fs-2 fw-bold py-2">Dados do Usuário:</div>
+      <div *ngIf="!isPartner" class="col-md-6 fs-2 fw-bold py-2">
+        Dados do Usuário:
+      </div>
+      <div *ngIf="isPartner" class="col-md-6 fs-2 fw-bold py-2">
+        Dados da Empresa:
+      </div>
     </div>
     <div class="row d-flex justify-content-center">
       <div class="col-md-6">
-        <label for="nome" class="form-label">Nome</label>
+        <label *ngIf="!isPartner" for="nome" class="form-label">Nome</label>
+        <label *ngIf="isPartner" for="nome" class="form-label"
+          >Nome do Responsável</label
+        >
         <input
           id="nome"
           name="nome"
@@ -30,7 +43,8 @@
         <div
           *ngIf="
             this.profile.get('nome')?.invalid &&
-            (this.profile.get('nome')?.touched || this.profile.get('nome')?.dirty)
+            (this.profile.get('nome')?.touched ||
+              this.profile.get('nome')?.dirty)
           "
           class="invalid-feedback"
         >
@@ -40,7 +54,7 @@
     </div>
 
     <div class="row d-flex justify-content-center">
-      <div class="col-md-6">
+      <div *ngIf="!isPartner" class="col-md-6">
         <label for="sobrenome" class="form-label">Sobrenome</label>
         <input
           id="sobrenome"
@@ -53,6 +67,22 @@
               this.profile.get('sobrenome')?.invalid &&
               (this.profile.get('sobrenome')?.touched ||
                 this.profile.get('sobrenome')?.dirty)
+          }"
+        />
+      </div>
+      <div *ngIf="isPartner" class="col-md-6">
+        <label for="empresa" class="form-label">Nome da Empresa</label>
+        <input
+          id="empresa"
+          name="empresa"
+          type="text"
+          class="form-control"
+          formControlName="empresa"
+          [ngClass]="{
+            'is-invalid':
+              this.profile.get('empresa')?.invalid &&
+              (this.profile.get('empresa')?.touched ||
+                this.profile.get('empresa')?.dirty)
           }"
         />
       </div>
@@ -79,7 +109,10 @@
 
     <div class="row d-flex justify-content-center">
       <div class="col-md-6">
-        <label for="cpf" class="form-label">CPF</label>
+        <label *ngIf="!isPartner" for="cpf" class="form-label">CPF</label>
+        <label *ngIf="isPartner" for="cpf" class="form-label"
+          >CPF do Responsável</label
+        >
         <input
           id="cpf"
           name="cpf"
@@ -91,6 +124,25 @@
               this.profile.get('cpf')?.invalid &&
               (this.profile.get('cpf')?.touched ||
                 this.profile.get('cpf')?.dirty)
+          }"
+        />
+      </div>
+    </div>
+
+    <div *ngIf="isPartner" class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="cnpj" class="form-label">CNPJ</label>
+        <input
+          id="cnpj"
+          name="cnpj"
+          type="cnpj"
+          class="form-control"
+          formControlName="cnpj"
+          [ngClass]="{
+            'is-invalid':
+              this.profile.get('cnpj')?.invalid &&
+              (this.profile.get('cnpj')?.touched ||
+                this.profile.get('cnpj')?.dirty)
           }"
         />
       </div>
@@ -146,8 +198,7 @@
           [ngClass]="{
             'is-invalid':
               this.profile.get('uf')?.invalid &&
-              (this.profile.get('uf')?.touched ||
-                this.profile.get('uf')?.dirty)
+              (this.profile.get('uf')?.touched || this.profile.get('uf')?.dirty)
           }"
         />
       </div>
@@ -167,6 +218,42 @@
               this.profile.get('rua')?.invalid &&
               (this.profile.get('rua')?.touched ||
                 this.profile.get('rua')?.dirty)
+          }"
+        />
+      </div>
+    </div>
+
+    <div *ngIf="isPartner" class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="contato_numero" class="form-label"
+          >Número para Contato</label
+        >
+        <input
+          id="contato_numero"
+          name="contato_numero"
+          type="contato_numero"
+          class="form-control"
+          formControlName="contato_numero"
+          [ngClass]="{
+            'is-invalid': numberInvalid
+          }"
+        />
+      </div>
+    </div>
+
+    <div *ngIf="isPartner" class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="contato_email" class="form-label"
+          >E-mail para Contato</label
+        >
+        <input
+          id="contato_email"
+          name="contato_email"
+          type="contato_email"
+          class="form-control"
+          formControlName="contato_email"
+          [ngClass]="{
+            'is-invalid': this.emailInvalid
           }"
         />
       </div>

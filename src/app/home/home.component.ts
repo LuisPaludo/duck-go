@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   geoReady: boolean = false;
   buttonDisabler: boolean = false;
 
-  cameraButtonDisable:boolean = false;
+  cameraButtonDisable: boolean = false;
 
   cameraPermissionName = 'camera' as PermissionName;
   geolocationPermissionName = 'geolocation' as PermissionName;
@@ -113,14 +113,28 @@ export class HomeComponent implements OnInit {
     };
 
     const errorCallback = (error) => {
-      console.log(error);
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          console.log('O usuário não permitiu a geolocalização.');
+          break;
+        case error.POSITION_UNAVAILABLE:
+          console.log('Informação de localização não está disponível.');
+          break;
+        case error.TIMEOUT:
+          console.log(
+            'A solicitação para obter a localização do usuário expirou.'
+          );
+          break;
+        case error.UNKNOWN_ERROR:
+          console.log('Ocorreu um erro desconhecido.');
+          break;
+      }
       this.buttonDisabler = false;
       this.permissionDenied = true;
       this.geoReady = false;
     };
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
-      enableHighAccuracy: true,
-    });
+
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
   }
 
   getCamera() {
@@ -140,9 +154,6 @@ export class HomeComponent implements OnInit {
           }
           if (this.cameraPermission === 'denied') {
             this.permissionDenied = true;
-          } else {
-            console.error('O acesso a permissão da camera apresentou um erro');
-            this.buttonDisabler = false;
           }
         });
       })
@@ -205,6 +216,7 @@ export class HomeComponent implements OnInit {
         .then((ignore) => {
           this.cameraButtonDisable = false;
           if (this.cameraCodeRead) {
+            console.log(this.geolocationPermission);
             if (this.geolocationPermission === 'granted') {
               this.getGeolocationPermission();
             } else {
@@ -225,5 +237,6 @@ export class HomeComponent implements OnInit {
   goBack() {
     this.apiPoints.getPointSuccess = false;
     this.apiPoints.manyGetPoints = false;
+    this.apiPoints.awayFromPoint = false;
   }
 }

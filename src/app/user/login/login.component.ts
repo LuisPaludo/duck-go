@@ -82,6 +82,10 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('token', data.access );
     localStorage.setItem('refresh', data.refresh);
     localStorage.setItem('isVerified', 'true' );
+    this.api.isPartner.next(data.user.is_partner);
+    if(data.user.is_partner) {
+      localStorage.setItem('isPartner', 'true');
+    }
   }
 
   private handleLoginComplete() {
