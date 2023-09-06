@@ -1,0 +1,411 @@
+<div class="row d-flex justify-content-center pt-2 m-0">
+  <div class="col-md-6">
+    <div
+      class="display-6 text-center border border-2 rounded mb-2 bg-light shadow-sm"
+    >
+      Preview
+    </div>
+    <div class="container border border-2 rounded mb-3 shadow-sm bg-white">
+      <div class="row p-4">
+        <div class="col-3 d-flex justify-content-center align-items-center p-0">
+          <img
+            src="{{ user?.profile_photo }}"
+            alt="Logo"
+            class="img-fluid rounded-circle"
+            style="object-fit: contain; max-height: 10rem"
+          />
+        </div>
+        <div class="col-9 d-flex flex-column justify-content-between">
+          <div
+            class="fw-bold fs-5 mb-2 text-wrap"
+            style="max-height: 2rem; overflow: auto; overflow-wrap: break-word"
+          >
+            {{ this.prize.get("nome").value }}
+          </div>
+          <div
+            class="mb-2 text-wrap"
+            style="max-height: 6rem; overflow: auto; overflow-wrap: break-word"
+          >
+            {{ this.prize.get("descricao").value }}
+          </div>
+          <div class="text-wrap">
+            <span class="fw-bold">Cupom gerado por: </span>
+            {{ user?.company_name }}
+          </div>
+        </div>
+      </div>
+      <div class="row bg-info-subtle">
+        <div
+          class="col-5 d-flex justify-content-center align-items-center fw-semibold"
+        >
+          Unidades Restantes:
+        </div>
+        <div
+          class="col-7 d-flex justify-content-center align-items-center fw-bolder"
+        >
+          {{ this.prize.get("unidades").value }} Unidades
+        </div>
+      </div>
+      <div class="row bg-info-subtle">
+        <div
+          class="col-5 d-flex justify-content-center align-items-center fw-semibold"
+        >
+          Valor do Cupom:
+        </div>
+        <div
+          class="col-4 d-flex justify-content-center align-items-center fw-bolder text-danger"
+        >
+          {{ this.prize.get("pontos").value }} Pontos
+        </div>
+        <div class="col-3 d-flex justify-content-center align-items-center">
+          <button class="btn btn-success">Resgatar</button>
+        </div>
+      </div>
+      <div class="row bg-info-subtle">
+        <div
+          class="col-5 d-flex justify-content-center align-items-center fw-semibold"
+        >
+          Validade do Cupom:
+        </div>
+        <div
+          class="col-7 d-flex justify-content-center align-items-center text-center fw-bolder"
+        >
+          {{ this.prize.get("expiracao").value | date : "medium" }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form *ngIf="!prizeCreated" action="" [formGroup]="prize">
+  <div class="row d-flex justify-content-center py-2 m-0">
+    <div class="col-md-6">
+      <div
+        class="display-6 text-center border border-2 rounded mb-2 bg-light shadow-sm"
+      >
+        Dados do Prêmio
+      </div>
+      <div class="row">
+        <label for="nome" class="form-label">Nome do Cupom</label>
+        <div class="container">
+          <input
+            id="nome"
+            name="nome"
+            type="text"
+            class="form-control"
+            formControlName="nome"
+            [ngClass]="{
+              'is-invalid':
+                this.prize.get('nome')?.invalid &&
+                (this.prize.get('nome')?.touched ||
+                  this.prize.get('nome')?.dirty),
+              'is-valid':
+                this.prize.get('nome')?.valid &&
+                (this.prize.get('nome')?.touched ||
+                  this.prize.get('nome')?.dirty)
+            }"
+          />
+          <div
+            *ngIf="
+              this.prize.get('nome').hasError('required') &&
+              (this.prize.get('nome')?.touched || this.prize.get('nome')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            O Prêmio não pode ter nome nulo!
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <label for="descricao" class="form-label">Descrição</label>
+        <div class="container">
+          <input
+            style="height: 5em"
+            id="descricao"
+            name="descricao"
+            type="text"
+            class="form-control w-100"
+            formControlName="descricao"
+            [ngClass]="{
+              'is-invalid':
+                this.prize.get('descricao')?.invalid &&
+                (this.prize.get('descricao')?.touched ||
+                  this.prize.get('descricao')?.dirty),
+              'is-valid':
+                this.prize.get('descricao')?.valid &&
+                (this.prize.get('descricao')?.touched ||
+                  this.prize.get('descricao')?.dirty)
+            }"
+          />
+          <div
+            *ngIf="
+              this.prize.get('descricao').hasError('required') &&
+              (this.prize.get('descricao')?.touched ||
+                this.prize.get('descricao')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            O Prêmio precisa contar uma descriçao!
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md">
+          <label for="unidades" class="form-label">Unidades</label>
+          <input
+            id="unidades"
+            name="unidades"
+            type="number"
+            class="form-control"
+            formControlName="unidades"
+            [ngClass]="{
+              'is-invalid':
+                this.prize.get('unidades')?.invalid &&
+                (this.prize.get('unidades')?.touched ||
+                  this.prize.get('unidades')?.dirty),
+              'is-valid':
+                this.prize.get('unidades')?.valid &&
+                (this.prize.get('unidades')?.touched ||
+                  this.prize.get('unidades')?.dirty)
+            }"
+          />
+          <div
+            *ngIf="
+              this.prize.get('unidades').hasError('required') &&
+              (this.prize.get('unidades')?.touched ||
+                this.prize.get('unidades')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            Insira as unidades do prêmio a serem geradas!
+          </div>
+          <div
+            *ngIf="
+              this.prize.get('unidades').hasError('min') &&
+              (this.prize.get('unidades')?.touched ||
+                this.prize.get('unidades')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            No mínimo uma unidade deve ser gerada!
+          </div>
+          <div
+            *ngIf="
+              this.prize.get('unidades').hasError('max') &&
+              (this.prize.get('unidades')?.touched ||
+                this.prize.get('unidades')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            No máxima 3000 unidades podem ser geradas!
+          </div>
+        </div>
+        <div class="col-md">
+          <label for="pontos" class="form-label">Pontos</label>
+          <input
+            id="pontos"
+            name="pontos"
+            type="number"
+            class="form-control"
+            formControlName="pontos"
+            [ngClass]="{
+              'is-invalid':
+                this.prize.get('pontos').invalid &&
+                (this.prize.get('pontos')?.touched ||
+                  this.prize.get('pontos')?.dirty),
+              'is-valid':
+                this.prize.get('pontos')?.valid &&
+                (this.prize.get('pontos')?.touched ||
+                  this.prize.get('pontos')?.dirty)
+            }"
+          />
+          <div
+            *ngIf="
+              this.prize.get('pontos').hasError('required') &&
+              (this.prize.get('pontos')?.touched ||
+                this.prize.get('pontos')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            Insira a Pontuação necessária para obter o prêmio!
+          </div>
+          <div
+            *ngIf="
+              this.prize.get('pontos').hasError('min') &&
+              (this.prize.get('pontos')?.touched ||
+                this.prize.get('pontos')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            A Pontuação mínima deve ser 100 Pontos!
+          </div>
+          <div
+            *ngIf="
+              this.prize.get('pontos').hasError('max') &&
+              (this.prize.get('pontos')?.touched ||
+                this.prize.get('pontos')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            A pontuação máxima deve ser 1000 Pontos!
+          </div>
+        </div>
+        <div class="col-md">
+          <label for="expiracao" class="form-label">Data de Expiração</label>
+          <input
+            id="expiracao"
+            name="expiracao"
+            type="date"
+            class="form-control"
+            formControlName="expiracao"
+            min="{{ minDate }}"
+            [ngClass]="{
+              'is-invalid':
+                this.prize.get('expiracao').invalid &&
+                (this.prize.get('expiracao')?.touched ||
+                  this.prize.get('expiracao')?.dirty),
+              'is-valid':
+                prize.get('expiracao').valid &&
+                (this.prize.get('expiracao')?.touched ||
+                  this.prize.get('expiracao')?.dirty)
+            }"
+          />
+          <div
+            *ngIf="
+              this.prize.get('expiracao').hasError('required') &&
+              (this.prize.get('expiracao')?.touched ||
+                this.prize.get('expiracao')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            Insira a data de expiração do prêmio!
+          </div>
+          <div
+            *ngIf="
+              this.prize.get('expiracao').hasError('minOneWeek') &&
+              (this.prize.get('expiracao')?.touched ||
+                this.prize.get('expiracao')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            A validade do cupom deve ser de no mínimo uma semana!
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label for="categoria" class="form-label">Categoria do Brinde</label>
+          <select
+            title="categoria"
+            name="categoria"
+            id="categoria"
+            class="form-select"
+            formControlName="categoria"
+            [ngClass]="{
+              'is-invalid':
+                this.prize.get('categoria')?.invalid &&
+                (this.prize.get('categoria')?.touched ||
+                  this.prize.get('categoria')?.dirty),
+              'is-valid':
+                this.prize.get('categoria')?.valid &&
+                (this.prize.get('categoria')?.touched ||
+                  this.prize.get('categoria')?.dirty)
+            }"
+          >
+            <option
+              value="{{ category.id }}"
+              *ngFor="let category of categorys"
+            >
+              {{ category.name }}
+            </option>
+          </select>
+          <div
+            *ngIf="
+              this.prize.get('categoria')?.invalid &&
+              (this.prize.get('categoria')?.touched ||
+                this.prize.get('categoria')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            Selecione uma Categoria.
+          </div>
+        </div>
+      </div>
+      <div class="row d-flex justify-content-center py-2 m-0">
+        <div class="col-md-6">
+          <div *ngIf="e400" class="alert alert-danger mt-2">
+            Um Prêmio com esse nome já existe!
+          </div>
+        </div>
+      </div>
+      <div class="row my-2">
+        <div class="col d-flex justify-content-center">
+          <button
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#confirmationModal"
+          >
+            Criar Prêmio!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="row d-flex justify-content-center py-2 m-0">
+  <div class="col-md-6">
+    <div *ngIf="prizeCreated" class="alert alert-success mt-2">
+      Prêmio Criado com sucesso!
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="confirmationModal"
+  tabindex="-1"
+  aria-labelledby="modalLabel"
+  aria-hidden="true"
+  (hidden.bs.modal)="cleanData()"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #f5f5f5">
+        <h1 class="modal-title fs-5" id="modalLabel">Criação de Prêmio</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="modal-body" style="background-color: #ffffff; color: #333">
+        <p class="text-start fw-bold">
+          Quando um prêmio é criado, ele não pode ser excluído até a data de
+          expiração fornecida. A partir do momento em que você clicar em "Criar
+          Prêmio", os usuários já podem resgatar o mesmo. Caso necessário, você
+          pode desativar o cupom em Perfil da Empresa -> Meus Cupons.
+        </p>
+      </div>
+      <div class="modal-footer" style="background-color: #f9f9f9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          (click)="submit()"
+        >
+          Criar Prêmio
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-dark"
+          data-bs-dismiss="modal"
+          (click)="cleanData()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

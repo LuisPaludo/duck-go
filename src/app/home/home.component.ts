@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit {
 
   isVerified: boolean = false;
   promptRegister: boolean = false;
+  isPartner:boolean = false;
 
   constructor(
     public apiPoints: ApiPointsService,
@@ -44,6 +45,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isPartner = localStorage.getItem('isPartner') === 'true';
     this.api.userAuthenticated.subscribe({
       next: (isVerified) => {
         if (isVerified) {
@@ -53,6 +55,12 @@ export class HomeComponent implements OnInit {
         }
       },
     });
+
+    this.api.isPartner$.subscribe({
+      next: (isPartner) => {
+        this.isPartner = isPartner;
+      }
+    })
 
     this.checkPermission(this.cameraPermissionName).then((permission) => {
       this.cameraPermission = permission;
@@ -232,6 +240,10 @@ export class HomeComponent implements OnInit {
 
   redirectToRegister() {
     this.router.navigate(['register']);
+  }
+
+  redirectToLogin() {
+    this.router.navigate(['login']);
   }
 
   goBack() {

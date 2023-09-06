@@ -9,7 +9,7 @@
   <div class="row d-flex justify-content-center">
     <div class="col col-md-5">
       <p class="text-center fw-bold fs-5" [ngClass]="{'text-danger': user?.is_partner,'text-uppercase': user?.is_partner}" >{{user?.username | titlecase}}</p>
-      <p class="text-center fw-bold fs-5">Pontuação Atual: {{total_points}} Pontos</p>
+      <p *ngIf="!user?.is_partner" class="text-center fw-bold fs-5">Pontuação Atual: {{total_points}} Pontos</p>
     </div>
   </div>
   <div class="row d-flex justify-content-center">
@@ -23,7 +23,7 @@
         <div class="col">
           <a routerLink="dados" class="btn btn-primary w-100">Dados</a>
         </div>
-        <div class="col">
+        <div *ngIf="!user?.is_partner" class="col">
           <a routerLink="historico" class="btn btn-success w-100">Histórico</a>
         </div>
         <div class="col">

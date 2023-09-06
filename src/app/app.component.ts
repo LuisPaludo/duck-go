@@ -42,6 +42,11 @@ export class AppComponent implements OnInit, OnDestroy {
           next: (isVerified) => {
             if (isVerified) {
               this.userVerified = true;
+              this.api.isPartner$.subscribe({
+                next: (isPartner) => {
+                  this.isPartner = isPartner;
+                }
+              })
             } else {
               this.userVerified = false;
             }

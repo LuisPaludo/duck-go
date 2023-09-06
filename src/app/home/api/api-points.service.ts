@@ -7,7 +7,6 @@ import {
   of,
   throwError,
 } from 'rxjs';
-import { ApiService } from 'src/app/api/api.service';
 import { GeoPoint } from '../models/GeoPoint';
 import { PointData } from '../models/PointData';
 import { UserHistory } from '../models/history';
@@ -41,7 +40,7 @@ export class ApiPointsService {
   user: GeoPoint;
   center: GeoPoint;
 
-  constructor(private http: HttpClient, private api: ApiService) {}
+  constructor(private http: HttpClient) {}
 
   verifyQRCode(qrIdNumber: number, coords: GeolocationCoordinates) {
     if (this.isLoading) {
@@ -75,10 +74,11 @@ export class ApiPointsService {
               longitude: coords.longitude,
             };
 
-            const result = this.isWithinRadius(this.user, this.center, 60);
+            const result = this.isWithinRadius(this.user, this.center, 1000);
 
             if (result) {
               this.savePoints(points, locationName);
+              this.locationPhoto = locationData[0].photo;
             }
             else {
               this.awayFromPoint = true;
@@ -154,6 +154,8 @@ export class ApiPointsService {
       .subscribe({
         next: (info: HistoryPost) => {
           this.locationPoints = info.points;
+          this.locationDescription = info.description;
+          // this.locationName = info.
           this.getPointSuccess = true;
           this.isSaving = false;
         },

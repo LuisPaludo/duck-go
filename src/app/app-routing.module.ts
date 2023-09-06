@@ -15,6 +15,7 @@ import { VerifyEmailComponent } from './user/register/verify-email/verify-email.
 import { PrizesComponent } from './prizes/prizes.component';
 import { CupounsComponent } from './user/profile/cupouns/cupouns.component';
 import { PartnerGuideComponent } from './partner-guide/partner-guide.component';
+import { CreateComponent } from './prizes/create/create/create.component';
 
 const routes: Routes = [
   {
@@ -36,8 +37,9 @@ const routes: Routes = [
     component: HowtoplayComponent,
   },
   {
-    path:'guia-parceiros',
+    path: 'guia-parceiros',
     component: PartnerGuideComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'perfil',
@@ -56,8 +58,8 @@ const routes: Routes = [
       {
         path: 'meus-cupons',
         component: CupounsComponent,
-        canActivate: [AuthGuard]
-      }
+        canActivate: [AuthGuard],
+      },
     ],
     canActivate: [AuthGuard],
   },
@@ -78,8 +80,13 @@ const routes: Routes = [
   {
     path: 'premios',
     component: PrizesComponent,
-    canActivate: [AuthGuard]
-  }
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'novo-premio',
+    component: CreateComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 
 @NgModule({

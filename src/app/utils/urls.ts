@@ -17,4 +17,8 @@ export class Urls {
     this.baseUrl + '/accounts/registration/verify-email/';
   loginUrl: string = this.baseUrl + '/accounts/login/';
   resendUrl: string = this.baseUrl + '/accounts/registration/resend-email/';
+  redeemedUrl: string = this.baseUrl + '/resgatar/';
+  qrCodeUrl: string = this.baseUrl + '/qr-code/?prize=';
+  partnerPrizes: string = this.baseUrl + '/resgatar-cupons-criados/';
+  prizeCategory: string = this.baseUrl + '/premios-categoria/';
 }

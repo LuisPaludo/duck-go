@@ -18,11 +18,16 @@ export class PrizesComponent implements OnInit {
   public success: boolean = false;
   public e402: boolean = false;
   public e400: boolean = false;
+  public e406: boolean = false;
   public end: boolean = false;
+
+  public isPartner:boolean = false;
 
   constructor(private apiPrizes: PrizesService) {}
 
   ngOnInit(): void {
+    this.isPartner = localStorage.getItem('isPartner') === 'true';
+    console.log(this.isPartner)
     this.apiPrizes.getPrizes().subscribe({
       next: (data) => {
         if (data) {
@@ -56,6 +61,10 @@ export class PrizesComponent implements OnInit {
           this.e402 = true;
           console.log('Usuário não possui pontos suficientes');
         }
+        if (e instanceof HttpErrorResponse && e.status === 406) {
+          this.e406 = true;
+          console.log('Cupom Esgotado');
+        }
       },
     });
   }
@@ -74,6 +83,7 @@ export class PrizesComponent implements OnInit {
     this.prizeId = null;
     this.e400 = false;
     this.e402 = false;
+    this.e406 = false;
     this.success = false;
     this.end = false;
   }

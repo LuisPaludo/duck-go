@@ -34,15 +34,5 @@ export class NegateAuthGuard {
         return false;
       })
     );
-
-    // return this.apiService.isUserVerified().pipe(
-    //   map((isLoggedIn) => {
-    //     if (!(isLoggedIn || cacheAuthUser)) {
-    //       return true;
-    //     }
-    //     this.router.navigate(['']);
-    //     return false;
-    //   })
-    // );
   }
 }

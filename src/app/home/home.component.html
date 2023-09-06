@@ -20,6 +20,10 @@
         *ngIf="!reading"
         [hidden]="cameraReady"
         [disabled]="cameraButtonDisable"
+        [ngClass]="{
+          'btn-success': !isPartner,
+          'btn-info': isPartner,
+        }"
       >
         <svg
           width="200"
@@ -202,6 +206,17 @@
               (click)="redirectToRegister()"
             >
               Cadastrar
+            </button>
+          </div>
+        </div>
+        <div class="row pt-2">
+          <div class="col">
+            <button
+              [disabled]="buttonDisabler"
+              class="btn btn-success w-100 h-100 accessButton"
+              (click)="redirectToLogin()"
+            >
+              Já possui uma conta? Faça o Login!
             </button>
           </div>
         </div>

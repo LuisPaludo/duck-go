@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,6 +20,8 @@ import { PrizesComponent } from './prizes/prizes.component';
 import { CupounsComponent } from './user/profile/cupouns/cupouns.component';
 import { PhonePipe } from './utils/pipe/phone/phone.pipe';
 import { PartnerGuideComponent } from './partner-guide/partner-guide.component';
+import { CreateComponent } from './prizes/create/create/create.component';
+
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { PartnerGuideComponent } from './partner-guide/partner-guide.component';
     CupounsComponent,
     PhonePipe,
     PartnerGuideComponent,
+    CreateComponent,
   ],
   imports: [
     BrowserModule,

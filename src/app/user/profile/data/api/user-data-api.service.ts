@@ -59,13 +59,13 @@ export class UserDataApiService {
       formData.append('email_contact', data.contato_email);
       formData.append('number_contact', data.contato_numero);
     }
-    
+
     if (data.foto) {
       formData.append('profile_photo', selectedFile, selectedFile.name);
     }
 
     return this.http
-      .put(this.urls.postUrl, formData, {
+      .patch(this.urls.postUrl, formData, {
         headers: VerifiedHttpHeaders,
       })
 
