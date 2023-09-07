@@ -5,6 +5,7 @@ import { User } from './models/user';
 import { ApiPointsService } from 'src/app/home/api/api-points.service';
 import { UserHistory } from 'src/app/home/models/history';
 import { AuthenticationService } from 'src/app/api/authentication-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -16,10 +17,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public total_points: number;
   private userSubscription: Subscription;
 
+  public partnerPage:boolean = false;
+
   constructor(
     public profileApi: ProfileApiService,
     private pointsApi: ApiPointsService,
-    private api: AuthenticationService
+    private api: AuthenticationService,
+    private router:Router,
   ) {}
 
   ngOnInit(): void {
@@ -32,6 +36,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
           next: (data) => {
             if (data) {
               this.user = data;
+              if(data.company_name_slug) {
+                this.partnerPage = true;
+              }
               this.api.isPartner.next(data.is_partner);
               if (data.is_partner) {
                 localStorage.setItem('isPartner', 'true');
@@ -58,5 +65,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
+  }
+
+  navigateToPartner():void {
+    const slug = this.user.company_name_slug;
+    this.router.navigate(['parceiros',slug])
   }
 }

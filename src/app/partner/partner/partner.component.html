@@ -1,0 +1,91 @@
+<div class="row d-flex justify-content-center pt-2 m-0">
+  <div class="col-md-6">
+    <div
+      class="container mb-3 shadow-sm bg-danger-subtle rounded"
+    >
+      <div class="row p-4">
+        <div class="col-3 d-flex justify-content-center align-items-center p-0">
+          <img
+            src="{{ baseUrl + partner?.profile_photo }}"
+            alt="Logo"
+            class="img-fluid rounded-circle"
+            style="object-fit: contain; max-height: 10rem"
+          />
+        </div>
+        <div class="col-9 d-flex flex-column justify-content-around">
+          <div
+            class="fw-bold fs-5 mb-2 text-wrap"
+            style="max-height: 2rem; overflow: auto; overflow-wrap: break-word"
+          >
+            {{ partner?.company_name }}
+          </div>
+          <div
+            class="mb-2 text-wrap fs-5"
+            style="max-height: 6rem; overflow: auto; overflow-wrap: break-word"
+          >
+            {{partner?.company_description}}
+          </div>
+        </div>
+      </div>
+      <div
+        class="row bg-info-subtle"
+      >
+        <div
+          class="col d-flex justify-content-center align-items-center fw-bold fs-3"
+        >
+          Contato
+        </div>
+      </div>
+      <div
+        class="row bg-info-subtle "
+        *ngIf="partner?.number_contact"
+      >
+        <div
+          class="col d-flex justify-content-around align-items-center fw-bold "
+        >
+          Telefone:
+        </div>
+        <div class="col d-flex justify-content-center">
+          {{ partner?.number_contact }}
+        </div>
+      </div>
+      <div class="row bg-info-subtle" *ngIf="partner?.email_contact">
+        <div
+          class="col fw-bold d-flex justify-content-center "
+        >
+          E-mail:
+        </div>
+        <div class="col d-flex justify-content-center">
+          {{ partner?.email_contact }}
+        </div>
+      </div>
+      <div class="row bg-warning-subtle border-warning">
+        <div
+          class="col d-flex justify-content-center align-items-center fw-bold fs-3"
+        >
+          Endereço
+        </div>
+      </div>
+      <div class="row bg-warning-subtle" *ngIf="partner?.email_contact">
+        <div
+          class="col fw-bold d-flex justify-content-center "
+        >
+          Rua:
+        </div>
+        <div class="col d-flex justify-content-center">
+          {{ partner?.addres_rua }}
+        </div>
+      </div>
+      <div class="row bg-warning-subtle" *ngIf="partner?.email_contact">
+        <div
+          class="col fw-bold d-flex justify-content-center "
+        >
+          CEP:
+        </div>
+        <div class="col d-flex justify-content-center">
+          {{ partner?.cep }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -17,7 +17,6 @@ import { Urls } from 'src/app/utils/urls';
   providedIn: 'root',
 })
 export class ApiPointsService {
-
   private urls: Urls = new Urls();
 
   public userHistorySubject = new BehaviorSubject<UserHistory[]>(null);
@@ -25,7 +24,7 @@ export class ApiPointsService {
 
   public getPointSuccess: boolean = false;
   public manyGetPoints: boolean = false;
-  public awayFromPoint:boolean = false;
+  public awayFromPoint: boolean = false;
 
   postRequest: boolean = false;
   isLoading: boolean = false;
@@ -42,7 +41,7 @@ export class ApiPointsService {
 
   constructor(private http: HttpClient) {}
 
-  verifyQRCode(qrIdNumber: number, coords: GeolocationCoordinates) {
+  verifyQRCode(qrIdNumber: string, coords: GeolocationCoordinates) {
     if (this.isLoading) {
       return;
     }
@@ -79,8 +78,7 @@ export class ApiPointsService {
             if (result) {
               this.savePoints(points, locationName);
               this.locationPhoto = locationData[0].photo;
-            }
-            else {
+            } else {
               this.awayFromPoint = true;
             }
           } else {
@@ -130,10 +128,7 @@ export class ApiPointsService {
     return haversineDistance(user, center) <= radius;
   }
 
-  savePoints(
-    points: number,
-    name: string
-  ): void {
+  savePoints(points: number, name: string): void {
     if (this.isSaving) {
       return;
     }
@@ -181,5 +176,10 @@ export class ApiPointsService {
     return new HttpHeaders({
       Authorization: 'Bearer ' + accessToken,
     });
+  }
+
+  redeemUserPrize(): Observable<any> {
+
+    return this.http.get(this.urls.baseUrl)
   }
 }

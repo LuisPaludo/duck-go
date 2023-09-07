@@ -39,7 +39,7 @@
             </div>
             <div class="text-wrap">
               <span class="fw-bold">Cupom gerado por: </span>
-              {{ prize.generated_by_company_name }}
+              <a style="cursor: pointer;" (click)="navigateToPartner(prize.generated_by_slug)" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"> {{ prize.generated_by_company_name }}</a>
             </div>
           </div>
         </div>

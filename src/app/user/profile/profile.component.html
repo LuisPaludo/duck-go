@@ -26,6 +26,9 @@
         <div *ngIf="!user?.is_partner" class="col">
           <a routerLink="historico" class="btn btn-success w-100">Histórico</a>
         </div>
+        <div *ngIf="user?.is_partner" class="col">
+          <button [disabled]="!partnerPage" (click)="navigateToPartner()" class="btn btn-success w-100">Minha Empresa</button>
+        </div>
         <div class="col">
           <a routerLink="meus-cupons" class="btn btn-danger w-100">Meus Cupons</a>
         </div>

@@ -16,6 +16,8 @@ import { PrizesComponent } from './prizes/prizes.component';
 import { CupounsComponent } from './user/profile/cupouns/cupouns.component';
 import { PartnerGuideComponent } from './partner-guide/partner-guide.component';
 import { CreateComponent } from './prizes/create/create/create.component';
+import { PartnerComponent } from './partner/partner/partner.component';
+import { NotFoundComponent } from './notFound/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -73,6 +75,11 @@ const routes: Routes = [
     canActivate: [NegateAuthGuard],
   },
   {
+    path: 'parceiros/:slug',
+    component: PartnerComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'verificacao-email/:key',
     component: VerifyEmailComponent,
     canActivate: [NegateAuthGuard],
@@ -87,6 +94,10 @@ const routes: Routes = [
     component: CreateComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: '**',
+    component: NotFoundComponent,
+  }
 ];
 
 @NgModule({

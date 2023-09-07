@@ -29,14 +29,14 @@ export class HomeComponent implements OnInit {
   cameraPermission: string;
   geolocationPermission: string;
 
-  cameraCodeRead: number;
+  cameraCodeRead: string;
   locationRead: GeolocationCoordinates;
 
   permissionDenied: boolean = false;
 
   isVerified: boolean = false;
   promptRegister: boolean = false;
-  isPartner:boolean = false;
+  isPartner: boolean = false;
 
   constructor(
     public apiPoints: ApiPointsService,
@@ -59,8 +59,8 @@ export class HomeComponent implements OnInit {
     this.api.isPartner$.subscribe({
       next: (isPartner) => {
         this.isPartner = isPartner;
-      }
-    })
+      },
+    });
 
     this.checkPermission(this.cameraPermissionName).then((permission) => {
       this.cameraPermission = permission;
@@ -197,9 +197,14 @@ export class HomeComponent implements OnInit {
                 { facingMode: 'environment' },
                 { fps: 10, qrbox: 250 },
                 (decodedText, decodedResult) => {
-                  this.cameraCodeRead = +decodedText;
-                  if (typeof this.cameraCodeRead === 'number') {
+                  this.cameraCodeRead = decodedText;
+                  if (typeof +this.cameraCodeRead === 'number' && !this.isPartner) {
                     this.stopReading();
+                  } else if (
+                    typeof this.cameraCodeRead === 'string' &&
+                    this.isPartner
+                  ) {
+                    this.redeemUserPrize();
                   }
                 },
                 (errorMessage) => {}
@@ -224,12 +229,28 @@ export class HomeComponent implements OnInit {
         .then((ignore) => {
           this.cameraButtonDisable = false;
           if (this.cameraCodeRead) {
-            console.log(this.geolocationPermission);
             if (this.geolocationPermission === 'granted') {
               this.getGeolocationPermission();
             } else {
               this.getGeolocation();
             }
+          }
+        })
+        .catch((err) => {
+          // Stop failed, handle it.
+        });
+    }
+  }
+
+  redeemUserPrize() {
+    if (this.html5QrCode.getState() === 2) {
+      this.reading = false;
+      this.html5QrCode
+        .stop()
+        .then((ignore) => {
+          this.cameraButtonDisable = false;
+          if (this.cameraCodeRead) {
+            console.log(this.cameraCodeRead)
           }
         })
         .catch((err) => {

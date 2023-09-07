@@ -80,6 +80,7 @@ export class DataComponent implements OnInit {
       foto: [''],
       contato_email: ['', Validators.email],
       contato_numero: [''],
+      descricao: ['', Validators.required],
     });
     this.profile.disable();
   }
@@ -161,6 +162,7 @@ export class DataComponent implements OnInit {
       empresa: data.company_name,
       contato_numero: this.phone.transform(data.number_contact),
       contato_email: data.email_contact,
+      descricao: data.company_description,
     });
   }
 
@@ -180,6 +182,7 @@ export class DataComponent implements OnInit {
       this.profile.get(['contato_email']).enable();
       this.profile.get(['contato_numero']).enable();
       this.profile.get(['foto']).enable();
+      this.profile.get(['descricao']).enable();
     }
     this.subscribeForms();
   }

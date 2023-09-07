@@ -21,6 +21,8 @@ import { CupounsComponent } from './user/profile/cupouns/cupouns.component';
 import { PhonePipe } from './utils/pipe/phone/phone.pipe';
 import { PartnerGuideComponent } from './partner-guide/partner-guide.component';
 import { CreateComponent } from './prizes/create/create/create.component';
+import { PartnerComponent } from './partner/partner/partner.component';
+import { NotFoundComponent } from './notFound/not-found/not-found.component';
 
 
 @NgModule({
@@ -41,6 +43,8 @@ import { CreateComponent } from './prizes/create/create/create.component';
     PhonePipe,
     PartnerGuideComponent,
     CreateComponent,
+    PartnerComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

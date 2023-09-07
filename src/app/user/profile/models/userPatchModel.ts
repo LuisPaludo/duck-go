@@ -12,4 +12,5 @@ export class userPatchModel {
   empresa: string;
   contato_email: string;
   contato_numero: string;
+  descricao:string;
 }

@@ -15,5 +15,7 @@ export class User {
   is_partner: boolean;
   company_name: string;
   email_contact: string;
-  number_contact:string;
+  number_contact: string;
+  company_description: string;
+  company_name_slug:string;
 }

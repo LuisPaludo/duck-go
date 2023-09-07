@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PrizesService } from './api/prizes.service';
 import { Prizes } from './models/prizes';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-prizes',
@@ -21,13 +22,12 @@ export class PrizesComponent implements OnInit {
   public e406: boolean = false;
   public end: boolean = false;
 
-  public isPartner:boolean = false;
+  public isPartner: boolean = false;
 
-  constructor(private apiPrizes: PrizesService) {}
+  constructor(private apiPrizes: PrizesService, private router: Router) {}
 
   ngOnInit(): void {
     this.isPartner = localStorage.getItem('isPartner') === 'true';
-    console.log(this.isPartner)
     this.apiPrizes.getPrizes().subscribe({
       next: (data) => {
         if (data) {
@@ -77,7 +77,7 @@ export class PrizesComponent implements OnInit {
     this.loader = false;
   }
 
-  clearData():void {
+  clearData(): void {
     this.prizeName = '';
     this.prizeCost = null;
     this.prizeId = null;
@@ -86,5 +86,9 @@ export class PrizesComponent implements OnInit {
     this.e406 = false;
     this.success = false;
     this.end = false;
+  }
+
+  navigateToPartner(slug:string):void{
+    this.router.navigate(['parceiros',slug]);
   }
 }

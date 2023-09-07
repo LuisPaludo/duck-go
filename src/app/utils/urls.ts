@@ -21,4 +21,5 @@ export class Urls {
   qrCodeUrl: string = this.baseUrl + '/qr-code/?prize=';
   partnerPrizes: string = this.baseUrl + '/resgatar-cupons-criados/';
   prizeCategory: string = this.baseUrl + '/premios-categoria/';
+  partner: string = this.baseUrl + '/partner-details/';
 }

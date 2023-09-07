@@ -259,6 +259,37 @@
       </div>
     </div>
 
+    <div *ngIf="isPartner" class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <label for="descricao" class="form-label">Descrição</label>
+
+          <input
+            style="height: 5em"
+            id="descricao"
+            name="descricao"
+            type="text"
+            class="form-control"
+            formControlName="descricao"
+            [ngClass]="{
+              'is-invalid':
+                this.profile.get('descricao')?.invalid &&
+                (this.profile.get('descricao')?.touched ||
+                  this.profile.get('descricao')?.dirty),
+            }"
+          />
+          <div
+            *ngIf="
+              this.profile.get('descricao').hasError('required') &&
+              (this.profile.get('descricao')?.touched ||
+                this.profile.get('descricao')?.dirty)
+            "
+            class="invalid-feedback"
+          >
+            Insira uma descrição para sua empresa!
+          </div>
+        </div>
+      </div>
+
     <div class="row d-flex justify-content-center mt-2">
       <div class="col-md-6">
         <div class="row">

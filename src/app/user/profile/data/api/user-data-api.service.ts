@@ -58,6 +58,7 @@ export class UserDataApiService {
       formData.append('company_name', data.empresa);
       formData.append('email_contact', data.contato_email);
       formData.append('number_contact', data.contato_numero);
+      formData.append('company_description', data.descricao);
     }
 
     if (data.foto) {
