@@ -310,6 +310,9 @@
   <div>
   coordenadas ponto: Latitude: {{apiPoints?.cachePointCordLatitude}}, Longitude: {{apiPoints?.cachePointCordLongitude}}
   </div>
+  <div *ngIf="erroGeo">
+    Erro na geolocalização
+  </div>
 </div>
 
 <div class="container d-flex justify-content-center">

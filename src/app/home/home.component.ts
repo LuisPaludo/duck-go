@@ -41,9 +41,10 @@ export class HomeComponent implements OnInit {
 
   userPrize: any;
   usePrizeLoader: boolean = false;
-  usePrizeSuccess:boolean = false
+  usePrizeSuccess: boolean = false;
 
-
+  erroCode:boolean = false;
+  erroGeo:boolean = false;
 
   constructor(
     public apiPoints: ApiPointsService,
@@ -119,15 +120,19 @@ export class HomeComponent implements OnInit {
           if (permission === 'granted') {
             this.buttonDisabler = false;
             this.locationRead = position.coords;
+            this.apiPoints.waitingResult = true;
             this.apiPoints.verifyQRCode(this.cameraCodeRead, this.locationRead);
           } else {
             this.buttonDisabler = false;
+            this.apiPoints.waitingResult = true;
           }
         }
       );
     };
 
     const errorCallback = (error) => {
+      this.erroGeo = true;
+      this.apiPoints.waitingResult = true;
       switch (error.code) {
         case error.PERMISSION_DENIED:
           console.log('O usuário não permitiu a geolocalização.');
@@ -149,7 +154,9 @@ export class HomeComponent implements OnInit {
       this.geoReady = false;
     };
 
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {enableHighAccuracy: true});
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
+      enableHighAccuracy: true,
+    });
   }
 
   getCamera() {
@@ -173,7 +180,6 @@ export class HomeComponent implements OnInit {
         });
       })
       .catch((err) => {
-        console.log(err)
         this.permissionDenied = true;
         this.cameraReady = false;
         this.buttonDisabler = false;
