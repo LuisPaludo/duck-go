@@ -124,6 +124,7 @@ export class HomeComponent implements OnInit {
           console.log(this.geolocationPermission);
           setTimeout(() => {
             console.log(this.geolocationPermission);
+            console.log(permission)
             this.geoReady = false;
             if (permission === 'granted') {
               this.buttonDisabler = false;
