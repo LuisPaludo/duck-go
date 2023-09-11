@@ -42,7 +42,7 @@ export class ProfileApiService {
     this.isLoadingSubject.next(true);
 
     return this.http
-      .get<User>(this.urls.userUrl, { headers: verifiedHttpHeaders })
+      .get<User>(this.urls.user, { headers: verifiedHttpHeaders })
       .pipe(
         tap((user) => {
           this.userDataSubject.next(user);

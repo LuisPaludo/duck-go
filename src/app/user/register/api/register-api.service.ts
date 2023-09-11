@@ -10,8 +10,6 @@ export class RegisterApiService {
 
   private urls: Urls = new Urls();
 
-  httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-
   estados: { sigla: string; nome: string }[] = [
     { sigla: '', nome: '' },
     { sigla: 'AC', nome: 'Acre' },
@@ -53,18 +51,16 @@ export class RegisterApiService {
       password2: userData.confSenha,
       cep: userData.cep,
       cpf: userData.cpf,
-      addres_rua: userData.rua,
-      address_UF: this.estados[userData.uf].sigla,
-      address_cidade: userData.cidade,
-      data_nascimento: userData.data_nascimento,
+      address_street: userData.rua,
+      address_state: this.estados[userData.uf].sigla,
+      address_city: userData.cidade,
+      birth_date: userData.data_nascimento,
       first_name: userData.nome,
       last_name: userData.sobrenome,
-      accepted_terms: userData.termos,
+      is_terms_accepted: userData.termos,
     };
 
-    return this.http.post(this.urls.registerUrl, postData, {
-      headers: this.httpHeaders,
-    });
+    return this.http.post(this.urls.register, postData);
   }
 }
 

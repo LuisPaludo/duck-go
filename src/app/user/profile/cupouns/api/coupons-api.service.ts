@@ -21,56 +21,43 @@ export class CouponsApiService {
   ) {}
 
   getRedeemedPrizes(): Observable<PrizeResponse[]> {
-    const httpHeaders = this.apiPoints.generateHeaders();
-
-    return this.http.get<PrizeResponse[]>(this.urls.redeemedUrl, {
-      headers: httpHeaders,
-    });
+    return this.http.get<PrizeResponse[]>(this.urls.redeem);
   }
 
   getCreatedPrizes(): Observable<Prizes[]> {
-    const httpHeaders = this.apiPoints.generateHeaders();
 
-    return this.http.get<Prizes[]>(this.urls.partnerPrizes, {
-      headers: httpHeaders,
-    });
+
+    return this.http.get<Prizes[]>(this.urls.partnerPrizes);
   }
 
   getQrCode(prize: number): Observable<any> {
-    const httpHeaders = this.apiPoints.generateHeaders();
 
-    const fullUrl = this.urls.qrCodeUrl + prize;
 
-    return this.http.get<any>(fullUrl, {
-      headers: httpHeaders,
-    });
+    const fullUrl = this.urls.qrCode + prize;
+
+    return this.http.get<any>(fullUrl);
   }
 
   disablePrize(prize: number): Observable<any> {
-    const httpHeaders = this.apiPoints.generateHeaders();
 
-    const fullUrl = this.urls.prizeUrl + prize + '/';
+
+    const fullUrl = this.urls.prize + prize + '/';
 
     const patchData = {
       disabled: true,
     };
 
-    return this.http.patch<any>(fullUrl, patchData, {
-      headers: httpHeaders,
-    });
+    return this.http.patch<any>(fullUrl, patchData);
   }
 
   activatePrize(prize: number): Observable<any> {
-    const httpHeaders = this.apiPoints.generateHeaders();
 
-    const fullUrl = this.urls.prizeUrl + prize + '/';
+    const fullUrl = this.urls.prize + prize + '/';
 
     const patchData = {
       disabled: false,
     };
 
-    return this.http.patch<any>(fullUrl, patchData, {
-      headers: httpHeaders,
-    });
+    return this.http.patch<any>(fullUrl, patchData);
   }
 }

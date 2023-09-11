@@ -16,4 +16,5 @@ export interface Prizes {
 
 export interface PrizeResponse {
   prize: Prizes;
+  is_used:boolean;
 }

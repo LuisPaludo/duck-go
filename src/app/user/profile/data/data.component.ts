@@ -79,8 +79,8 @@ export class DataComponent implements OnInit {
       uf: ['', Validators.required],
       foto: [''],
       contato_email: ['', Validators.email],
-      contato_numero: [''],
-      descricao: ['', Validators.required],
+      contato_numero: ['',],
+      descricao: ['',],
     });
     this.profile.disable();
   }
@@ -156,13 +156,13 @@ export class DataComponent implements OnInit {
       cpf: data.cpf,
       cep: data.cep,
       cnpj: data.cnpj,
-      cidade: data.address_cidade,
-      uf: data.address_UF,
-      rua: data.addres_rua,
-      empresa: data.company_name,
-      contato_numero: this.phone.transform(data.number_contact),
-      contato_email: data.email_contact,
-      descricao: data.company_description,
+      cidade: data.address_city,
+      uf: data.address_state,
+      rua: data.address_street,
+      empresa: data.partner_company_name,
+      contato_numero: this.phone.transform(data.partner_number_contact),
+      contato_email: data.partner_email_contact,
+      descricao: data.partner_company_description,
     });
   }
 

@@ -1,4 +1,14 @@
-<div *ngIf="!apiPoints.getPointSuccess && !apiPoints.manyGetPoints && !apiPoints.awayFromPoint">
+<div
+  *ngIf="
+    !apiPoints.getPointSuccess &&
+    !apiPoints.manyGetPoints &&
+    !apiPoints.awayFromPoint &&
+    !apiPoints.checkPrize &&
+    !apiPoints.notPrizePartner &&
+    !apiPoints.invalidPrize &&
+    !apiPoints.expiredPrize
+  "
+>
   <div
     *ngIf="!permissionDenied && !promptRegister"
     class="container d-flex flex-column justify-content-center"
@@ -185,7 +195,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="promptRegister" class="card text-center" style="width: 25rem;">
+    <div *ngIf="promptRegister" class="card text-center" style="width: 25rem">
       <div class="card-header">Cadastro Necessário</div>
       <div class="card-body">
         <h5 class="card-title">Ei, aventureiro Duck Go!</h5>
@@ -340,20 +350,23 @@
         <div class="card-body">
           <h2 class="card-title">Explorando Pato Branco com Duck GO!</h2>
           <div class="alert alert-warning mt-2">
-            Você escaneou um código QR válido, mas não parece estar próximo do ponto turístico de Pato Branco associado.
+            Você escaneou um código QR válido, mas não parece estar próximo do
+            ponto turístico de Pato Branco associado.
           </div>
           <p class="card-text">
-            Verifique se você está no ponto turístico correto em nossa incrível cidade. Duck GO! está aqui para te guiar pelos melhores locais!
+            Verifique se você está no ponto turístico correto em nossa incrível
+            cidade. Duck GO! está aqui para te guiar pelos melhores locais!
           </p>
           <p class="mt-1">
-            Se você acredita que está no local certo e ainda assim encontra problemas, não hesite em contatar nosso suporte: <a>duckgosuporte@gmail.com</a>.
+            Se você acredita que está no local certo e ainda assim encontra
+            problemas, não hesite em contatar nosso suporte:
+            <a>duckgosuporte@gmail.com</a>.
           </p>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 
 <div *ngIf="apiPoints.manyGetPoints">
   <div class="container d-flex justify-content-between flex-column">
@@ -381,6 +394,105 @@
           quack-quack!
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="apiPoints.checkPrize">
+  <button class="btn btn-primary mt-3 mx-3" (click)="goBack()">Voltar</button>
+  <div class="container">
+    <div class="container p-2">
+      <div class="card mt-2">
+        <h2 class="card-title card-header">Verificação de Prêmio</h2>
+        <div class="card-body">
+          <div *ngIf="!usePrizeLoader && !usePrizeSuccess" class="card-text">
+            <p class="fw-semibold fs-4">Informações do Usuário:</p>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                UserName: {{ userPrize.username }}
+              </li>
+              <li class="list-group-item">
+                Nome: {{ userPrize.first_name }} {{ userPrize.last_name }}
+              </li>
+              <li class="list-group-item">CPF: {{ userPrize.cpf }}</li>
+            </ul>
+            <hr class="hr-blurry" />
+            <p class="fw-semibold mt-3 fs-4">Informações do Prêmio:</p>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Nome: {{ userPrize.prize.name }}</li>
+              <li class="list-group-item">
+                Descrição: {{ userPrize.prize.description }}
+              </li>
+              <li class="list-group-item">
+                Data de Expiração: {{ userPrize.prize.expiry_date }}
+              </li>
+              <li class="list-group-item">
+                Gerado Por: {{ userPrize.prize.generated_by_company_name }}
+              </li>
+            </ul>
+          </div>
+          <div *ngIf="usePrizeLoader" class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <div
+            *ngIf="usePrizeSuccess"
+            class="alert alert-success"
+            role="alert"
+          >
+            Prêmio Resgatado com Sucesso!
+          </div>
+        </div>
+        <div
+          *ngIf="!usePrizeLoader && !usePrizeSuccess"
+          class="card-footer d-flex justify-content-around"
+        >
+          <button class="btn btn-success" (click)="useUserPrize()">Confirmar Prêmio</button>
+          <button class="btn btn-danger" (click)="goBack()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="apiPoints.notPrizePartner" class="container">
+  <div class="card mt-2">
+    <h2 class="card-title card-header bg-warning-subtle">
+      Restrição de Prêmio
+    </h2>
+    <div class="card-body">
+      <p class="fw-semibold fs-4">Atenção!</p>
+      <p>O prêmio só pode ser resgatado pela empresa que o criou.</p>
+    </div>
+    <div class="card-footer d-flex justify-content-center bg-warning-subtle">
+      <button class="btn btn-primary" (click)="goBack()">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="apiPoints.expiredPrize" class="container">
+  <div class="card mt-2">
+    <h2 class="card-title card-header bg-danger-subtle">Prêmio Expirado</h2>
+    <div class="card-body">
+      <p class="fw-semibold fs-4">Atenção!</p>
+      <p>O prêmio que você está tentando resgatar já expirou.</p>
+    </div>
+    <div class="card-footer d-flex justify-content-center bg-danger-subtle">
+      <button class="btn btn-primary" (click)="goBack()">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="apiPoints.invalidPrize" class="container">
+  <div class="card mt-2">
+    <h2 class="card-title card-header bg-danger-subtle">Prêmio já Resgatado</h2>
+    <div class="card-body">
+      <p class="fw-semibold fs-4">Atenção!</p>
+      <p>
+        O prêmio que você está tentando resgatar já foi resgatado anteriormente.
+      </p>
+    </div>
+    <div class="card-footer d-flex justify-content-center bg-danger-subtle">
+      <button class="btn btn-primary" (click)="goBack()">Voltar</button>
     </div>
   </div>
 </div>

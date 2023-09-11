@@ -19,7 +19,7 @@ export class VerifyEmailComponent implements OnInit {
     const key = this.activeRout.snapshot.params['key'];
 
     this.verifyApi.verify(key).subscribe({
-      next: (data) => {
+      next: () => {
         this.isLoading = false;
       },
       error: (e) => {

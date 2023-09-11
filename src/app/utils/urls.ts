@@ -1,25 +1,29 @@
 export class Urls {
   // baseUrl: string = 'http://192.168.0.125:8000';
-  baseUrl: string = 'http://127.0.0.1:8000';
+  baseUrl: string = 'http://127.0.0.1:8000/';
 
-  verifyUrl: string = this.baseUrl + '/accounts/token/verify/';
-  refreshUrl: string = this.baseUrl + '/accounts/token/refresh/';
-  logoutUrl: string = this.baseUrl + '/accounts/logout/';
-  searchUrl: string = this.baseUrl + '/turistic-points/?search=';
-  historyUrl: string = this.baseUrl + '/history/';
-  locationUrl: string = this.baseUrl + '/locais/';
-  prizeUrl: string = this.baseUrl + '/premios/';
-  redeemUrl: string = this.baseUrl + '/resgatar/';
-  userUrl: string = this.baseUrl + '/accounts/user/';
-  postUrl: string = this.baseUrl + '/accounts/user/';
-  registerUrl: string = this.baseUrl + '/accounts/registration/';
-  verifyEmailUrl: string =
-    this.baseUrl + '/accounts/registration/verify-email/';
-  loginUrl: string = this.baseUrl + '/accounts/login/';
-  resendUrl: string = this.baseUrl + '/accounts/registration/resend-email/';
-  redeemedUrl: string = this.baseUrl + '/resgatar/';
-  qrCodeUrl: string = this.baseUrl + '/qr-code/?prize=';
-  partnerPrizes: string = this.baseUrl + '/resgatar-cupons-criados/';
-  prizeCategory: string = this.baseUrl + '/premios-categoria/';
-  partner: string = this.baseUrl + '/partner-details/';
+  verify: string = this.baseUrl + 'accounts/token/verify/';
+  refresh: string = this.baseUrl + 'accounts/token/refresh/';
+  logout: string = this.baseUrl + 'accounts/logout/';
+
+  locations: string = this.baseUrl + 'locais/';
+  touristAttaction: string = this.baseUrl + 'pontos-turisticos/?search=';
+
+  user: string = this.baseUrl + 'accounts/user/';
+  history: string = this.baseUrl + 'usuario/historico/';
+  register: string = this.baseUrl + 'accounts/registration/';
+  verifyEmail: string = this.baseUrl + 'accounts/registration/verify-email/';
+  resend: string = this.baseUrl + 'accounts/registration/resend-email/';
+  login: string = this.baseUrl + 'accounts/login/';
+
+  partner: string = this.baseUrl + 'parceiros/detalhes/';
+
+  prize: string = this.baseUrl + 'premios/';
+  redeem: string = this.baseUrl + 'resgatar/';
+
+  prizeCategory: string = this.baseUrl + 'categorias/';
+  partnerPrizes: string = this.baseUrl + 'premios/criados/';
+  recover: string = this.baseUrl + 'premios/usuarios/recuperar/';
+  check: string = this.baseUrl + 'checar/';
+  qrCode: string = this.baseUrl + 'premios/premio/qr-code/?prize=';
 }

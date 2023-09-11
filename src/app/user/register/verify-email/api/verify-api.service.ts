@@ -17,6 +17,6 @@ export class VerifyApiService {
       key: verificationKey,
     };
 
-    return this.http.post(this.urls.verifyEmailUrl, postData);
+    return this.http.post(this.urls.verifyEmail, postData);
   }
 }

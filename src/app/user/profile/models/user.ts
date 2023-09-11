@@ -6,16 +6,16 @@ export class User {
   cep: string;
   cpf: string;
   cnpj: string;
-  addres_rua: string;
-  address_UF: string;
-  address_cidade: string;
+  address_street: string;
+  address_state: string;
+  address_city: string;
   profile_photo: string;
-  data_nascimento: string;
-  accepted_terms: boolean;
+  birth_date: string;
+  is_terms_accepted: boolean;
   is_partner: boolean;
-  company_name: string;
-  email_contact: string;
-  number_contact: string;
-  company_description: string;
-  company_name_slug:string;
+  partner_company_name: string;
+  partner_email_contact: string;
+  partner_number_contact: string;
+  partner_company_description: string;
+  partner_company_name_slug: string;
 }

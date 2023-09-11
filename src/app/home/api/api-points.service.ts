@@ -25,6 +25,11 @@ export class ApiPointsService {
   public getPointSuccess: boolean = false;
   public manyGetPoints: boolean = false;
   public awayFromPoint: boolean = false;
+  public checkPrize: boolean = false;
+
+  public notPrizePartner: boolean = false;
+  public invalidPrize: boolean = false;
+  public expiredPrize:boolean = false;
 
   postRequest: boolean = false;
   isLoading: boolean = false;
@@ -49,14 +54,10 @@ export class ApiPointsService {
     this.postRequest = true;
     this.isLoading = true;
 
-    const VerifiedHttpHeaders = this.generateHeaders();
-
-    let fullUrl = this.urls.searchUrl + qrIdNumber;
+    let fullUrl = this.urls.touristAttaction + qrIdNumber;
 
     this.http
-      .get(fullUrl, {
-        headers: VerifiedHttpHeaders,
-      })
+      .get(fullUrl)
       .subscribe({
         next: (locationData: PointData[]) => {
           if (locationData.length !== 0) {
@@ -73,7 +74,7 @@ export class ApiPointsService {
               longitude: coords.longitude,
             };
 
-            const result = this.isWithinRadius(this.user, this.center, 1000);
+            const result = this.isWithinRadius(this.user, this.center);
 
             if (result) {
               this.savePoints(points, locationName);
@@ -135,51 +136,44 @@ export class ApiPointsService {
 
     this.isSaving = true;
 
-    const VerifiedHttpHeaders = this.generateHeaders();
-
     const postData: HistoryPost = new HistoryPost();
 
     postData.points = points;
     postData.description = 'Ponto Turístico -> ' + name;
 
-    this.http
-      .post(this.urls.historyUrl, postData, {
-        headers: VerifiedHttpHeaders,
-      })
-      .subscribe({
-        next: (info: HistoryPost) => {
-          this.locationPoints = info.points;
-          this.locationDescription = info.description;
-          // this.locationName = info.
-          this.getPointSuccess = true;
-          this.isSaving = false;
-        },
-        error: (e) => {
-          this.isSaving = false;
-          if (e.status === 429) {
-            this.manyGetPoints = true;
-          }
-        },
-      });
+    this.http.post(this.urls.history, postData).subscribe({
+      next: (info: HistoryPost) => {
+        this.locationPoints = info.points;
+        this.locationDescription = info.description;
+        // this.locationName = info.
+        this.getPointSuccess = true;
+        this.isSaving = false;
+      },
+      error: (e) => {
+        this.isSaving = false;
+        if (e.status === 429) {
+          this.manyGetPoints = true;
+        }
+      },
+    });
   }
 
   getUserHistory(): Observable<any> {
-    const VerifiedHttpHeaders = this.generateHeaders();
-
-    return this.http.get(this.urls.historyUrl, {
-      headers: VerifiedHttpHeaders,
-    });
+    return this.http.get(this.urls.history);
   }
 
-  generateHeaders(): HttpHeaders {
-    const accessToken: string = localStorage.getItem('token');
-    return new HttpHeaders({
-      Authorization: 'Bearer ' + accessToken,
-    });
+
+  redeemUserPrize(code: string): Observable<any> {
+    const postData = {
+      code: code,
+    };
+    return this.http.post(this.urls.recover, postData);
   }
 
-  redeemUserPrize(): Observable<any> {
-
-    return this.http.get(this.urls.baseUrl)
+  checkUserPrize(code: string): Observable<any> {
+    const postData = {
+      code: code,
+    };
+    return this.http.post(this.urls.check, postData);
   }
 }

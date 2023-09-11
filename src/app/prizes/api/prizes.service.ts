@@ -9,8 +9,7 @@ import { Urls } from 'src/app/utils/urls';
   providedIn: 'root',
 })
 export class PrizesService {
-
-  private urls:Urls = new Urls();
+  private urls: Urls = new Urls();
 
   isGetting: boolean = false;
   isPosting: boolean = false;
@@ -24,29 +23,20 @@ export class PrizesService {
 
     this.isGetting = true;
 
-    const httpHeaders = this.apiPoints.generateHeaders();
-
-    return this.http.get<Prizes[]>(this.urls.prizeUrl, {
-      headers: httpHeaders,
-    });
+    return this.http.get<Prizes[]>(this.urls.prize);
   }
 
-  redeemPrize(id:number): Observable<any> {
+  redeemPrize(id: number): Observable<any> {
     if (this.isPosting) {
-      return
+      return;
     }
 
     this.isPosting = true;
 
-    const httpHeaders = this.apiPoints.generateHeaders();
-
     const postData = {
       prize: id,
-    }
+    };
 
-    return this.http.post(this.urls.redeemUrl,postData,{
-      headers: httpHeaders,
-    })
-
+    return this.http.post(this.urls.redeem, postData);
   }
 }

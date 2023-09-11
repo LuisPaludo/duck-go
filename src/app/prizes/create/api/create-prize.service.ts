@@ -29,6 +29,6 @@ export class CreatePrizeService {
       category: prizeData.categoria,
     };
 
-    return this.http.post(this.urls.prizeUrl,postData)
+    return this.http.post(this.urls.prize,postData)
   }
 }

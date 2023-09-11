@@ -14,13 +14,13 @@ export class LocationApiService {
   constructor(private http: HttpClient) {}
 
   getAllLocations(): Observable<any> {
-    return this.http.get(this.urls.locationUrl, {
+    return this.http.get(this.urls.locations, {
       headers: this.httpHeaders,
     });
   }
 
   getLocation(locationId): Observable<any> {
-    return this.http.get(this.urls.locationUrl + locationId, {
+    return this.http.get(this.urls.touristAttaction + locationId, {
       headers: this.httpHeaders,
     });
   }

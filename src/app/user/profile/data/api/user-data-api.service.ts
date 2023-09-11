@@ -37,9 +37,6 @@ export class UserDataApiService {
     this.isLoading = true;
 
     const accessToken: string = localStorage.getItem('token');
-    const VerifiedHttpHeaders = new HttpHeaders({
-      Authorization: 'Bearer ' + accessToken,
-    });
 
     const formData: FormData = new FormData();
 
@@ -49,16 +46,16 @@ export class UserDataApiService {
     formData.append('username', this.profileApi.user.username);
     formData.append('cep', data.cep);
     formData.append('cpf', data.cpf);
-    formData.append('addres_rua', data.rua);
-    formData.append('address_UF', data.uf);
-    formData.append('address_cidade', data.cidade);
-    formData.append('data_nascimento', this.profileApi.user.data_nascimento);
+    formData.append('address_street', data.rua);
+    formData.append('address_state', data.uf);
+    formData.append('address_city', data.cidade);
+    formData.append('birth_date', this.profileApi.user.birth_date);
 
     if(isPartner) {
-      formData.append('company_name', data.empresa);
-      formData.append('email_contact', data.contato_email);
-      formData.append('number_contact', data.contato_numero);
-      formData.append('company_description', data.descricao);
+      formData.append('partner_company_name', data.empresa);
+      formData.append('partner_email_contact', data.contato_email);
+      formData.append('partner_number_contact', data.contato_numero);
+      formData.append('partner_company_description', data.descricao);
     }
 
     if (data.foto) {
@@ -66,9 +63,6 @@ export class UserDataApiService {
     }
 
     return this.http
-      .patch(this.urls.postUrl, formData, {
-        headers: VerifiedHttpHeaders,
-      })
-
+      .patch(this.urls.user, formData)
   }
 }

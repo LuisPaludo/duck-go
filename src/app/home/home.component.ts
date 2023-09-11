@@ -4,6 +4,7 @@ import { ApiPointsService } from './api/api-points.service';
 import { ApiService } from '../api/api.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../api/authentication-service.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -37,6 +38,10 @@ export class HomeComponent implements OnInit {
   isVerified: boolean = false;
   promptRegister: boolean = false;
   isPartner: boolean = false;
+
+  userPrize: any;
+  usePrizeLoader: boolean = false;
+  usePrizeSuccess:boolean = false;
 
   constructor(
     public apiPoints: ApiPointsService,
@@ -142,7 +147,7 @@ export class HomeComponent implements OnInit {
       this.geoReady = false;
     };
 
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {enableHighAccuracy: true});
   }
 
   getCamera() {
@@ -198,7 +203,10 @@ export class HomeComponent implements OnInit {
                 { fps: 10, qrbox: 250 },
                 (decodedText, decodedResult) => {
                   this.cameraCodeRead = decodedText;
-                  if (typeof +this.cameraCodeRead === 'number' && !this.isPartner) {
+                  if (
+                    typeof +this.cameraCodeRead === 'number' &&
+                    !this.isPartner
+                  ) {
                     this.stopReading();
                   } else if (
                     typeof this.cameraCodeRead === 'string' &&
@@ -250,7 +258,24 @@ export class HomeComponent implements OnInit {
         .then((ignore) => {
           this.cameraButtonDisable = false;
           if (this.cameraCodeRead) {
-            console.log(this.cameraCodeRead)
+            console.log(this.cameraCodeRead);
+            this.apiPoints.checkUserPrize(this.cameraCodeRead).subscribe({
+              next: (data) => {
+                this.userPrize = data;
+                this.apiPoints.checkPrize = true;
+              },
+              error: (e) => {
+                if (e instanceof HttpErrorResponse && e.status === 406) {
+                  this.apiPoints.notPrizePartner = true;
+                }
+                if (e instanceof HttpErrorResponse && e.status === 410) {
+                  this.apiPoints.expiredPrize = true;
+                }
+                if (e instanceof HttpErrorResponse && e.status === 409) {
+                  this.apiPoints.invalidPrize = true;
+                }
+              },
+            });
           }
         })
         .catch((err) => {
@@ -271,5 +296,33 @@ export class HomeComponent implements OnInit {
     this.apiPoints.getPointSuccess = false;
     this.apiPoints.manyGetPoints = false;
     this.apiPoints.awayFromPoint = false;
+    this.apiPoints.invalidPrize = false;
+    this.apiPoints.expiredPrize = false;
+    this.apiPoints.notPrizePartner = false;
+    this.apiPoints.checkPrize = false;
+    this.cameraCodeRead = null;
+    this.usePrizeSuccess = false;
+  }
+
+  useUserPrize() {
+    this.usePrizeLoader = true;
+    this.apiPoints.redeemUserPrize(this.cameraCodeRead).subscribe({
+      next: (data) => {
+        this.usePrizeLoader = false;
+        this.usePrizeSuccess = true;
+        console.log(data);
+      },
+      error: (e) => {
+        if (e instanceof HttpErrorResponse && e.status === 406) {
+          this.apiPoints.notPrizePartner = true;
+        }
+        if (e instanceof HttpErrorResponse && e.status === 410) {
+          this.apiPoints.expiredPrize = true;
+        }
+        if (e instanceof HttpErrorResponse && e.status === 409) {
+          this.apiPoints.invalidPrize = true;
+        }
+      },
+    });
   }
 }

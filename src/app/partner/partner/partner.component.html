@@ -17,13 +17,13 @@
             class="fw-bold fs-5 mb-2 text-wrap"
             style="max-height: 2rem; overflow: auto; overflow-wrap: break-word"
           >
-            {{ partner?.company_name }}
+            {{ partner?.partner_company_name }}
           </div>
           <div
             class="mb-2 text-wrap fs-5"
             style="max-height: 6rem; overflow: auto; overflow-wrap: break-word"
           >
-            {{partner?.company_description}}
+            {{partner?.partner_company_description}}
           </div>
         </div>
       </div>
@@ -38,7 +38,7 @@
       </div>
       <div
         class="row bg-info-subtle "
-        *ngIf="partner?.number_contact"
+        *ngIf="partner?.partner_number_contact"
       >
         <div
           class="col d-flex justify-content-around align-items-center fw-bold "
@@ -46,17 +46,17 @@
           Telefone:
         </div>
         <div class="col d-flex justify-content-center">
-          {{ partner?.number_contact }}
+          {{ partner?.partner_number_contact }}
         </div>
       </div>
-      <div class="row bg-info-subtle" *ngIf="partner?.email_contact">
+      <div class="row bg-info-subtle" *ngIf="partner?.partner_email_contact">
         <div
           class="col fw-bold d-flex justify-content-center "
         >
           E-mail:
         </div>
         <div class="col d-flex justify-content-center">
-          {{ partner?.email_contact }}
+          {{ partner?.partner_email_contact }}
         </div>
       </div>
       <div class="row bg-warning-subtle border-warning">
@@ -66,17 +66,17 @@
           Endereço
         </div>
       </div>
-      <div class="row bg-warning-subtle" *ngIf="partner?.email_contact">
+      <div class="row bg-warning-subtle" *ngIf="partner?.partner_email_contact">
         <div
           class="col fw-bold d-flex justify-content-center "
         >
           Rua:
         </div>
         <div class="col d-flex justify-content-center">
-          {{ partner?.addres_rua }}
+          {{ partner?.address_street }}
         </div>
       </div>
-      <div class="row bg-warning-subtle" *ngIf="partner?.email_contact">
+      <div class="row bg-warning-subtle" *ngIf="partner?.partner_email_contact">
         <div
           class="col fw-bold d-flex justify-content-center "
         >

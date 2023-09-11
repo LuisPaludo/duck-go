@@ -21,9 +21,7 @@ export class LoginApiService {
       password: userData.senha,
     };
 
-    return this.http.post(this.urls.loginUrl, postData, {
-      headers: this.httpHeaders,
-    });
+    return this.http.post(this.urls.login, postData);
   }
 
   resendEmail(userData): Observable<any> {
@@ -31,8 +29,6 @@ export class LoginApiService {
       email: userData.email,
     };
 
-    return this.http.post(this.urls.resendUrl, postData, {
-      headers: this.httpHeaders,
-    });
+    return this.http.post(this.urls.resend, postData);
   }
 }

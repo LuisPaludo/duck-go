@@ -46,7 +46,7 @@ export class AuthenticationService {
       token: accessToken,
     };
     // Retorna um Observable da resposta
-    return this.http.post(this.urls.verifyUrl, postData, {
+    return this.http.post(this.urls.verify, postData, {
       headers: this.httpHeaders,
     });
   }
@@ -65,7 +65,7 @@ export class AuthenticationService {
       };
       // Faz uma chamada POST para atualizar o token.
       return this.http
-        .post(this.urls.refreshUrl, postData, {
+        .post(this.urls.refresh, postData, {
           headers: this.httpHeaders,
         })
         .pipe(
@@ -130,7 +130,7 @@ export class AuthenticationService {
 
     // Faz uma chamada POST para a API de logout.
     this.http
-      .post(this.urls.logoutUrl, '', {
+      .post(this.urls.logout, '', {
         headers: this.httpHeaders,
       })
       .subscribe({

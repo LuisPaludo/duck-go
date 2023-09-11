@@ -36,7 +36,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           next: (data) => {
             if (data) {
               this.user = data;
-              if(data.company_name_slug) {
+              if(data.partner_company_name_slug) {
                 this.partnerPage = true;
               }
               this.api.isPartner.next(data.is_partner);
@@ -68,7 +68,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   navigateToPartner():void {
-    const slug = this.user.company_name_slug;
+    const slug = this.user.partner_company_name_slug;
     this.router.navigate(['parceiros',slug])
   }
 }
