@@ -59,13 +59,21 @@ export class ApiPointsService {
       return;
     }
 
+    console.log('to aqui na API')
+    this.cacheUserCordLatitude = coords.latitude;
+    this.cacheUserCordLongitude = coords.longitude;
+    console.log(this.cacheUserCordLatitude)
+    console.log(this.cacheUserCordLongitude)
+
     this.postRequest = true;
     this.isLoading = true;
 
     let fullUrl = this.urls.touristAttaction + qrIdNumber;
 
+    console.log('Vai fazer o get')
     this.http.get(fullUrl).subscribe({
       next: (locationData: PointData[]) => {
+        console.log('Fez o get')
         if (locationData.length !== 0) {
           const points = locationData[0].points;
           const locationName = locationData[0].name;
@@ -82,8 +90,7 @@ export class ApiPointsService {
 
           console.log(this.user);
 
-          this.cacheUserCordLatitude = coords.latitude;
-          this.cacheUserCordLongitude = coords.longitude;
+
 
           this.cachePointCordLatitude = locationData[0].coordinates_lat;
           this.cachePointCordLongitude = locationData[0].coordinates_long;
@@ -104,6 +111,7 @@ export class ApiPointsService {
         this.isLoading = false;
       },
       error: (e) => {
+        console.log('Deu erro no get')
         this.waitingResult = false;
         this.isLoading = false;
 

@@ -117,15 +117,19 @@ export class HomeComponent implements OnInit {
 
     const successCallback = (position: GeolocationPosition) => {
       console.log('success call back')
+      console.log(this.geolocationPermission)
       this.checkPermission(this.geolocationPermissionName).then(
         (permission) => {
+          console.log('passou o check permission')
           this.geoReady = false;
           if (permission === 'granted') {
             this.buttonDisabler = false;
+            console.log('vai chamar a API')
             this.locationRead = position.coords;
             this.apiPoints.waitingResult = true;
             this.apiPoints.verifyQRCode(this.cameraCodeRead, this.locationRead);
           } else {
+            console.log('Não chamou a API')
             this.buttonDisabler = false;
             this.apiPoints.waitingResult = true;
           }
