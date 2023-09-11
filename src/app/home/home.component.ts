@@ -121,18 +121,25 @@ export class HomeComponent implements OnInit {
       this.checkPermission(this.geolocationPermissionName).then(
         (permission) => {
           console.log('passou o check permission')
-          this.geoReady = false;
-          if (permission === 'granted') {
-            this.buttonDisabler = false;
-            console.log('vai chamar a API')
-            this.locationRead = position.coords;
-            this.apiPoints.waitingResult = true;
-            this.apiPoints.verifyQRCode(this.cameraCodeRead, this.locationRead);
-          } else {
-            console.log('Não chamou a API')
-            this.buttonDisabler = false;
-            this.apiPoints.waitingResult = true;
-          }
+          console.log(this.geolocationPermission);
+          setTimeout(() => {
+            console.log(this.geolocationPermission);
+            this.geoReady = false;
+            if (permission === 'granted') {
+              this.buttonDisabler = false;
+              console.log('vai chamar a API');
+              this.locationRead = position.coords;
+              this.apiPoints.waitingResult = true;
+              this.apiPoints.verifyQRCode(
+                this.cameraCodeRead,
+                this.locationRead
+              );
+            } else {
+              console.log('Não chamou a API');
+              this.buttonDisabler = false;
+              this.apiPoints.waitingResult = true;
+            }
+          }, 100);
         }
       );
     };
