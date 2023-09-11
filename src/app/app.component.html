@@ -106,7 +106,7 @@
           <li class="nav-item">
             <a
               data-bs-dismiss="offcanvas"
-              *ngIf="userVerified&&isPartner"
+              *ngIf="userVerified && isPartner"
               class="nav-link active pe-md-5 text-secondary"
               routerLink="/perfil"
               >Perfil da Empresa</a
@@ -115,7 +115,7 @@
           <li class="nav-item">
             <a
               data-bs-dismiss="offcanvas"
-              *ngIf="userVerified&&!isPartner"
+              *ngIf="userVerified && !isPartner"
               class="nav-link active pe-md-5 text-secondary"
               routerLink="/perfil"
               >Perfil do Usuário</a
@@ -123,7 +123,7 @@
           </li>
           <li class="nav-item">
             <a
-            *ngIf="!isPartner"
+              *ngIf="!isPartner"
               data-bs-dismiss="offcanvas"
               class="nav-link active pe-md-5 text-secondary"
               routerLink="/como-jogar"
@@ -151,7 +151,7 @@
           <li class="nav-item">
             <a
               data-bs-dismiss="offcanvas"
-              *ngIf="userVerified&&isPartner"
+              *ngIf="userVerified && isPartner"
               class="nav-link active pe-md-5 text-secondary"
               routerLink="novo-premio"
               >Criar um Prêmio</a
@@ -166,7 +166,7 @@
             >
           </li>
         </ul>
-        <div class="d-flex flex-column flex-lg-row" >
+        <div class="d-flex flex-column flex-lg-row">
           <a
             data-bs-dismiss="offcanvas"
             *ngIf="!userVerified"
@@ -187,20 +187,21 @@
             (click)="logout()"
             href=""
             class="btn btn-danger mx-2 my-2 my-lg-0 nav-link active p-2"
-            >Logout</button
           >
+            Logout
+          </button>
         </div>
       </div>
     </div>
   </div>
 </nav>
-<main class="">
+<main>
   <router-outlet></router-outlet>
 </main>
 <footer>
   <div
     class="container-fluid border-top border text-center mt-1 text-secondary fs-6"
   >
-    Todos os direitos reservados - Nome da empresa aqui e outras informações
+    Todos os direitos reservados - (Nome da empresa aqui e outras informações)
   </div>
 </footer>

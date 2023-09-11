@@ -17,12 +17,12 @@ import { ResendEmailComponent } from './user/login/resend-email/resend-email.com
 import { TokenInterceptor } from './interceptor/token-interceptor.interceptor';
 import { VerifyEmailComponent } from './user/register/verify-email/verify-email.component';
 import { PrizesComponent } from './prizes/prizes.component';
-import { CupounsComponent } from './user/profile/cupouns/cupouns.component';
 import { PhonePipe } from './utils/pipe/phone/phone.pipe';
 import { PartnerGuideComponent } from './partner-guide/partner-guide.component';
 import { CreateComponent } from './prizes/create/create/create.component';
 import { PartnerComponent } from './partner/partner/partner.component';
 import { NotFoundComponent } from './notFound/not-found/not-found.component';
+import { UserPrizesComponent } from './user/profile/user-prizes/user-prizes.component';
 
 
 @NgModule({
@@ -39,12 +39,12 @@ import { NotFoundComponent } from './notFound/not-found/not-found.component';
     ResendEmailComponent,
     VerifyEmailComponent,
     PrizesComponent,
-    CupounsComponent,
     PhonePipe,
     PartnerGuideComponent,
     CreateComponent,
     PartnerComponent,
     NotFoundComponent,
+    UserPrizesComponent,
   ],
   imports: [
     BrowserModule,

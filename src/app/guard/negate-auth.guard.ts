@@ -19,12 +19,6 @@ export class NegateAuthGuard {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> {
-
-    let cacheAuthUser: boolean = false;
-    if (localStorage.getItem('isVerified')) {
-      cacheAuthUser = JSON.parse(localStorage.getItem('isVerified')).isVerified;
-    }
-
     return this.api.isAuthenticated.pipe(
       map((isLoggedIn) => {
         if (!isLoggedIn) {

@@ -11,18 +11,12 @@ import { AuthenticationService } from 'src/app/api/authentication-service.servic
 })
 export class LoginComponent implements OnInit {
   login!: FormGroup;
-  resend!: FormGroup;
 
   buttonDisable: boolean = false;
   verifyEmail: boolean = false;
   incorrect: boolean = false;
   success: boolean = false;
-
-  sendEmail: boolean = false;
-  resendIncorrect: boolean = false;
-  resendSuccess: boolean = false;
-  buttonSend: boolean = false;
-  buttonBack:boolean = false;
+  resend: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -36,10 +30,6 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       senha: ['', [Validators.required]],
     });
-
-    this.resend = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-    });
   }
 
   onSubmit() {
@@ -51,12 +41,10 @@ export class LoginComponent implements OnInit {
         },
         error: (e) => {
           this.buttonDisable = false;
-          console.log(e);
           this.verifyEmail = false;
           this.incorrect = false;
           if (e.error.email) {
             this.login.get('email')?.setErrors({ incorrect: true });
-            console.log(e);
           }
           if (
             e.error.non_field_errors ==
@@ -79,11 +67,11 @@ export class LoginComponent implements OnInit {
   }
 
   private handleLoginSuccess(data: any) {
-    localStorage.setItem('token', data.access );
+    localStorage.setItem('token', data.access);
     localStorage.setItem('refresh', data.refresh);
-    localStorage.setItem('isVerified', 'true' );
+    localStorage.setItem('isVerified', 'true');
     this.api.isPartner.next(data.user.is_partner);
-    if(data.user.is_partner) {
+    if (data.user.is_partner) {
       localStorage.setItem('isPartner', 'true');
     }
   }
@@ -97,45 +85,17 @@ export class LoginComponent implements OnInit {
     this.api.currentToken.next(localStorage.getItem('token'));
     this.api.isAuthenticated.subscribe({
       next: (isVerified) => {
-        if(isVerified){
+        if (isVerified) {
           setTimeout(() => {
             this.router.navigate(['']);
-          }, 2000);
+          }, 1000);
         }
-      }
+      },
     });
-
-
   }
 
   redirect() {
-    if(this.sendEmail) {
-      this.sendEmail = false;
-      this.verifyEmail = false;
-    } else {
-      this.sendEmail = true;
-    }
-      // this.login.markAsUntouched();
-  }
-
-  send() {
-
-    if (this.resend?.valid) {
-      this.buttonSend = true;
-      this.buttonBack = true;
-      this.apiLogin.resendEmail(this.resend.getRawValue()).subscribe({
-        next: () => {
-          console.log('Email Enviado com sucesso')
-          this.resendSuccess = true;
-          this.buttonBack = false;
-        },
-        error: (e) => {
-          console.error('Erro -> ' + e)
-        }
-      })
-
-    } else {
-      this.resend.markAllAsTouched();
-    }
+    this.resend = true;
+    this.router.navigate(['/login/reenviar']);
   }
 }

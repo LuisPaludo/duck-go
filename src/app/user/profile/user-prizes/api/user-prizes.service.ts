@@ -9,7 +9,7 @@ import { Urls } from 'src/app/utils/urls';
 @Injectable({
   providedIn: 'root',
 })
-export class CouponsApiService {
+export class UserPrizesService {
   private isGetting: boolean = false;
 
   private urls: Urls = new Urls();
@@ -25,22 +25,16 @@ export class CouponsApiService {
   }
 
   getCreatedPrizes(): Observable<Prizes[]> {
-
-
     return this.http.get<Prizes[]>(this.urls.partnerPrizes);
   }
 
   getQrCode(prize: number): Observable<any> {
-
-
     const fullUrl = this.urls.qrCode + prize;
 
     return this.http.get<any>(fullUrl);
   }
 
   disablePrize(prize: number): Observable<any> {
-
-
     const fullUrl = this.urls.prize + prize + '/';
 
     const patchData = {
@@ -51,7 +45,6 @@ export class CouponsApiService {
   }
 
   activatePrize(prize: number): Observable<any> {
-
     const fullUrl = this.urls.prize + prize + '/';
 
     const patchData = {

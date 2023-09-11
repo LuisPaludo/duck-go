@@ -13,11 +13,12 @@ import { AuthGuard } from './guard/auth-guard.guard';
 import { NegateAuthGuard } from './guard/negate-auth.guard';
 import { VerifyEmailComponent } from './user/register/verify-email/verify-email.component';
 import { PrizesComponent } from './prizes/prizes.component';
-import { CupounsComponent } from './user/profile/cupouns/cupouns.component';
 import { PartnerGuideComponent } from './partner-guide/partner-guide.component';
 import { CreateComponent } from './prizes/create/create/create.component';
 import { PartnerComponent } from './partner/partner/partner.component';
 import { NotFoundComponent } from './notFound/not-found/not-found.component';
+import { UserPrizesComponent } from './user/profile/user-prizes/user-prizes.component';
+import { PartnerGuard } from './guard/partner.guard';
 
 const routes: Routes = [
   {
@@ -35,13 +36,18 @@ const routes: Routes = [
     canActivate: [NegateAuthGuard],
   },
   {
+    path: 'login/reenviar',
+    component: ResendEmailComponent,
+    canActivate: [NegateAuthGuard],
+  },
+  {
     path: 'como-jogar',
     component: HowtoplayComponent,
   },
   {
     path: 'guia-parceiros',
     component: PartnerGuideComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, PartnerGuard],
   },
   {
     path: 'perfil',
@@ -59,7 +65,7 @@ const routes: Routes = [
       },
       {
         path: 'meus-cupons',
-        component: CupounsComponent,
+        component: UserPrizesComponent,
         canActivate: [AuthGuard],
       },
     ],
@@ -92,16 +98,16 @@ const routes: Routes = [
   {
     path: 'novo-premio',
     component: CreateComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, PartnerGuard],
   },
   {
     path: '**',
     component: NotFoundComponent,
-  }
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -1,7 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, ReplaySubject, catchError, map, of, switchMap, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  ReplaySubject,
+  catchError,
+  map,
+  of,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { Urls } from '../utils/urls';
 
 @Injectable({
@@ -19,7 +29,9 @@ export class AuthenticationService {
   // novo observador que se inscrever. Ele é usado principalmente para lidar com atualizações simultâneas de token.
   private refreshTokenSubject: ReplaySubject<any> = new ReplaySubject(1);
   // Um ReplaySubject que informa se o usuário está ou não autenticado.
-  public userAuthenticated: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
+  public userAuthenticated: ReplaySubject<boolean> = new ReplaySubject<boolean>(
+    1
+  );
 
   // Um BehaviorSubject que armazena o token atual do usuário. Ele inicializa com o token armazenado no localStorage.
   public currentToken: BehaviorSubject<string | null> = new BehaviorSubject<
@@ -29,9 +41,6 @@ export class AuthenticationService {
   // Outro ReplaySubject que informa se o usuário é ou não um "parceiro".
   public isPartner: ReplaySubject<boolean> = new ReplaySubject<boolean>(1);
   public isPartner$ = this.isPartner.asObservable();
-
-  // Define o cabeçalho HTTP padrão com 'Content-Type' como 'application/json'.
-  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   // Intância da classe de cosntantes Urls
   private urls: Urls = new Urls();
@@ -46,9 +55,7 @@ export class AuthenticationService {
       token: accessToken,
     };
     // Retorna um Observable da resposta
-    return this.http.post(this.urls.verify, postData, {
-      headers: this.httpHeaders,
-    });
+    return this.http.post(this.urls.verify, postData);
   }
 
   refreshToken(): Observable<any> {
@@ -64,25 +71,21 @@ export class AuthenticationService {
         refresh: refreshToken,
       };
       // Faz uma chamada POST para atualizar o token.
-      return this.http
-        .post(this.urls.refresh, postData, {
-          headers: this.httpHeaders,
+      return this.http.post(this.urls.refresh, postData).pipe(
+        // Se a chamada for bem-sucedida, ele armazena o novo token e notifica os observadores. Se falhar, ele faz logout local.
+        // tap é usado para armazenar tokens e atualizar algumas propriedades após uma chamada HTTP bem-sucedida.
+        tap((tokens) => {
+          this.storeTokens(tokens);
+          this.refreshTokenSubject.next(tokens);
+          this.refreshTokenInProgress = false;
+          this.refreshFailed = false;
+        }),
+        catchError((error) => {
+          this.refreshTokenInProgress = false;
+          this.localLogout();
+          return throwError(() => error);
         })
-        .pipe(
-          // Se a chamada for bem-sucedida, ele armazena o novo token e notifica os observadores. Se falhar, ele faz logout local.
-          // tap é usado para armazenar tokens e atualizar algumas propriedades após uma chamada HTTP bem-sucedida.
-          tap((tokens) => {
-            this.storeTokens(tokens);
-            this.refreshTokenSubject.next(tokens);
-            this.refreshTokenInProgress = false;
-            this.refreshFailed = false;
-          }),
-          catchError((error) => {
-            this.refreshTokenInProgress = false;
-            this.localLogout();
-            return throwError(() => error);
-          })
-        );
+      );
     } else {
       // Se a atualização do token já estiver em andamento, ele apenas retorna o refreshTokenSubject.
       return this.refreshTokenSubject.asObservable();
@@ -129,24 +132,20 @@ export class AuthenticationService {
     this.logoutInProgress = true;
 
     // Faz uma chamada POST para a API de logout.
-    this.http
-      .post(this.urls.logout, '', {
-        headers: this.httpHeaders,
-      })
-      .subscribe({
-        next: () => {
-          // Limpa o localStorage, atualiza os observadores e navega para a rota raiz.
-          localStorage.clear();
-          this.currentToken.next(null);
-          this.logoutInProgress = false;
-          this.userAuthenticated.next(false);
-          this.isPartner.next(false);
-          this.router.navigate(['']);
-        },
-        error: (e) => {
-          console.log('erro no logout');
-        },
-      });
+    this.http.post(this.urls.logout, '').subscribe({
+      next: () => {
+        // Limpa o localStorage, atualiza os observadores e navega para a rota raiz.
+        localStorage.clear();
+        this.currentToken.next(null);
+        this.logoutInProgress = false;
+        this.userAuthenticated.next(false);
+        this.isPartner.next(false);
+        this.router.navigate(['']);
+      },
+      error: (e) => {
+        console.log('erro no logout');
+      },
+    });
   }
 
   // Um método auxiliar para fazer logout localmente, sem fazer uma chamada à API.

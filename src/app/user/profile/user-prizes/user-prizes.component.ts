@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { CouponsApiService } from './api/coupons-api.service';
 import { PrizeResponse, Prizes } from 'src/app/prizes/models/prizes';
+import { UserPrizesService } from './api/user-prizes.service';
 
 @Component({
-  selector: 'app-cupouns',
-  templateUrl: './cupouns.component.html',
-  styleUrls: ['./cupouns.component.css'],
+  selector: 'app-user-prizes',
+  templateUrl: './user-prizes.component.html',
+  styleUrls: ['./user-prizes.component.css'],
 })
-export class CupounsComponent implements OnInit {
+export class UserPrizesComponent {
   public redeemedPrizes: PrizeResponse[];
   public createdPrizes: Prizes[];
   public dataGet: boolean = false;
@@ -17,9 +17,9 @@ export class CupounsComponent implements OnInit {
 
   private isPartner: boolean = false;
 
-  private index:number;
+  private index: number;
 
-  constructor(private apiRedeemedPrizes: CouponsApiService) {}
+  constructor(private apiRedeemedPrizes: UserPrizesService) {}
 
   ngOnInit(): void {
     this.isPartner = localStorage.getItem('isPartner') === 'true';
@@ -82,7 +82,7 @@ export class CupounsComponent implements OnInit {
     });
   }
 
-  getPrize(prize: number, index:number): void {
+  getPrize(prize: number, index: number): void {
     this.prize = prize;
     this.index = index;
   }

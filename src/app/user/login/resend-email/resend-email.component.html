@@ -1,1 +1,73 @@
-<p>resend-email works!</p>
+<div class="container p-4">
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4 col">
+      <div class="card">
+        <h5 class="card-header">Reenviar E-mail de Verificação:</h5>
+        <div class="card-body">
+          <form
+            [formGroup]="resend"
+            class=""
+          >
+            <label for="email" class="form-label"
+              >Digite o e-mail cadastrado:</label
+            >
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="form-control my-2"
+              [ngClass]="{
+                'is-invalid':
+                  this.resend.get('email')?.invalid &&
+                  (this.resend.get('email')?.touched ||
+                    this.resend.get('email')?.dirty)
+              }"
+              formControlName="email"
+            />
+            <div
+              *ngIf="
+                this.resend.get('email')?.invalid &&
+                (this.resend.get('email')?.touched ||
+                  this.resend.get('email')?.dirty)
+              "
+              class="invalid-feedback"
+            >
+              Insira seu e-mail.
+            </div>
+            <div
+              *ngIf="resendSuccess"
+              class="alert alert-success mt-3 d-flex align-items-center"
+              role="alert"
+            >
+              Se o e-mail constar em nosso banco de dados, você recebera em
+              breve o novo e-mail de confirmação.
+            </div>
+            <div class="row">
+              <div class="col">
+                <button
+                  type="submit"
+                  [disabled]="buttonSend"
+                  (click)="send()"
+                  class="btn btn-success mt-2"
+                >
+                  Enviar
+                </button>
+              </div>
+              <div class="col">
+                <button
+                  type="submit"
+                  [disabled]="buttonBack"
+                  (click)="redirect()"
+                  class="btn btn-primary mt-2"
+                >
+                  Voltar
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

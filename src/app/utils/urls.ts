@@ -1,6 +1,7 @@
 export class Urls {
   // baseUrl: string = 'http://192.168.0.125:8000';
-  baseUrl: string = 'http://127.0.0.1:8000/';
+  // baseUrl: string = 'http://127.0.0.1:8000/';
+  baseUrl: string = 'https://web-production-a3bd.up.railway.app/';
 
   verify: string = this.baseUrl + 'accounts/token/verify/';
   refresh: string = this.baseUrl + 'accounts/token/refresh/';
