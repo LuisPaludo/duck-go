@@ -113,7 +113,10 @@ export class HomeComponent implements OnInit {
   getGeolocationPermission() {
     this.buttonDisabler = true;
 
+    console.log('vai chamar a permissao pro geo')
+
     const successCallback = (position: GeolocationPosition) => {
+      console.log('success call back')
       this.checkPermission(this.geolocationPermissionName).then(
         (permission) => {
           this.geoReady = false;
@@ -131,6 +134,8 @@ export class HomeComponent implements OnInit {
     };
 
     const errorCallback = (error) => {
+      console.log('error call back');
+      console.log(error.code)
       this.erroGeo = true;
       this.apiPoints.waitingResult = true;
       switch (error.code) {
@@ -212,6 +217,9 @@ export class HomeComponent implements OnInit {
                 { fps: 10, qrbox: 250 },
                 (decodedText, decodedResult) => {
                   this.cameraCodeRead = decodedText;
+
+                  console.log('code ' + decodedText)
+
                   if (
                     typeof +this.cameraCodeRead === 'number' &&
                     !this.isPartner
@@ -245,6 +253,8 @@ export class HomeComponent implements OnInit {
         .stop()
         .then((ignore) => {
           this.cameraButtonDisable = false;
+          console.log(this.cameraCodeRead)
+          console.log(this.geolocationPermission)
           if (this.cameraCodeRead) {
             if (this.geolocationPermission === 'granted') {
               this.apiPoints.waitingResult = true;
