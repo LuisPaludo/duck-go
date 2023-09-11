@@ -41,7 +41,9 @@ export class HomeComponent implements OnInit {
 
   userPrize: any;
   usePrizeLoader: boolean = false;
-  usePrizeSuccess:boolean = false;
+  usePrizeSuccess:boolean = false
+
+
 
   constructor(
     public apiPoints: ApiPointsService,
@@ -238,6 +240,7 @@ export class HomeComponent implements OnInit {
           this.cameraButtonDisable = false;
           if (this.cameraCodeRead) {
             if (this.geolocationPermission === 'granted') {
+              this.apiPoints.waitingResult = true;
               this.getGeolocationPermission();
             } else {
               this.getGeolocation();
@@ -258,7 +261,6 @@ export class HomeComponent implements OnInit {
         .then((ignore) => {
           this.cameraButtonDisable = false;
           if (this.cameraCodeRead) {
-            console.log(this.cameraCodeRead);
             this.apiPoints.checkUserPrize(this.cameraCodeRead).subscribe({
               next: (data) => {
                 this.userPrize = data;

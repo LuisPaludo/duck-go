@@ -25,6 +25,8 @@ export class DataComponent implements OnInit {
   emailInvalid: boolean = false;
   numberInvalid:boolean = false;
 
+  saveDisabler:boolean = false;
+
   private cepSubscription: Subscription;
   selectedFile: File = null;
 
@@ -189,6 +191,7 @@ export class DataComponent implements OnInit {
 
   save() {
     if (this.profile.valid) {
+      this.saveDisabler = true;
       this.apiPatchUser
         .updateUserData(this.profile.getRawValue(), this.selectedFile, this.isPartner)
         .subscribe({
@@ -200,8 +203,10 @@ export class DataComponent implements OnInit {
             this.profileApi.userDataSubject.next(data);
             this.userEditing = false;
             this.profile.disable();
+            this.saveDisabler = false;
           },
           error: (e: HttpErrorResponse) => {
+            this.saveDisabler = false;
             this.apiPatchUser.isLoading = false;
             if (e.status === 400) {
               if (e.error.email_contact) {

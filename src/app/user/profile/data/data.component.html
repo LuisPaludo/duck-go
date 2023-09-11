@@ -300,6 +300,7 @@
             <button
               *ngIf="userEditing"
               class="btn btn-primary"
+              [disabled] = "saveDisabler"
               (click)="save()"
             >
               Salvar

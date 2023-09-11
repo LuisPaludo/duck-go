@@ -29,7 +29,7 @@ export class ApiPointsService {
 
   public notPrizePartner: boolean = false;
   public invalidPrize: boolean = false;
-  public expiredPrize:boolean = false;
+  public expiredPrize: boolean = false;
 
   postRequest: boolean = false;
   isLoading: boolean = false;
@@ -40,6 +40,14 @@ export class ApiPointsService {
   public locationDescription: string;
   public locationPhoto: string;
   public locationPoints: number;
+
+  public waitingResult: boolean = false;
+
+  public cacheUserCordLatitude;
+  public cacheUserCordLongitude;
+
+  public cachePointCordLatitude;
+  public cachePointCordLongitude;
 
   user: GeoPoint;
   center: GeoPoint;
@@ -56,52 +64,59 @@ export class ApiPointsService {
 
     let fullUrl = this.urls.touristAttaction + qrIdNumber;
 
-    this.http
-      .get(fullUrl)
-      .subscribe({
-        next: (locationData: PointData[]) => {
-          if (locationData.length !== 0) {
-            const points = locationData[0].points;
-            const locationName = locationData[0].name;
+    this.http.get(fullUrl).subscribe({
+      next: (locationData: PointData[]) => {
+        if (locationData.length !== 0) {
+          const points = locationData[0].points;
+          const locationName = locationData[0].name;
 
-            this.center = {
-              latitude: locationData[0].coordinates_lat,
-              longitude: locationData[0].coordinates_long,
-            };
+          this.center = {
+            latitude: locationData[0].coordinates_lat,
+            longitude: locationData[0].coordinates_long,
+          };
 
-            this.user = {
-              latitude: coords.latitude,
-              longitude: coords.longitude,
-            };
+          this.user = {
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+          };
 
-            const result = this.isWithinRadius(this.user, this.center);
+          console.log(this.user);
 
-            if (result) {
-              this.savePoints(points, locationName);
-              this.locationPhoto = locationData[0].photo;
-            } else {
-              this.awayFromPoint = true;
-            }
+          this.cacheUserCordLatitude = coords.latitude;
+          this.cacheUserCordLongitude = coords.longitude;
+
+          this.cachePointCordLatitude = locationData[0].coordinates_lat;
+          this.cachePointCordLongitude = locationData[0].coordinates_long;
+
+          const result = this.isWithinRadius(this.user, this.center);
+
+          if (result) {
+            this.savePoints(points, locationName);
+            this.locationPhoto = locationData[0].photo;
           } else {
-            console.error('Código inválido');
+            this.awayFromPoint = true;
           }
+        } else {
+          console.error('Código inválido');
+        }
 
-          this.postRequest = false;
-          this.isLoading = false;
-        },
-        error: (e) => {
-          this.isLoading = false;
+        this.postRequest = false;
+        this.isLoading = false;
+      },
+      error: (e) => {
+        this.waitingResult = false;
+        this.isLoading = false;
 
-          if (e.status === 401) {
-          } else {
-            console.error('Não foi possível acessar o link');
-          }
-        },
-        complete: () => {
-          this.center = null;
-          this.user = null;
-        },
-      });
+        if (e.status === 401) {
+        } else {
+          console.error('Não foi possível acessar o link');
+        }
+      },
+      complete: () => {
+        this.center = null;
+        this.user = null;
+      },
+    });
   }
 
   isWithinRadius(user: GeoPoint, center: GeoPoint, radius = 100): boolean {
@@ -148,8 +163,10 @@ export class ApiPointsService {
         // this.locationName = info.
         this.getPointSuccess = true;
         this.isSaving = false;
+        this.waitingResult = false;
       },
       error: (e) => {
+        this.waitingResult = false;
         this.isSaving = false;
         if (e.status === 429) {
           this.manyGetPoints = true;
@@ -161,7 +178,6 @@ export class ApiPointsService {
   getUserHistory(): Observable<any> {
     return this.http.get(this.urls.history);
   }
-
 
   redeemUserPrize(code: string): Observable<any> {
     const postData = {
