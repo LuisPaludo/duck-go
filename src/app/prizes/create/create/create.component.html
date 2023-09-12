@@ -5,7 +5,15 @@
     >
       Preview
     </div>
-    <div class="container border border-2 rounded mb-3 shadow-sm bg-white">
+    <div class="container d-flex justify-content-center">
+      <div *ngIf="profileApi.loading" class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div
+      *ngIf="!profileApi.loading"
+      class="container border border-2 rounded mb-3 shadow-sm bg-white"
+    >
       <div class="row p-4">
         <div class="col-3 d-flex justify-content-center align-items-center p-0">
           <img
@@ -85,7 +93,16 @@
       >
         Dados do Prêmio
       </div>
-      <div class="row">
+      <div class="container d-flex justify-content-center">
+        <div
+          *ngIf="apiCreatePrize.loading"
+          class="spinner-border"
+          role="status"
+        >
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <div *ngIf="!apiCreatePrize.loading" class="row">
         <label for="nome" class="form-label">Nome do Cupom</label>
         <div class="container">
           <input
@@ -116,7 +133,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div *ngIf="!apiCreatePrize.loading" class="row">
         <label for="descricao" class="form-label">Descrição</label>
         <div class="container">
           <input
@@ -149,7 +166,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div *ngIf="!apiCreatePrize.loading" class="row">
         <div class="col-md">
           <label for="unidades" class="form-label">Unidades</label>
           <input
@@ -292,7 +309,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div *ngIf="!apiCreatePrize.loading" class="row">
         <div class="col">
           <label for="categoria" class="form-label">Categoria do Brinde</label>
           <select
@@ -341,6 +358,7 @@
       <div class="row my-2">
         <div class="col d-flex justify-content-center">
           <button
+            [disabled]="apiCreatePrize.loading"
             class="btn btn-primary"
             data-bs-toggle="modal"
             data-bs-target="#confirmationModal"

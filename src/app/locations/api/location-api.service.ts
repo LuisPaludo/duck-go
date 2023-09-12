@@ -11,6 +11,8 @@ export class LocationApiService {
 
   httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
+  public loading:boolean = false;
+
   constructor(private http: HttpClient) {}
 
   getAllLocations(): Observable<any> {

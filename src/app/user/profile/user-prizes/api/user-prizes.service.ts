@@ -10,14 +10,12 @@ import { Urls } from 'src/app/utils/urls';
   providedIn: 'root',
 })
 export class UserPrizesService {
-  private isGetting: boolean = false;
+  public loading:boolean = false;
 
   private urls: Urls = new Urls();
 
   constructor(
     private http: HttpClient,
-    private apiPoints: ApiPointsService,
-    private api: AuthenticationService
   ) {}
 
   getRedeemedPrizes(): Observable<PrizeResponse[]> {

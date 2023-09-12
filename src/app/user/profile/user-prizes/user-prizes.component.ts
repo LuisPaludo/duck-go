@@ -19,25 +19,32 @@ export class UserPrizesComponent {
 
   private index: number;
 
-  constructor(private apiRedeemedPrizes: UserPrizesService) {}
+  constructor(public apiRedeemedPrizes: UserPrizesService) {}
 
   ngOnInit(): void {
+    this.apiRedeemedPrizes.loading = true;
     this.isPartner = localStorage.getItem('isPartner') === 'true';
 
     if (this.isPartner) {
       this.apiRedeemedPrizes.getCreatedPrizes().subscribe({
         next: (data: Prizes[]) => {
+          this.apiRedeemedPrizes.loading = false;
           this.createdPrizes = data;
         },
-        error: (e) => {},
+        error: (e) => {
+          this.apiRedeemedPrizes.loading = false;
+        },
       });
     } else {
       this.apiRedeemedPrizes.getRedeemedPrizes().subscribe({
         next: (data: PrizeResponse[]) => {
+          this.apiRedeemedPrizes.loading = false;
           this.redeemedPrizes = data;
           console.log(this.redeemedPrizes);
         },
-        error: (e) => {},
+        error: (e) => {
+          this.apiRedeemedPrizes.loading = false;
+        },
       });
     }
   }

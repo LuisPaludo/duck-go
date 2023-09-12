@@ -11,6 +11,8 @@ export class CreatePrizeService {
 
   private urls: Urls = new Urls();
 
+  public loading:boolean = false;
+
   constructor(private http:HttpClient, private apiPoints:ApiPointsService) {}
 
   getCategory():Observable<any> {

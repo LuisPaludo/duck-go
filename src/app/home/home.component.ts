@@ -290,12 +290,15 @@ export class HomeComponent implements OnInit {
         .then((ignore) => {
           this.cameraButtonDisable = false;
           if (this.cameraCodeRead) {
+            this.apiPoints.waitingResult = true;
             this.apiPoints.checkUserPrize(this.cameraCodeRead).subscribe({
               next: (data) => {
                 this.userPrize = data;
                 this.apiPoints.checkPrize = true;
+                this.apiPoints.waitingResult = false;
               },
               error: (e) => {
+                this.apiPoints.waitingResult = false;
                 if (e instanceof HttpErrorResponse && e.status === 406) {
                   this.apiPoints.notPrizePartner = true;
                 }
@@ -336,14 +339,17 @@ export class HomeComponent implements OnInit {
   }
 
   useUserPrize() {
+    this.apiPoints.waitingResult = true;
     this.usePrizeLoader = true;
     this.apiPoints.redeemUserPrize(this.cameraCodeRead).subscribe({
       next: (data) => {
+        this.apiPoints.waitingResult = false;
         this.usePrizeLoader = false;
         this.usePrizeSuccess = true;
         console.log(data);
       },
       error: (e) => {
+        this.apiPoints.waitingResult = false;
         if (e instanceof HttpErrorResponse && e.status === 406) {
           this.apiPoints.notPrizePartner = true;
         }

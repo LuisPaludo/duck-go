@@ -11,12 +11,14 @@ export class HistoryComponent implements OnInit{
 
   public history:UserHistory[];
 
-  constructor(private apiHistory: HistoryService) {}
+  constructor(public apiHistory: HistoryService) {}
 
   ngOnInit(): void {
+    this.apiHistory.loading = true;
     this.apiHistory.getUserHistory().subscribe({
       next: (data:UserHistory[]) => {
         this.history = data.slice(0).reverse()  ;
+        this.apiHistory.loading = false;
       }
     })
   }

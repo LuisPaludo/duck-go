@@ -313,13 +313,13 @@
   <div *ngIf="erroGeo">
     Erro na geolocalização
   </div>
-</div>
+</div> -->
 
 <div class="container d-flex justify-content-center">
   <div *ngIf="apiPoints.waitingResult" class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
-</div> -->
+</div>
 
 <div *ngIf="apiPoints.getPointSuccess">
   <button class="btn btn-primary mt-3 mx-3" (click)="goBack()">Voltar</button>
@@ -417,7 +417,7 @@
   </div>
 </div>
 
-<div *ngIf="apiPoints.checkPrize">
+<div *ngIf="apiPoints.checkPrize && !apiPoints.waitingResult">
   <button class="btn btn-primary mt-3 mx-3" (click)="goBack()">Voltar</button>
   <div class="container">
     <div class="container p-2">

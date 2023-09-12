@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LocationApiService } from './api/location-api.service';
 
@@ -8,20 +8,28 @@ import { LocationApiService } from './api/location-api.service';
   templateUrl: './locations.component.html',
   styleUrls: ['./locations.component.css'],
 })
-export class LocationsComponent {
+export class LocationsComponent implements OnInit {
   locations: any;
   location:any;
   showAll:boolean = true;
 
-  constructor(private api: LocationApiService) {
+  constructor(public apiLocation: LocationApiService) {
+  }
+
+  ngOnInit(): void {
+    this
     this.getLocations();
   }
 
   getLocations = () => {
-    this.api.getAllLocations().subscribe({
-      next: (data) => this.locations = data,
-      error: (e) => console.log(e.message),
-      complete: () => {}
+    this.apiLocation.loading = true;
+    this.apiLocation.getAllLocations().subscribe({
+      next: (data) => {
+        this.locations = data;
+        this.apiLocation.loading = false;
+      },
+      error: (e) => this.apiLocation.loading = false,
+      complete: () => {},
     });
   };
 

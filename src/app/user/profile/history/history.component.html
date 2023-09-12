@@ -1,19 +1,25 @@
-<div class="row d-flex justify-content-center">
+<div class="container d-flex justify-content-center">
+  <div *ngIf="apiHistory.loading" class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div *ngIf="!apiHistory.loading" class="row d-flex justify-content-center">
   <div class="col-md-6 fs-2 fw-bold py-2">Histórico do Usuário:</div>
 </div>
-<div class="row d-flex justify-content-center">
+<div *ngIf="!apiHistory.loading" class="row d-flex justify-content-center">
   <div class="col-md-6">
     <div class="row text-center fw-bold">
       <div class="border border-1 border-dark col-3">Data</div>
-      <div class="border border-1 border-dark col-5">Descrição</div>
-      <div class="border border-1 border-dark col-2">Pontos</div>
+      <div class="border border-1 border-dark col-4">Descrição</div>
+      <div class="border border-1 border-dark col-3">Pontos</div>
       <div class="border border-1 border-dark col-2">Saldo</div>
     </div>
 
     <div *ngFor="let entry of history" class="row text-center fw-bold">
       <div class="border border-1 border-dark col-3">{{entry.date | date:'short'}}</div>
-      <div class="border border-1 border-dark col-5">{{entry.description}}</div>
-      <div class="border border-1 border-dark col-2">{{entry.points}}</div>
+      <div class="border border-1 border-dark col-4">{{entry.description}}</div>
+      <div class="border border-1 border-dark col-3">{{entry.points}}</div>
       <div class="border border-1 border-dark col-2">{{entry.total_points}}</div>
     </div>
   </div>

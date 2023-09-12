@@ -27,9 +27,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.profileApi.loading = true;
     this.profileApi.getUser().subscribe({
       next: (data: User) => {
         this.user = data;
+        this.profileApi.loading = false;
       },
       complete: () => {
         this.profileApi.userData$.subscribe({
@@ -48,9 +50,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
         });
       },
     });
-
+    this.profileApi.loading = true;
     this.pointsApi.getUserHistory().subscribe({
       next: (data: UserHistory[]) => {
+        this.profileApi.loading = false;
         if (data.length === 0) {
           this.total_points = 0;
         } else {

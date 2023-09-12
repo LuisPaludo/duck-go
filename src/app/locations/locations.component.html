@@ -1,8 +1,14 @@
-<button *ngIf="!showAll" class="btn btn-primary mt-3 mx-3" (click)="goBack()">
+<button *ngIf="!showAll && !apiLocation.loading" class="btn btn-primary mt-3 mx-3" (click)="goBack()">
   Voltar
 </button>
 
-<div *ngIf="showAll" class="px-3">
+<div class="container d-flex justify-content-center">
+  <div *ngIf="apiLocation.loading" class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div *ngIf="showAll && !apiLocation.loading" class="px-3">
   <div
     *ngFor="let location of locations"
     class="container border border-3 border-primary rounded my-5"

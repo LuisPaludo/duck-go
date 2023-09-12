@@ -23,7 +23,7 @@ export class Urls {
   redeem: string = this.baseUrl + 'resgatar/';
 
   prizeCategory: string = this.baseUrl + 'categorias/';
-  partnerPrizes: string = this.baseUrl + 'premios/criados/';
+  partnerPrizes: string = this.baseUrl + 'criados/';
   recover: string = this.baseUrl + 'premios/usuarios/recuperar/';
   check: string = this.baseUrl + 'checar/';
   qrCode: string = this.baseUrl + 'premios/premio/qr-code/?prize=';

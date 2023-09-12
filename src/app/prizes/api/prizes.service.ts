@@ -14,6 +14,8 @@ export class PrizesService {
   isGetting: boolean = false;
   isPosting: boolean = false;
 
+  public loading:boolean = false;
+
   constructor(private http: HttpClient, private apiPoints: ApiPointsService) {}
 
   getPrizes(): Observable<Prizes[]> {

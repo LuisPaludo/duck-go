@@ -8,6 +8,7 @@ import { Urls } from 'src/app/utils/urls';
 })
 export class HistoryService {
   private urls:Urls = new Urls();
+  public loading:boolean = false;
 
   constructor(private http: HttpClient) {}
 

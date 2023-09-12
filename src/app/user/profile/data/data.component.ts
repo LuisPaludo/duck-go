@@ -63,7 +63,7 @@ export class DataComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private profileApi: ProfileApiService,
+    public profileApi: ProfileApiService,
     private http: HttpClient,
     public apiPatchUser: UserDataApiService,
     private phone: PhonePipe
@@ -196,6 +196,7 @@ export class DataComponent implements OnInit {
         .updateUserData(this.profile.getRawValue(), this.selectedFile, this.isPartner)
         .subscribe({
           next: (data: User) => {
+            this.cepSubscription.unsubscribe();
             this.apiPatchUser.postRequest = false;
             this.apiPatchUser.isLoading = false;
             this.emailInvalid = false;

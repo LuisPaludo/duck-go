@@ -29,17 +29,19 @@ export class CreateComponent implements OnInit {
   public prizeCreated: boolean = false;
 
   constructor(
-    private profileApi: ProfileApiService,
+    public profileApi: ProfileApiService,
     private api: AuthenticationService,
     private formBuilder: FormBuilder,
-    private apiCreatePrize: CreatePrizeService
+    public apiCreatePrize: CreatePrizeService
   ) {}
 
   ngOnInit(): void {
+    this.profileApi.loading = true;
     this.profileApi.getUser().subscribe({
       next: (data: User) => {
         if (data) {
           this.user = data;
+          this.profileApi.loading = false;
         }
       },
     });
@@ -95,12 +97,16 @@ export class CreateComponent implements OnInit {
       this.prize.markAllAsTouched();
       return;
     }
-
+    this.apiCreatePrize.loading = true;
     this.apiCreatePrize
       .createPrize(this.prize.getRawValue(), this.user.profile_photo)
       .subscribe({
-        next: (data) => (this.prizeCreated = true),
+        next: (data) => {
+          this.prizeCreated = true;
+          this.apiCreatePrize.loading = false;
+        },
         error: (e) => {
+          this.apiCreatePrize.loading = false;
           if (e instanceof HttpErrorResponse && e.status === 400) {
             this.e400 = true;
             this.prize.get('nome')?.setErrors({ incorrect: true });

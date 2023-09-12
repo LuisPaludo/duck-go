@@ -18,14 +18,19 @@ export class PartnerComponent implements OnInit {
 
   public baseUrl:string;
 
-  constructor(private route:ActivatedRoute,private router: Router, private apiPartner: PartnerService) {}
+  constructor(private route:ActivatedRoute,private router: Router, public apiPartner: PartnerService) {}
 
   ngOnInit(): void {
+    this.apiPartner.loading = true;
     this.slug = this.route.snapshot.paramMap.get('slug');
     this.baseUrl = this.apiPartner.urls.baseUrl;
     this.apiPartner.getPartner(this.slug).subscribe({
-      next: (data:User) => this.partner = data,
+      next: (data:User) => {
+        this.partner = data;
+        this.apiPartner.loading = false;
+      },
       error: (e) => {
+        this.apiPartner.loading = false;
         if(e instanceof HttpErrorResponse && e.status === 404) {
           this.router.navigate(['not-found']);
         }

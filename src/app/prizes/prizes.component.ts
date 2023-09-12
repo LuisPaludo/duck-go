@@ -24,19 +24,22 @@ export class PrizesComponent implements OnInit {
 
   public isPartner: boolean = false;
 
-  constructor(private apiPrizes: PrizesService, private router: Router) {}
+  constructor(public apiPrizes: PrizesService, private router: Router) {}
 
   ngOnInit(): void {
     this.isPartner = localStorage.getItem('isPartner') === 'true';
+    this.apiPrizes.loading = true;
     this.apiPrizes.getPrizes().subscribe({
       next: (data) => {
         if (data) {
           this.prizes = data;
           this.apiPrizes.isGetting = false;
+          this.apiPrizes.loading = false;
         }
       },
       error: () => {
         this.apiPrizes.isGetting = false;
+        this.apiPrizes.loading = false;
       },
     });
   }

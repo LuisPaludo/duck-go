@@ -20,7 +20,7 @@ export class ProfileApiService {
 
   public user: User = null;
 
-  private isLoading = false;
+  public loading = false;
 
   private userVerifiedSubscription: Subscription;
 
