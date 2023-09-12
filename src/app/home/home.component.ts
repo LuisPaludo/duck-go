@@ -126,7 +126,7 @@ export class HomeComponent implements OnInit {
             console.log(this.geolocationPermission);
             console.log(permission)
             this.geoReady = false;
-            if (permission === 'granted') {
+            // if (permission === 'granted') {
               this.buttonDisabler = false;
               console.log('vai chamar a API');
               this.locationRead = position.coords;
@@ -135,11 +135,11 @@ export class HomeComponent implements OnInit {
                 this.cameraCodeRead,
                 this.locationRead
               );
-            } else {
+            // } else {
               console.log('Não chamou a API');
-              this.buttonDisabler = false;
-              this.apiPoints.waitingResult = true;
-            }
+              // this.buttonDisabler = false;
+              // this.apiPoints.waitingResult = true;
+            // }
           }, 100);
         }
       );
