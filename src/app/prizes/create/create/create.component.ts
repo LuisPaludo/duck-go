@@ -6,7 +6,33 @@ import { User } from 'src/app/user/profile/models/user';
 import { MinOneWeek } from 'src/app/utils/expiry_data_validator';
 import { CreatePrizeService } from '../api/create-prize.service';
 import { HttpErrorResponse } from '@angular/common/http';
-
+/**
+ * CreateComponent - Componente responsável pela criação de prêmios.
+ *
+ * Propriedades:
+ * - `user`: Armazena informações sobre o usuário logado.
+ * - `today`: Armazena a data atual.
+ * - `dd, mm, yyyy`: Representam o dia, mês e ano da data atual, respectivamente.
+ * - `minDate`: Representa a data mínima para expiração do prêmio.
+ * - `prize`: FormGroup que contém o formulário para criar o prêmio.
+ * - `categorys`: Lista das categorias disponíveis para os prêmios.
+ * - `e400`: Indica se ocorreu um erro 400 durante a requisição.
+ * - `prizeCreated`: Indica se o prêmio foi criado com sucesso.
+ *
+ * Métodos:
+ * - `ngOnInit()`: Método de inicialização do componente. Obtém o usuário, categorias e inicializa a formação do formulário.
+ * - `subscribeForms()`: Inscreve-se em mudanças do formulário para verificar erros.
+ * - `submit()`: Envia o formulário para criar um novo prêmio.
+ * - `cleanData()`: Limpa dados após a criação do prêmio.
+ *
+ * Dependências:
+ * - `profileApi`: Serviço para obter informações do usuário.
+ * - `api`: Serviço de autenticação.
+ * - `formBuilder`: Utilizado para criar instâncias FormGroup.
+ * - `apiCreatePrize`: Serviço para criar prêmios.
+ *
+ * Este componente é utilizado principalmente para interagir com o usuário e permitir a criação de novos prêmios. Também gerencia erros e feedback.
+ */
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html',
@@ -55,11 +81,10 @@ export class CreateComponent implements OnInit {
     });
 
     this.today = new Date();
-    // Adicione 7 dias à data atual
     this.today.setDate(this.today.getDate() + 7);
 
     this.dd = String(this.today.getDate()).padStart(2, '0');
-    this.mm = String(this.today.getMonth() + 1).padStart(2, '0'); // Os meses são 0 indexados, então Janeiro = 0, Fevereiro = 1, etc.
+    this.mm = String(this.today.getMonth() + 1).padStart(2, '0');
     this.yyyy = this.today.getFullYear();
 
     this.minDate = `${this.yyyy}-${this.mm}-${this.dd}`;
@@ -83,7 +108,6 @@ export class CreateComponent implements OnInit {
   }
 
   subscribeForms(): void {
-
     this.prize.get('nome')?.valueChanges.subscribe(() => {
       if (this.prize.get('nome').valid) {
         this.e400 = false;
@@ -99,7 +123,7 @@ export class CreateComponent implements OnInit {
     }
     this.apiCreatePrize.loading = true;
     this.apiCreatePrize
-      .createPrize(this.prize.getRawValue(), this.user.profile_photo)
+      .createPrize(this.prize.getRawValue())
       .subscribe({
         next: (data) => {
           this.prizeCreated = true;

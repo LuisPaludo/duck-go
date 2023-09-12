@@ -1,17 +1,54 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RegisterApiService } from './api/register-api.service';
 
 import { CpfValidator } from 'src/app/utils/cpf_validator';
-import { SelectValidator } from 'src/app/utils/select_validator';
-import { NumberValidator } from 'src/app/utils/number_validator';
 import { CepValidator } from 'src/app/utils/cep_validator';
 import { usernameValidator } from 'src/app/utils/username_validator';
 import { passwordValidator } from 'src/app/utils/password_validator';
 
+/**
+ * RegisterComponent - Componente responsável pelo registro de usuários.
+ *
+ * Propriedades:
+ * - `form`: FormGroup que contém os controles para o formulário de registro.
+ * - `isDisabled`: Um indicador para controlar o estado desativado dos elementos do formulário.
+ * - `verifyEmailSent`: Um indicador para notificar que um email de verificação foi enviado.
+ * - `emailAlreadyRegistered`: Um indicador para notificar se o email inserido já está registrado.
+ * - `usernameAlreadyRegistered`: Um indicador para notificar se o nome de usuário inserido já está registrado.
+ * - `buttonDisable`: Um indicador para controlar o estado do botão de envio.
+ * - `showTerms`: Um indicador para alternar a exibição dos termos e condições.
+ * - `estados`: Uma lista dos estados brasileiros com suas abreviações e nomes completos.
+ *
+ * Métodos:
+ * - `ngOnInit()`: Inicializa o formulário com todas as validações necessárias e inicia a assinatura dos controles do formulário.
+ * - `subscribeForms()`: Assina mudanças em certos controles do formulário, como 'cep' e 'confSenha'.
+ * - `salvar()`: Verifica a validade do formulário e potencialmente salva os dados (placeholder no momento).
+ * - `onSubmit()`: Valida o formulário e envia os dados para a API. Lida com a resposta para fornecer feedback ao usuário.
+ * - `termsandconditions()`: Exibe os termos e condições.
+ * - `accept()`: Aceita os termos e condições e marca a caixa de seleção associada.
+ * - `recuse()`: Recusa os termos e condições e desmarca a caixa de seleção associada.
+ *
+ * Dependências:
+ * - `formBuilder`: Serviço Angular para criar formulários reativos.
+ * - `http`: Serviço Angular para fazer solicitações HTTP.
+ * - `router`: Serviço de roteamento Angular para navegar entre componentes/páginas.
+ * - `api`: Serviço que facilita a comunicação com a API de registro de usuário.
+ *
+ * Vários validadores são importados para garantir a validade da entrada do usuário:
+ * - `CpfValidator`: Validador para o CPF brasileiro.
+ * - `SelectValidator`: Validador para seleções em dropdown.
+ * - `NumberValidator`: Validador para entradas numéricas.
+ * - `CepValidator`: Validador para o CEP brasileiro.
+ * - `usernameValidator`: Validador para nomes de usuário.
+ * - `passwordValidator`: Validador para senhas.
+ *
+ * Este componente permite que os usuários se registrem preenchendo um formulário. Comunica-se com serviços externos (por exemplo, ViaCEP)
+ * para preencher automaticamente certos campos com base no CEP inserido. Também se comunica com o backend para registrar o usuário
+ * e fornece feedback com base no sucesso ou falha do registro.
+ */
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -24,7 +61,7 @@ export class RegisterComponent implements OnInit {
   emailAlreadyRegistered: boolean = false;
   usernameAlreadyRegistered: boolean = false;
   buttonDisable: boolean = false;
-  showTerms:boolean = false;
+  showTerms: boolean = false;
 
   estados: { sigla: string; nome: string }[] = [
     { sigla: '', nome: '' },
@@ -86,7 +123,7 @@ export class RegisterComponent implements OnInit {
       cidade: ['', [Validators.required]],
       uf: ['', [Validators.required]],
       data_nascimento: ['', [Validators.required]],
-      termos: ['', Validators.requiredTrue]
+      termos: ['', Validators.requiredTrue],
     });
 
     this.subscribeForms();
@@ -214,7 +251,6 @@ export class RegisterComponent implements OnInit {
     this.form.get('termos').setValue(true, {
       emitEvent: false,
     });
-
   }
 
   recuse() {

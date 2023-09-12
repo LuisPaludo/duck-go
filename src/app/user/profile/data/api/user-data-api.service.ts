@@ -1,18 +1,37 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subscription, of } from 'rxjs';
-import { ApiService } from 'src/app/api/api.service';
+import { Observable, of } from 'rxjs';
 import { ProfileApiService } from '../../api/profile-api.service';
 import { userPatchModel } from '../../models/userPatchModel';
-import { User } from '../../models/user';
 import { Urls } from 'src/app/utils/urls';
-
+/**
+ * UserDataApiService - Serviço responsável por gerenciar ações de atualização de dados do usuário.
+ *
+ * Propriedades:
+ * - `urls`: Uma instância da classe Urls para manter as URLs usadas para chamadas à API.
+ * - `verified`: Um indicador booleano se os dados do usuário foram verificados.
+ * - `isLoading`: Um indicador booleano representando o estado de carregamento da chamada da API.
+ * - `postData`: Uma instância do `userPatchModel` contendo os dados do usuário a serem atualizados.
+ * - `postRequest`: Um indicador booleano representando o estado da solicitação de envio.
+ * - `postCache`: Cache para FormData.
+ * - `fileCache`: Cache para o arquivo de perfil do usuário.
+ *
+ * Métodos:
+ * - `updateUserData(data:userPatchModel, selectedFile:File, isPartner:boolean)`: Realiza uma solicitação HTTP PATCH para
+ * atualizar os dados do usuário. Retorna um observable da resposta.
+ *
+ * Dependências:
+ * - `http`: Serviço HttpClient do Angular para fazer chamadas à API.
+ * - `profileApi`: Serviço para gerenciar os dados de perfil do usuário.
+ *
+ * O `UserDataApiService` é responsável por atualizar os dados do usuário no backend. O método updateUserData prepara o
+ * FormData com base nos dados do usuário fornecidos e parâmetros adicionais, e faz uma solicitação HTTP PATCH para o backend.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class UserDataApiService {
-
-  private urls:Urls = new Urls();
+  private urls: Urls = new Urls();
 
   verified: boolean = false;
   isLoading: boolean = false;
@@ -27,8 +46,11 @@ export class UserDataApiService {
     private profileApi: ProfileApiService
   ) {}
 
-  updateUserData(data:userPatchModel, selectedFile:File, isPartner:boolean):Observable<any> {
-
+  updateUserData(
+    data: userPatchModel,
+    selectedFile: File,
+    isPartner: boolean
+  ): Observable<any> {
     if (this.isLoading) {
       return of(false);
     }
@@ -51,7 +73,7 @@ export class UserDataApiService {
     formData.append('address_city', data.cidade);
     formData.append('birth_date', this.profileApi.user.birth_date);
 
-    if(isPartner) {
+    if (isPartner) {
       formData.append('partner_company_name', data.empresa);
       formData.append('partner_email_contact', data.contato_email);
       formData.append('partner_number_contact', data.contato_numero);
@@ -62,7 +84,6 @@ export class UserDataApiService {
       formData.append('profile_photo', selectedFile, selectedFile.name);
     }
 
-    return this.http
-      .patch(this.urls.user, formData)
+    return this.http.patch(this.urls.user, formData);
   }
 }

@@ -1,13 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Urls } from 'src/app/utils/urls';
-
+/**
+ * RegisterApiService
+ *
+ * Serviço responsável por fornecer funcionalidades relacionadas ao registro de usuários.
+ *
+ * Propriedades:
+ * - urls: Contém as URLs dos endpoints da API.
+ * - estados: Lista de estados brasileiros com suas respectivas siglas e nomes.
+ *
+ * Métodos:
+ * - constructor(http: HttpClient): Construtor da classe, inicializa o serviço HttpClient, permitindo realizar requisições HTTP.
+ *
+ * - registerNewUser(userData): Método utilizado para registrar um novo usuário. Recebe como parâmetro um objeto contendo
+ *   as informações do usuário. Transforma e organiza esses dados em formato adequado e realiza uma requisição POST para
+ *   a API de registro.
+ *
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class RegisterApiService {
-
   private urls: Urls = new Urls();
 
   estados: { sigla: string; nome: string }[] = [
@@ -63,5 +78,3 @@ export class RegisterApiService {
     return this.http.post(this.urls.register, postData);
   }
 }
-
-

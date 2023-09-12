@@ -1,4 +1,8 @@
-<button *ngIf="!showAll && !apiLocation.loading" class="btn btn-primary mt-3 mx-3" (click)="goBack()">
+<button
+  *ngIf="!showAll && !apiLocation.loading"
+  class="btn btn-primary mt-3 mx-3"
+  (click)="goBack()"
+>
   Voltar
 </button>
 
@@ -21,7 +25,8 @@
           src="{{ location.locations_photo }}"
           alt=""
           class="overflow-hidden position-relative top-50 start-50 translate-middle"
-          width="500px" height="250px"
+          width="500px"
+          height="250px"
         />
       </div>
       <div class="col-7 col-md-10">
@@ -40,7 +45,6 @@
     *ngIf="!showAll"
     class="p-3 container border border-3 border-primary rounded my-5"
   >
-
     <div class="container fw-bold fs-5 text-center pb-5">
       {{ location.name }}
     </div>
@@ -49,7 +53,7 @@
       <a
         class="icon-link icon-link-hover"
         style="--bs-link-hover-color-rgb: 25, 135, 84"
-        href="{{location.map_link}}"
+        href="{{ location.map_link }}"
       >
         Leve-me até lá
         <svg
@@ -92,15 +96,23 @@
       </a>
     </div>
     <div class="container d-flex flex-column">
+      <img
+        src="{{ location.photo_1 }}"
+        alt=""
+        class="h-25 img-fluid border rounded py-3"
+      />
 
-          <img src="{{location.photo_1}}" alt="" class="h-25 img-fluid border rounded py-3">
+      <img
+        src="{{ location.photo_2 }}"
+        alt=""
+        class="h-25 img-fluid border rounded pb-3"
+      />
 
-          <img src="{{location.photo_2}}" alt="" class="h-25 img-fluid border rounded pb-3">
-
-          <img src="{{location.photo_3}}" alt="" class="h-25 img-fluid border rounded">
-
+      <img
+        src="{{ location.photo_3 }}"
+        alt=""
+        class="h-25 img-fluid border rounded"
+      />
     </div>
-
   </div>
-
 </div>

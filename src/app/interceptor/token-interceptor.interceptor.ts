@@ -8,7 +8,6 @@ import {
 } from '@angular/common/http';
 import { Observable, catchError, switchMap, take, throwError } from 'rxjs';
 import { AuthenticationService } from '../api/authentication-service.service';
-import { ApiPointsService } from '../home/api/api-points.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -51,7 +50,6 @@ export class TokenInterceptor implements HttpInterceptor {
               this.auth.refreshTokenInProgress
             ) {
               return throwError(() => error);
-
             }
             // Se o erro for um HttpErrorResponse com um código de status 401 e o token de atualização
             //  não estiver em andamento, ele tentará manipular o erro chamando

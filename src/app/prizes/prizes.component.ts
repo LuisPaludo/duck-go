@@ -3,7 +3,29 @@ import { PrizesService } from './api/prizes.service';
 import { Prizes } from './models/prizes';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-
+/**
+ * PrizesComponent - Componente que gerencia a visualização e resgate de prêmios.
+ *
+ * Propriedades:
+ * - `prizes`: Uma lista de prêmios disponíveis.
+ * - `loader`: Flag que indica se um carregamento está em andamento.
+ * - `prizeId`, `prizeName`, `prizeCost`: Propriedades relacionadas ao prêmio que o usuário está prestes a resgatar.
+ * - `success`, `e402`, `e400`, `e406`, `end`: Flags relacionadas ao estado e respostas do processo de resgate.
+ * - `isPartner`: Indica se o usuário atual é um parceiro.
+ *
+ * Métodos:
+ * - `ngOnInit()`: Carrega a lista de prêmios quando o componente é inicializado.
+ * - `redeem(id: number)`: Tentativa de resgate de um prêmio com base em seu ID.
+ * - `confirmation(name: string, cost: number, id: number)`: Prepara o componente para a confirmação de resgate, definindo detalhes do prêmio selecionado.
+ * - `clearData()`: Limpa os dados e estados relacionados ao processo de resgate.
+ * - `navigateToPartner(slug:string)`: Navega para a página de detalhes do parceiro com base em seu slug.
+ *
+ * Dependências:
+ * - `apiPrizes`: Serviço que interage com a API relacionada aos prêmios.
+ * - `router`: Serviço de roteamento para navegação entre componentes.
+ *
+ * O componente é usado principalmente para listar os prêmios disponíveis e permitir que os usuários resgatem prêmios.
+ */
 @Component({
   selector: 'app-prizes',
   templateUrl: './prizes.component.html',
@@ -91,7 +113,7 @@ export class PrizesComponent implements OnInit {
     this.end = false;
   }
 
-  navigateToPartner(slug:string):void{
-    this.router.navigate(['parceiros',slug]);
+  navigateToPartner(slug: string): void {
+    this.router.navigate(['parceiros', slug]);
   }
 }

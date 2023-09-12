@@ -1,10 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import { Html5Qrcode, Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 import { ApiPointsService } from './api/api-points.service';
-import { ApiService } from '../api/api.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../api/authentication-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
+
+/**
+ * HomeComponent - Componente responsável pela tela inicial do aplicativo 'duck-go'.
+ *
+ * Funções principais:
+ * - Manipulação de permissões para câmera e geolocalização.
+ * - Leitura de códigos QR via câmera.
+ * - Comunicação com APIs de pontos e autenticação.
+ * - Resgate de prêmios com base no código QR lido.
+ *
+ * Métodos:
+ * - `ngOnInit`: Inicializa o componente, verifica permissões e assina observáveis.
+ * - `checkPermission`: Verifica as permissões dadas para a câmera ou geolocalização.
+ * - `askCamera` e `dontGetCamera`: Manipulam o estado da permissão da câmera.
+ * - `getGeolocation` e `deniedGeolocation`: Manipulam o estado da permissão da geolocalização.
+ * - `getGeolocationPermission`: Solicita a permissão da geolocalização e lida com o retorno.
+ * - `getCamera`: Solicita acesso à câmera e verifica permissão.
+ * - `startReading`: Começa a leitura do código QR.
+ * - `stopReading`: Interrompe a leitura do código QR.
+ * - `redeemUserPrize`: Verifica o prêmio do usuário baseado no código QR.
+ * - `redirectToRegister` e `redirectToLogin`: Redireciona para as páginas de registro e login.
+ * - `goBack`: Restabelece o estado inicial dos pontos e prêmios.
+ * - `useUserPrize`: Resgata o prêmio do usuário.
+ *
+ * Observações:
+ * Este componente serve como um hub para as principais funcionalidades do aplicativo,
+ * permitindo que os usuários leiam códigos QR, verifiquem e resgatem prêmios, e lidem
+ * com permissões de dispositivos.
+ */
 
 @Component({
   selector: 'app-home',
@@ -43,8 +71,8 @@ export class HomeComponent implements OnInit {
   usePrizeLoader: boolean = false;
   usePrizeSuccess: boolean = false;
 
-  erroCode:boolean = false;
-  erroGeo:boolean = false;
+  erroCode: boolean = false;
+  erroGeo: boolean = false;
 
   constructor(
     public apiPoints: ApiPointsService,
@@ -113,32 +141,29 @@ export class HomeComponent implements OnInit {
   getGeolocationPermission() {
     this.buttonDisabler = true;
 
-    console.log('vai chamar a permissao pro geo')
+    console.log('vai chamar a permissao pro geo');
 
     const successCallback = (position: GeolocationPosition) => {
-      console.log('success call back')
-      console.log(this.geolocationPermission)
+      console.log('success call back');
+      console.log(this.geolocationPermission);
       this.checkPermission(this.geolocationPermissionName).then(
         (permission) => {
-          console.log('passou o check permission')
+          console.log('passou o check permission');
           console.log(this.geolocationPermission);
           setTimeout(() => {
             console.log(this.geolocationPermission);
-            console.log(permission)
+            console.log(permission);
             this.geoReady = false;
             // if (permission === 'granted') {
-              this.buttonDisabler = false;
-              console.log('vai chamar a API');
-              this.locationRead = position.coords;
-              this.apiPoints.waitingResult = true;
-              this.apiPoints.verifyQRCode(
-                this.cameraCodeRead,
-                this.locationRead
-              );
+            this.buttonDisabler = false;
+            console.log('vai chamar a API');
+            this.locationRead = position.coords;
+            this.apiPoints.waitingResult = true;
+            this.apiPoints.verifyQRCode(this.cameraCodeRead, this.locationRead);
             // } else {
-              console.log('Não chamou a API');
-              // this.buttonDisabler = false;
-              // this.apiPoints.waitingResult = true;
+            console.log('Não chamou a API');
+            // this.buttonDisabler = false;
+            // this.apiPoints.waitingResult = true;
             // }
           }, 100);
         }
@@ -147,7 +172,7 @@ export class HomeComponent implements OnInit {
 
     const errorCallback = (error) => {
       console.log('error call back');
-      console.log(error.code)
+      console.log(error.code);
       this.erroGeo = true;
       this.apiPoints.waitingResult = true;
       switch (error.code) {
@@ -230,7 +255,7 @@ export class HomeComponent implements OnInit {
                 (decodedText, decodedResult) => {
                   this.cameraCodeRead = decodedText;
 
-                  console.log('code ' + decodedText)
+                  console.log('code ' + decodedText);
 
                   if (
                     typeof +this.cameraCodeRead === 'number' &&
@@ -265,8 +290,8 @@ export class HomeComponent implements OnInit {
         .stop()
         .then((ignore) => {
           this.cameraButtonDisable = false;
-          console.log(this.cameraCodeRead)
-          console.log(this.geolocationPermission)
+          console.log(this.cameraCodeRead);
+          console.log(this.geolocationPermission);
           if (this.cameraCodeRead) {
             if (this.geolocationPermission === 'granted') {
               this.apiPoints.waitingResult = true;

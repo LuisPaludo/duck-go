@@ -10,7 +10,48 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserDataApiService } from './api/user-data-api.service';
 import { CepModel } from '../models/cep';
 import { PhonePipe } from 'src/app/utils/pipe/phone/phone.pipe';
-
+/**
+ * DataComponent
+ *
+ * Um componente responsável por exibir e editar os dados do usuário.
+ *
+ * Propriedades:
+ *
+ * - `profile`: FormGroup que contém o formulário de dados.
+ * - `userGet`: Um booleano para determinar se os dados do usuário foram buscados.
+ * - `userEditing`: Um booleano para determinar se o usuário está atualmente editando os dados.
+ * - `isPartner`: Um booleano para determinar se o usuário é um parceiro.
+ * - `emailInvalid`: Indica se o e-mail inserido é inválido.
+ * - `numberInvalid`: Indica se o número inserido é inválido.
+ * - `saveDisabler`: Usado para desativar o botão de salvar durante certas operações.
+ * - `cepSubscription`: Uma assinatura para observar as mudanças no controle 'cep' do formulário.
+ * - `selectedFile`: O arquivo selecionado pelo usuário (para imagem de perfil).
+ * - `estados`: Uma lista dos estados brasileiros.
+ *
+ * Métodos:
+ *
+ * - `subscribeForms()`: Inscreve-se para mudanças no controle 'cep' do formulário.
+ * - `handleCepError()`: Lida com o erro se 'cep' for inválido.
+ * - `updateProfileWithCepData(data: any)`: Atualiza o formulário de perfil com os dados CEP recebidos.
+ * - `setValueAndDisable(controlName: string, value: any)`: Define o valor de um controle do formulário e o desativa.
+ * - `patchForm(data: User)`: Aplica os dados do usuário no formulário de perfil.
+ * - `onFileChange(event)`: Atualiza o `selectedFile` quando o usuário seleciona um arquivo.
+ * - `edit()`: Permite que o usuário edite seu perfil.
+ * - `save()`: Envia os dados editados do usuário para o servidor.
+ * - `cancel()`: Cancela o processo de edição e redefine o formulário.
+ *
+ * Dependências:
+ * - `formBuilder`: Serviço FormBuilder para criar instâncias de FormGroup e FormControl.
+ * - `profileApi`: Serviço ProfileApiService para obter os dados do usuário.
+ * - `http`: Serviço HttpClient para fazer requisições HTTP.
+ * - `apiPatchUser`: Serviço UserDataApiService para atualizar os dados do usuário.
+ * - `phone`: PhonePipe para formatar números de telefone.
+ *
+ * Este componente é responsável por gerenciar os dados do usuário. Ele pode exibir o perfil do usuário, permitir que o usuário
+ * edite seus dados e salvar os dados editados de volta para o servidor. O formulário também possui validadores para garantir que
+ * o usuário insira dados válidos. O componente busca os dados do usuário na inicialização e também oferece recursos para fazer
+ * o upload de uma imagem de perfil e validar o código postal brasileiro (CEP) usando um serviço externo.
+ */
 @Component({
   selector: 'app-data',
   templateUrl: './data.component.html',
@@ -23,9 +64,9 @@ export class DataComponent implements OnInit {
   isPartner: boolean = false;
 
   emailInvalid: boolean = false;
-  numberInvalid:boolean = false;
+  numberInvalid: boolean = false;
 
-  saveDisabler:boolean = false;
+  saveDisabler: boolean = false;
 
   private cepSubscription: Subscription;
   selectedFile: File = null;
@@ -81,8 +122,8 @@ export class DataComponent implements OnInit {
       uf: ['', Validators.required],
       foto: [''],
       contato_email: ['', Validators.email],
-      contato_numero: ['',],
-      descricao: ['',],
+      contato_numero: [''],
+      descricao: [''],
     });
     this.profile.disable();
   }
@@ -193,7 +234,11 @@ export class DataComponent implements OnInit {
     if (this.profile.valid) {
       this.saveDisabler = true;
       this.apiPatchUser
-        .updateUserData(this.profile.getRawValue(), this.selectedFile, this.isPartner)
+        .updateUserData(
+          this.profile.getRawValue(),
+          this.selectedFile,
+          this.isPartner
+        )
         .subscribe({
           next: (data: User) => {
             this.cepSubscription.unsubscribe();

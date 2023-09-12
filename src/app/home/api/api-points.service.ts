@@ -1,18 +1,37 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  Observable,
-  Subscription,
-  of,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { GeoPoint } from '../models/GeoPoint';
 import { PointData } from '../models/PointData';
 import { UserHistory } from '../models/history';
 import { HistoryPost } from '../models/historypost';
 import { Urls } from 'src/app/utils/urls';
-
+/**
+ * ApiPointsService - Serviço para gerenciar e interagir com pontos de usuários e recompensas baseadas em localização.
+ *
+ * Propriedades:
+ * 1. `userHistorySubject` - Contém os dados do histórico do usuário como um observable.
+ * 2. Indicadores para gerenciar o estado da aplicação, por exemplo, `isLoading`, `postRequest`, `isSaving`, `isGettingPoints` etc.
+ * 3. Detalhes da localização como `locationName`, `locationDescription`, `locationPhoto` e `locationPoints`.
+ * 4. `user` e `center` - Representam a geolocalização atual do usuário e a geolocalização do ponto turístico atual, respectivamente.
+ *
+ * Métodos:
+ * 1. `verifyQRCode(qrIdNumber: string, coords: GeolocationCoordinates)` - Verifica um QR code escaneado em um endpoint da API,
+ *    verifica a proximidade do usuário a um ponto turístico e concede pontos se estiver suficientemente perto.
+ *
+ * 2. `isWithinRadius(user: GeoPoint, center: GeoPoint, radius = 100): boolean` - Verifica se o usuário está dentro de um raio
+ *    especificado (padrão é 100 metros) de um ponto turístico, usando a fórmula de haversine para calcular a distância entre duas geolocalizações.
+ *
+ * 3. `savePoints(points: number, name: string): void` - Salva os pontos no histórico do usuário após visitar um ponto turístico.
+ *
+ * 4. `getUserHistory(): Observable<any>` - Busca o histórico de pontos do usuário de um endpoint da API.
+ *
+ * 5. `redeemUserPrize(code: string): Observable<any>` - Permite ao usuário Parceiro resgatar um prêmio de um usuário convencional usando um código.
+ *
+ * 6. `checkUserPrize(code: string): Observable<any>` - Verifica se o código de prêmio do usuário é válido.
+ *
+ * Este serviço facilita principalmente as interações entre o usuário e os pontos turísticos em um sistema baseado em recompensas.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -43,12 +62,6 @@ export class ApiPointsService {
 
   public waitingResult: boolean = false;
 
-  public cacheUserCordLatitude;
-  public cacheUserCordLongitude;
-
-  public cachePointCordLatitude;
-  public cachePointCordLongitude;
-
   user: GeoPoint;
   center: GeoPoint;
 
@@ -59,21 +72,13 @@ export class ApiPointsService {
       return;
     }
 
-    console.log('to aqui na API')
-    this.cacheUserCordLatitude = coords.latitude;
-    this.cacheUserCordLongitude = coords.longitude;
-    console.log(this.cacheUserCordLatitude)
-    console.log(this.cacheUserCordLongitude)
-
     this.postRequest = true;
     this.isLoading = true;
 
     let fullUrl = this.urls.touristAttaction + qrIdNumber;
 
-    console.log('Vai fazer o get')
     this.http.get(fullUrl).subscribe({
       next: (locationData: PointData[]) => {
-        console.log('Fez o get')
         if (locationData.length !== 0) {
           const points = locationData[0].points;
           const locationName = locationData[0].name;
@@ -89,11 +94,6 @@ export class ApiPointsService {
           };
 
           console.log(this.user);
-
-
-
-          this.cachePointCordLatitude = locationData[0].coordinates_lat;
-          this.cachePointCordLongitude = locationData[0].coordinates_long;
 
           const result = this.isWithinRadius(this.user, this.center);
 
@@ -111,13 +111,11 @@ export class ApiPointsService {
         this.isLoading = false;
       },
       error: (e) => {
-        console.log('Deu erro no get')
         this.waitingResult = false;
         this.isLoading = false;
 
         if (e.status === 401) {
         } else {
-          console.error('Não foi possível acessar o link');
         }
       },
       complete: () => {
@@ -168,7 +166,6 @@ export class ApiPointsService {
       next: (info: HistoryPost) => {
         this.locationPoints = info.points;
         this.locationDescription = info.description;
-        // this.locationName = info.
         this.getPointSuccess = true;
         this.isSaving = false;
         this.waitingResult = false;

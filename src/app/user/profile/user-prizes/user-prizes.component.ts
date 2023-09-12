@@ -1,13 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { PrizeResponse, Prizes } from 'src/app/prizes/models/prizes';
 import { UserPrizesService } from './api/user-prizes.service';
-
+/**
+ * UserPrizesComponent - Componente responsável pela exibição e gerenciamento dos prêmios do usuário.
+ *
+ * Propriedades:
+ * - `redeemedPrizes`: Lista de prêmios resgatados pelo usuário.
+ * - `createdPrizes`: Lista de prêmios criados pelo usuário (se for um parceiro).
+ * - `dataGet`: Indicador booleano para determinar se os dados foram buscados.
+ * - `qrCode`: Representa o QR code associado a um prêmio específico.
+ * - `loader`: Indicador booleano para o estado de carregamento ao obter o QR code.
+ * - `prize`: O ID do prêmio selecionado.
+ * - `isPartner`: Indicador se o usuário é um parceiro.
+ * - `index`: Índice do prêmio selecionado na lista.
+ *
+ * Métodos:
+ * - `ngOnInit()`: Método inicial do ciclo de vida que faz a chamada API para buscar os prêmios.
+ * - `getQrCode(prize: number)`: Busca o QR code para um prêmio específico.
+ * - `cleanData()`: Limpa os dados selecionados e os estados associados.
+ * - `desactivate()`: Desativa um prêmio criado pelo parceiro.
+ * - `activate()`: Ativa um prêmio criado pelo parceiro.
+ * - `getPrize(prize: number, index: number)`: Define o prêmio e o índice selecionados.
+ *
+ * Dependências:
+ * - `apiRedeemedPrizes`: Serviço Angular que gerencia a comunicação entre o frontend e a API para informações relacionadas aos prêmios do usuário.
+ *
+ * Este componente é responsável por permitir que os usuários visualizem seus prêmios e, se forem parceiros, gerenciem os prêmios que criaram.
+ * O componente verifica se o usuário é um parceiro (usando `localStorage`) e faz as chamadas API apropriadas com base nesse status.
+ */
 @Component({
   selector: 'app-user-prizes',
   templateUrl: './user-prizes.component.html',
   styleUrls: ['./user-prizes.component.css'],
 })
-export class UserPrizesComponent {
+export class UserPrizesComponent implements OnInit {
   public redeemedPrizes: PrizeResponse[];
   public createdPrizes: Prizes[];
   public dataGet: boolean = false;

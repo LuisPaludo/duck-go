@@ -17,10 +17,16 @@
     </div>
 
     <div *ngFor="let entry of history" class="row text-center fw-bold">
-      <div class="border border-1 border-dark col-3">{{entry.date | date:'short'}}</div>
-      <div class="border border-1 border-dark col-4">{{entry.description}}</div>
-      <div class="border border-1 border-dark col-3">{{entry.points}}</div>
-      <div class="border border-1 border-dark col-2">{{entry.total_points}}</div>
+      <div class="border border-1 border-dark col-3">
+        {{ entry.date | date : "short" }}
+      </div>
+      <div class="border border-1 border-dark col-4">
+        {{ entry.description }}
+      </div>
+      <div class="border border-1 border-dark col-3">{{ entry.points }}</div>
+      <div class="border border-1 border-dark col-2">
+        {{ entry.total_points }}
+      </div>
     </div>
   </div>
 </div>
