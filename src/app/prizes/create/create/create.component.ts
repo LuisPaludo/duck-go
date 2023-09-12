@@ -23,7 +23,7 @@ import { HttpErrorResponse } from '@angular/common/http';
  * - `ngOnInit()`: Método de inicialização do componente. Obtém o usuário, categorias e inicializa a formação do formulário.
  * - `subscribeForms()`: Inscreve-se em mudanças do formulário para verificar erros.
  * - `submit()`: Envia o formulário para criar um novo prêmio.
- * - `cleanData()`: Limpa dados após a criação do prêmio.
+ * - `cleanData()`: Limpa os dados do formulário.
  *
  * Dependências:
  * - `profileApi`: Serviço para obter informações do usuário.
@@ -140,6 +140,6 @@ export class CreateComponent implements OnInit {
   }
 
   cleanData() {
-    // this.e400 = false;
+    this.prize.reset();
   }
 }
