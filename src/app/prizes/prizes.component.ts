@@ -3,11 +3,13 @@ import { PrizesService } from './api/prizes.service';
 import { Prizes } from './models/prizes';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { CreatePrizeService } from './create/api/create-prize.service';
 /**
  * PrizesComponent - Componente que gerencia a visualização e resgate de prêmios.
  *
  * Propriedades:
  * - `prizes`: Uma lista de prêmios disponíveis.
+ * - `categorys`: Uma lista de categorias de prêmios disponíveis.
  * - `loader`: Flag que indica se um carregamento está em andamento.
  * - `prizeId`, `prizeName`, `prizeCost`: Propriedades relacionadas ao prêmio que o usuário está prestes a resgatar.
  * - `success`, `e402`, `e400`, `e406`, `end`: Flags relacionadas ao estado e respostas do processo de resgate.
@@ -33,6 +35,7 @@ import { Router } from '@angular/router';
 })
 export class PrizesComponent implements OnInit {
   public prizes: Prizes[];
+  public categorys: any;
   public loader: boolean = false;
 
   public prizeId: number;
@@ -46,7 +49,7 @@ export class PrizesComponent implements OnInit {
 
   public isPartner: boolean = false;
 
-  constructor(public apiPrizes: PrizesService, private router: Router) {}
+  constructor(public apiPrizes: PrizesService, private router: Router, private apiCreatePrize:CreatePrizeService) {}
 
   ngOnInit(): void {
     this.isPartner = localStorage.getItem('isPartner') === 'true';
@@ -56,7 +59,16 @@ export class PrizesComponent implements OnInit {
         if (data) {
           this.prizes = data;
           this.apiPrizes.isGetting = false;
-          this.apiPrizes.loading = false;
+          this.apiCreatePrize.getCategory().subscribe({
+            next: (data) => {
+              if (data) {
+                this.categorys = data;
+              }
+            },
+            complete: () => {
+              this.apiPrizes.loading = false;
+            }
+          });
         }
       },
       error: () => {

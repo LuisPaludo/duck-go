@@ -8,8 +8,12 @@
   <div class="row d-flex justify-content-center">
     <div class="col-6 col-md-2">
       <div class="">
-        <img
+        <img *ngIf="user?.profile_photo"
           src="{{ user?.profile_photo }}"
+          class="img-thumbnail rounded float-start"
+        />
+        <img *ngIf="!user?.profile_photo"
+          src="https://duck-go.s3.sa-east-1.amazonaws.com/media/lusers/Pato-1.png"
           class="img-thumbnail rounded float-start"
         />
       </div>
@@ -56,7 +60,7 @@
         </div>
         <div class="col">
           <a routerLink="meus-cupons" class="btn btn-danger w-100"
-            >Meus Cupons</a
+            >Cupons</a
           >
         </div>
       </div>

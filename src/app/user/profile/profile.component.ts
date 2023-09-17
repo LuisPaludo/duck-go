@@ -54,7 +54,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profileApi.getUser().subscribe({
       next: (data: User) => {
         this.user = data;
-        this.profileApi.loading = false;
+        this.pointsApi.getUserHistory().subscribe({
+          next: (data: UserHistory[]) => {
+            if (data.length === 0) {
+              this.total_points = 0;
+            } else {
+              this.total_points = data[data.length - 1].total_points;
+            }
+          },
+          complete: () => {
+            this.profileApi.loading = false;
+          },
+        });
       },
       complete: () => {
         this.profileApi.userData$.subscribe({
@@ -72,18 +83,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
           },
         });
       },
-    });
-    this.profileApi.loading = true;
-    this.pointsApi.getUserHistory().subscribe({
-      next: (data: UserHistory[]) => {
-        this.profileApi.loading = false;
-        if (data.length === 0) {
-          this.total_points = 0;
-        } else {
-          this.total_points = data[data.length - 1].total_points;
-        }
-      },
-      complete: () => {},
     });
   }
 

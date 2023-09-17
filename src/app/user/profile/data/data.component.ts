@@ -232,6 +232,7 @@ export class DataComponent implements OnInit {
 
   save() {
     if (this.profile.valid) {
+      this.profile.disable();
       this.saveDisabler = true;
       this.apiPatchUser
         .updateUserData(
@@ -252,6 +253,7 @@ export class DataComponent implements OnInit {
             this.saveDisabler = false;
           },
           error: (e: HttpErrorResponse) => {
+            this.edit();
             this.saveDisabler = false;
             this.apiPatchUser.isLoading = false;
             if (e.status === 400) {

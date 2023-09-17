@@ -4,7 +4,54 @@
   </div>
 </div>
 
-<div class="row d-flex justify-content-center py-5 m-0">
+<div
+  *ngIf="!apiPrizes.loading"
+  class="row d-flex justify-content-center pt-5 m-0"
+>
+  <div class="col-md-6">
+    <form action="">
+      <div class="row d-flex align-items-center">
+        <div class="col-md ">
+          <label for="prize_filter" class="fw-bold fs-3"
+            >Filtrar Prêmios Por:</label
+          >
+          <select
+            name="prize_filter"
+            id="prize_filter"
+            class="form-select"
+            aria-label="Default select example"
+          >
+            <option value="1">Nome</option>
+            <option value="2">Validade</option>
+            <option value="3">Fornecedor</option>
+            <option value="4">Pontos</option>
+            <option value="5">Unidades</option>
+            <option *ngFor="let category of categorys; let i = index" value="{{5 + i}}">Categoria: {{category.name}}</option>
+          </select>
+        </div>
+        <div class="col-md">
+          <label for="prize_filter_order" class="fw-bold fs-3"
+            >Ordem:</label
+          >
+          <select
+            name="prize_filter_order"
+            id="prize_filter_order"
+            class="form-select"
+            aria-label="Default select example"
+          >
+            <option value="1">Crescente</option>
+            <option value="2">Decrescente</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div
+  *ngIf="!apiPrizes.loading"
+  class="row d-flex justify-content-center py-5 m-0"
+>
   <div class="col-md-6">
     <div *ngFor="let prize of prizes">
       <div
