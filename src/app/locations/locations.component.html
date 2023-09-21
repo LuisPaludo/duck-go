@@ -15,23 +15,20 @@
 <div *ngIf="showAll && !apiLocation.loading" class="px-3">
   <div
     *ngFor="let location of locations"
-    class="container border border-3 border-primary rounded my-5"
+    class="container border border-3 border-primary rounded my-2 location-summary"
+    (click)="redirect(location.id)"
   >
-    <div class="row p-3" (click)="redirect(location.id)">
-      <div
-        class="col-5 col-md-2 border border-2 border-warning rounded object-fit-contain p-0 overflow-hidden"
-      >
+    <div class="row p-3">
+      <div class="col-md-3">
         <img
-          src="{{ location.locations_photo }}"
-          alt=""
-          class="overflow-hidden position-relative top-50 start-50 translate-middle"
-          width="500px"
-          height="250px"
+          src="{{ location.photo_1 }}"
+          alt="{{ location.name }}"
+          class="img-fluid rounded"
         />
       </div>
-      <div class="col-7 col-md-10">
+      <div class="col-md-9">
         <a
-          class="text-decoration-none d-flex justify-content-center pb-2 text-primary"
+          class="text-decoration-none d-flex justify-content-center pb-2 text-primary fw-bolder fs-4 text-center py-3"
           >{{ location.name }}</a
         >
         <p>{{ location.resume }}</p>
@@ -40,21 +37,77 @@
   </div>
 </div>
 
-<div class="container">
+<div class="container" class="px-3 my-4">
   <div
-    *ngIf="!showAll"
-    class="p-3 container border border-3 border-primary rounded my-5"
+    *ngIf="!showAll && !apiLocation.loading"
+    class="container border border-3 border-primary rounded location-details p-3"
   >
-    <div class="container fw-bold fs-5 text-center pb-5">
-      {{ location.name }}
+    <div class="text-center pb-2">
+      <h2 class="fw-bold fs-3">{{ location.name }}</h2>
+      <p class="lh-lg">{{ location.description }}</p>
     </div>
-    <div class="container lh-lg">{{ location.description }}</div>
-    <div class="container py-3">
-      <a
-        class="icon-link icon-link-hover"
-        style="--bs-link-hover-color-rgb: 25, 135, 84"
-        href="{{ location.map_link }}"
-      >
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <div
+          id="locationCarousel"
+          class="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img
+                src="{{ location.photo_1 }}"
+                class="carousel-img"
+                alt="..."
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="{{ location.photo_2 }}"
+                class="carousel-img"
+                alt="..."
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="{{ location.photo_3 }}"
+                class="carousel-img"
+                alt="..."
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="{{ location.photo_4 }}"
+                class="carousel-img"
+                alt="..."
+              />
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#locationCarousel"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#locationCarousel"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center py-3">
+      <a class="icon-link icon-link-hover" href="{{ location.map_link }}">
         Leve-me até lá
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -69,15 +122,12 @@
           />
         </svg>
       </a>
-    </div>
-    <div class="container pb-5">
       <a
         target="_blank"
-        class="icon-link icon-link-hover"
-        style="--bs-link-hover-color-rgb: 25, 135, 84"
+        class="icon-link icon-link-hover ms-3"
         href="{{ location.location_link }}"
       >
-        Mais informações do local com o TripAdvisor
+        TripAdvisor
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -95,24 +145,38 @@
         </svg>
       </a>
     </div>
-    <div class="container d-flex flex-column">
-      <img
-        src="{{ location.photo_1 }}"
-        alt=""
-        class="h-25 img-fluid border rounded py-3"
-      />
-
-      <img
-        src="{{ location.photo_2 }}"
-        alt=""
-        class="h-25 img-fluid border rounded pb-3"
-      />
-
-      <img
-        src="{{ location.photo_3 }}"
-        alt=""
-        class="h-25 img-fluid border rounded"
-      />
-    </div>
   </div>
 </div>
+
+<style>
+  .location-summary:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    cursor: pointer;
+  }
+
+  .location-details .carousel {
+    max-height: 400px;
+    overflow: hidden;
+  }
+
+  .icon-link {
+    color: #198744;
+  }
+
+  .icon-link-hover:hover {
+    color: #198744;
+    text-decoration: underline;
+  }
+  .carousel-img {
+    object-fit: cover;
+    max-height: 300px;
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .carousel-img {
+      max-height: 500px; 
+      object-fit: contain;
+    }
+  }
+</style>
