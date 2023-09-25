@@ -313,7 +313,7 @@
             </button>
           </div>
           <div class="col-6 d-flex justify-content-center">
-            <button *ngIf="!userEditing" class="btn btn-primary">
+            <button *ngIf="!userEditing" class="btn btn-primary" (click)="changePassword()">
               Trocar Senha
             </button>
             <button

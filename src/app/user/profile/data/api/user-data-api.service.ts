@@ -86,4 +86,12 @@ export class UserDataApiService {
 
     return this.http.patch(this.urls.user, formData);
   }
+
+  changePassword(data):Observable<any> {
+    const postData = {
+      new_password1: data.new,
+      new_password2: data.repeat,
+    };
+    return this.http.post(this.urls.changePassword, postData);
+  }
 }

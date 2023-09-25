@@ -69,8 +69,11 @@ export class UserPrizesComponent implements OnInit {
     } else {
       this.apiRedeemedPrizes.getRedeemedPrizes().subscribe({
         next: (data: PrizeResponse[]) => {
+          if(data) {
+            this.noPrizes = false;
+            this.redeemedPrizes = data;
+          }
           this.apiRedeemedPrizes.loading = false;
-          this.redeemedPrizes = data;
         },
         error: (e) => {
           this.apiRedeemedPrizes.loading = false;

@@ -20,6 +20,7 @@ import { NotFoundComponent } from './notFound/not-found/not-found.component';
 import { UserPrizesComponent } from './user/profile/user-prizes/user-prizes.component';
 import { PartnerGuard } from './guard/partner.guard';
 import { LocationComponent } from './locations/location/location.component';
+import { ChangePasswordComponent } from './user/profile/data/change-password/change-password.component';
 
 const routes: Routes = [
   {
@@ -69,6 +70,11 @@ const routes: Routes = [
         component: UserPrizesComponent,
         canActivate: [AuthGuard],
       },
+      {
+        path: 'dados/trocar-senha',
+        component: ChangePasswordComponent,
+        canActivate: [AuthGuard]
+      }
     ],
     canActivate: [AuthGuard],
   },

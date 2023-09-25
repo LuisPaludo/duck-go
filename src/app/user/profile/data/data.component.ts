@@ -10,6 +10,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserDataApiService } from './api/user-data-api.service';
 import { CepModel } from '../models/cep';
 import { PhonePipe } from 'src/app/utils/pipe/phone/phone.pipe';
+import { Router } from '@angular/router';
 /**
  * DataComponent
  *
@@ -107,7 +108,8 @@ export class DataComponent implements OnInit {
     public profileApi: ProfileApiService,
     private http: HttpClient,
     public apiPatchUser: UserDataApiService,
-    private phone: PhonePipe
+    private phone: PhonePipe,
+    private router:Router,
   ) {
     this.profile = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -276,5 +278,9 @@ export class DataComponent implements OnInit {
   cancel() {
     this.userEditing = false;
     this.profile.disable();
+  }
+
+  changePassword() {
+    this.router.navigate(['perfil/dados/trocar-senha']);
   }
 }

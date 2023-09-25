@@ -1,5 +1,5 @@
 <div class="row d-flex justify-content-center">
-  <div class="col-md-6 fs-2 fw-bold py-2">Meus Cupons:</div>
+  <div class="col-md-6 fs-2 fw-bold py-2">Meus Prêmios:</div>
 </div>
 
 <div class="container d-flex justify-content-center">
@@ -14,7 +14,7 @@
 >
   <div class="col-md-6 p-3">
     <div *ngIf="noPrizes" class="container text-center">
-      Você ainda não resgatou nenhum cupom!
+      Você ainda não resgatou nenhum prêmio!
     </div>
     <div *ngFor="let prize of redeemedPrizes">
       <div *ngIf="!noPrizes" class="container">
@@ -177,7 +177,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header" style="background-color: #f5f5f5">
-        <h1 class="modal-title fs-5" id="modalLabel">Desativação de Cupom</h1>
+        <h1 class="modal-title fs-5" id="modalLabel">Desativação de Prêmio</h1>
         <button
           type="button"
           class="btn-close"
@@ -187,9 +187,9 @@
       </div>
       <div class="modal-body" style="background-color: #ffffff; color: #333">
         <p class="text-start fw-bold">
-          Ao desativar este cupom, ele não estará mais disponível para novos
+          Ao desativar este prêmio, ele não estará mais disponível para novos
           resgates. Entretanto, usuários que já o resgataram continuarão com
-          seus cupons ativos. Deseja continuar?
+          seus prêmios ativos. Deseja continuar?
         </p>
       </div>
       <div class="modal-footer" style="background-color: #f9f9f9">
@@ -235,7 +235,7 @@
       </div>
       <div class="modal-body" style="background-color: #ffffff; color: #333">
         <p class="text-start fw-bold">
-          Ao reativar este cupom, ele se tornará mais uma vez disponível para
+          Ao reativar este prêmio, ele se tornará mais uma vez disponível para
           novos resgates. Deseja continuar?
         </p>
       </div>

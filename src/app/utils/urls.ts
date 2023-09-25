@@ -27,4 +27,6 @@ export class Urls {
   recover: string = this.baseUrl + 'premios/usuarios/recuperar/';
   check: string = this.baseUrl + 'checar/';
   qrCode: string = this.baseUrl + 'premios/premio/qr-code/?prize=';
+
+  changePassword: string = this.baseUrl + 'accounts/password/change/';
 }
