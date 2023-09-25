@@ -13,44 +13,53 @@
   class="row d-flex justify-content-center"
 >
   <div class="col-md-6 p-3">
+    <div *ngIf="noPrizes" class="container text-center">
+      Você ainda não resgatou nenhum cupom!
+    </div>
     <div *ngFor="let prize of redeemedPrizes">
-      <div
-        *ngIf="!prize.is_used"
-        style="height: 8rem"
-        class="row border border-2 rounded mb-3 bg-light rounded shadow-sm"
-      >
-        <div class="col-3 d-flex justify-content-center align-items-center">
-          <img
-            src="{{ prize.prize.logo }}"
-            alt=""
-            srcset=""
-            class="img-thumbnail"
-          />
-        </div>
-        <div class="col-6">
-          <div class="fw-bold fs-5">
-            {{ prize.prize.name }}
+      <div *ngIf="!noPrizes" class="container">
+        <div
+          *ngIf="!prize.is_used"
+          style="height: 8rem"
+          class="row border border-2 rounded mb-3 bg-light rounded shadow-sm"
+        >
+          <div class="col-3 d-flex justify-content-center align-items-center">
+            <img
+              src="{{
+                prize.prize?.logo
+                  ? prize.prize.logo
+                  : 'https://duck-go.s3.sa-east-1.amazonaws.com/media/lusers/Pato-1.png'
+              }}"
+              alt=""
+              srcset=""
+              class="img-thumbnail"
+            />
           </div>
-          <div class="overflow-auto" style="overflow-wrap: break-word">
-            {{ prize.prize.description }}
+          <div class="col-6">
+            <div class="fw-bold fs-5">
+              {{ prize.prize.name }}
+            </div>
+            <div class="overflow-auto" style="overflow-wrap: break-word">
+              {{ prize.prize.description }}
+            </div>
+            <div
+              class="overflow-auto fw-semibold"
+              style="overflow-wrap: break-word"
+            >
+              Expira em: {{ prize.prize.expiry_date }}
+            </div>
           </div>
-          <div
-            class="overflow-auto fw-semibold"
-            style="overflow-wrap: break-word"
-          >
-            Expira em: {{ prize.prize.expiry_date }}
+          <div class="col-3 d-flex justify-content-center align-items-center">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-toggle="modal"
+              data-bs-target="#confirmationModal"
+              (click)="getQrCode(prize.prize.id)"
+            >
+              Gerar Qr Code
+            </button>
           </div>
-        </div>
-        <div class="col-3 d-flex justify-content-center align-items-center">
-          <button
-            type="button"
-            class="btn btn-danger"
-            data-bs-toggle="modal"
-            data-bs-target="#confirmationModal"
-            (click)="getQrCode(prize.prize.id)"
-          >
-            Gerar Qr Code
-          </button>
         </div>
       </div>
     </div>
@@ -64,7 +73,11 @@
         class="col-3 d-flex justify-content-center align-items-center"
         [ngStyle]="{ filter: prize.disabled ? 'grayscale(100%)' : 'none' }"
       >
-        <img src="{{ prize.logo }}" alt="" srcset="" class="img-thumbnail" />
+        <img src="{{
+                prize?.logo
+                  ? prize.logo
+                  : 'https://duck-go.s3.sa-east-1.amazonaws.com/media/lusers/Pato-1.png'
+              }}" alt="" srcset="" class="img-thumbnail" />
       </div>
       <div
         class="col-6 d-flex flex-column justify-content-between"

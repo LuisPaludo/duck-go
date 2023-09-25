@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { PrizeResponse, Prizes } from 'src/app/prizes/models/prizes';
 import { UserPrizesService } from './api/user-prizes.service';
 /**
@@ -13,6 +13,7 @@ import { UserPrizesService } from './api/user-prizes.service';
  * - `prize`: O ID do prêmio selecionado.
  * - `isPartner`: Indicador se o usuário é um parceiro.
  * - `index`: Índice do prêmio selecionado na lista.
+ * - `noPrizes`: Indica se o usuário possui ou não prêmios.
  *
  * Métodos:
  * - `ngOnInit()`: Método inicial do ciclo de vida que faz a chamada API para buscar os prêmios.
@@ -40,12 +41,13 @@ export class UserPrizesComponent implements OnInit {
   public qrCode: string;
   public loader: boolean = false;
   private prize: number;
+  public noPrizes:boolean = true;
 
   private isPartner: boolean = false;
 
   private index: number;
 
-  constructor(public apiRedeemedPrizes: UserPrizesService) {}
+  constructor(public apiRedeemedPrizes: UserPrizesService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.apiRedeemedPrizes.loading = true;
@@ -54,8 +56,11 @@ export class UserPrizesComponent implements OnInit {
     if (this.isPartner) {
       this.apiRedeemedPrizes.getCreatedPrizes().subscribe({
         next: (data: Prizes[]) => {
+          if(data) {
+            this.createdPrizes = data;
+            this.noPrizes = false;
+          }
           this.apiRedeemedPrizes.loading = false;
-          this.createdPrizes = data;
         },
         error: (e) => {
           this.apiRedeemedPrizes.loading = false;
@@ -66,7 +71,6 @@ export class UserPrizesComponent implements OnInit {
         next: (data: PrizeResponse[]) => {
           this.apiRedeemedPrizes.loading = false;
           this.redeemedPrizes = data;
-          console.log(this.redeemedPrizes);
         },
         error: (e) => {
           this.apiRedeemedPrizes.loading = false;
@@ -98,18 +102,22 @@ export class UserPrizesComponent implements OnInit {
   }
 
   desactivate(): void {
+    this.apiRedeemedPrizes.loading = true;
     this.apiRedeemedPrizes.disablePrize(this.prize).subscribe({
       next: (data) => {
         this.createdPrizes[this.index] = data;
+        this.ngOnInit();
       },
       error: (e) => console.log(e),
     });
   }
 
   activate(): void {
+    this.apiRedeemedPrizes.loading = true;
     this.apiRedeemedPrizes.activatePrize(this.prize).subscribe({
       next: (data) => {
         this.createdPrizes[this.index] = data;
+        this.ngOnInit();
       },
       error: (e) => console.log(e),
     });

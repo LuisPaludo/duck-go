@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Urls } from 'src/app/utils/urls';
+import { Locations } from '../models/locations';
 /**
  * LocationApiService - Serviço Angular para gerenciar a interação com a API relacionada a locais.
  *
@@ -26,10 +27,13 @@ export class LocationApiService {
 
   public loading: boolean = false;
 
+  public locations:Locations[];
+  public location:Locations;
+
   constructor(private http: HttpClient) {}
 
-  getAllLocations(): Observable<any> {
-    return this.http.get(this.urls.locations, {
+  getAllLocations(): Observable<Locations[]> {
+    return this.http.get<Locations[]>(this.urls.locations, {
       headers: this.httpHeaders,
     });
   }

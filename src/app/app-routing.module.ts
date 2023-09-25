@@ -19,6 +19,7 @@ import { PartnerComponent } from './partner/partner/partner.component';
 import { NotFoundComponent } from './notFound/not-found/not-found.component';
 import { UserPrizesComponent } from './user/profile/user-prizes/user-prizes.component';
 import { PartnerGuard } from './guard/partner.guard';
+import { LocationComponent } from './locations/location/location.component';
 
 const routes: Routes = [
   {
@@ -74,6 +75,10 @@ const routes: Routes = [
   {
     path: 'locais',
     component: LocationsComponent,
+  },
+  {
+    path: 'locais/:slug',
+    component: LocationComponent,
   },
   {
     path: 'reenviar-email-verificacao',

@@ -10,7 +10,7 @@ export interface Prizes {
   discount_value: number;
   logo: string;
   times_to_be_used: number;
-  expiry_date: Date;
+  expiry_date: string;
   disabled: boolean;
 }
 

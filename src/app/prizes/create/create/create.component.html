@@ -17,7 +17,7 @@
       <div class="row p-4">
         <div class="col-3 d-flex justify-content-center align-items-center p-0">
           <img
-            src="{{ user?.profile_photo }}"
+            src="{{ user?.profile_photo ? user.profile_photo : 'https://duck-go.s3.sa-east-1.amazonaws.com/media/lusers/Pato-1.png' }}"
             alt="Logo"
             class="img-fluid rounded-circle"
             style="object-fit: contain; max-height: 10rem"

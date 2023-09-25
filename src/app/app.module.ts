@@ -23,6 +23,7 @@ import { CreateComponent } from './prizes/create/create/create.component';
 import { PartnerComponent } from './partner/partner/partner.component';
 import { NotFoundComponent } from './notFound/not-found/not-found.component';
 import { UserPrizesComponent } from './user/profile/user-prizes/user-prizes.component';
+import { LocationComponent } from './locations/location/location.component';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { UserPrizesComponent } from './user/profile/user-prizes/user-prizes.comp
     PartnerComponent,
     NotFoundComponent,
     UserPrizesComponent,
+    LocationComponent,
   ],
   imports: [
     BrowserModule,

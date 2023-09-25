@@ -1,0 +1,157 @@
+<button
+  *ngIf="!apiLocation.loading"
+  class="btn btn-primary mt-3 mx-3"
+  (click)="goBack()"
+>
+  Voltar
+</button>
+
+<div class="container d-flex justify-content-center">
+  <div *ngIf="apiLocation.loading" class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div class="container" class="px-3 my-4">
+  <div
+    *ngIf="!apiLocation.loading"
+    class="container border border-3 border-primary rounded location-details p-3"
+  >
+    <div class="text-center pb-2">
+      <h2 class="fw-bold fs-3">{{ apiLocation.location.name }}</h2>
+      <p class="lh-lg">{{ apiLocation.location.description }}</p>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <div
+          id="locationCarousel"
+          class="carousel slide"
+          data-bs-ride="carousel"
+        >
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img
+                src="{{ apiLocation.location.photo_1 }}"
+                class="carousel-img"
+                alt="..."
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="{{ apiLocation.location.photo_2 }}"
+                class="carousel-img"
+                alt="..."
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="{{ apiLocation.location.photo_3 }}"
+                class="carousel-img"
+                alt="..."
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="{{ apiLocation.location.photo_4 }}"
+                class="carousel-img"
+                alt="..."
+              />
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#locationCarousel"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#locationCarousel"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center py-3">
+      <a class="icon-link icon-link-hover" href="{{ apiLocation.location.map_link }}">
+        Leve-me até lá
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-geo-alt-fill"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"
+          />
+        </svg>
+      </a>
+      <a
+        target="_blank"
+        class="icon-link icon-link-hover ms-3"
+        href="{{ apiLocation.location.review_link }}"
+      >
+        TripAdvisor
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-info-circle"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+          />
+          <path
+            d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .location-summary:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    cursor: pointer;
+  }
+
+  .location-details .carousel {
+    max-height: 400px;
+    overflow: hidden;
+  }
+
+  .icon-link {
+    color: #198744;
+  }
+
+  .icon-link-hover:hover {
+    color: #198744;
+    text-decoration: underline;
+  }
+  .carousel-img {
+    object-fit: cover;
+    max-height: 300px;
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .carousel-img {
+      max-height: 500px;
+      object-fit: contain;
+    }
+  }
+</style>

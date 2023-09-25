@@ -1,80 +1,53 @@
-<div class="container d-flex justify-content-center">
+<div class="container d-flex justify-content-center mt-4">
   <div *ngIf="apiPartner.loading" class="spinner-border" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
 
-<div
-  *ngIf="!apiPartner.loading"
-  class="row d-flex justify-content-center pt-2 m-0"
->
-  <div class="col-md-6">
-    <div class="container mb-3 shadow-sm bg-danger-subtle rounded">
-      <div class="row p-4">
-        <div class="col-3 d-flex justify-content-center align-items-center p-0">
-          <img
-            src="{{ partner?.profile_photo }}"
-            alt="Logo"
-            class="img-fluid rounded-circle"
-            style="object-fit: contain; max-height: 10rem"
-          />
-        </div>
-        <div class="col-9 d-flex flex-column justify-content-around">
-          <div
-            class="fw-bold fs-5 mb-2 text-wrap"
-            style="max-height: 2rem; overflow: auto; overflow-wrap: break-word"
-          >
-            {{ partner?.partner_company_name }}
+<div *ngIf="!apiPartner.loading" class="container mb-3">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-sm-12">
+      <div class="card shadow-sm mb-4">
+        <div class="row g-0">
+          <div class="col-md-4 col-sm-12 d-flex align-items-center justify-content-center p-3">
+            <img
+              src="{{ partner?.profile_photo ? partner.profile_photo : 'https://duck-go.s3.sa-east-1.amazonaws.com/media/lusers/Pato-1.png' }}"
+              alt="Logo"
+              class="img-fluid rounded-circle"
+              style="object-fit: contain; max-height: 10rem"
+            />
           </div>
-          <div
-            class="mb-2 text-wrap fs-5"
-            style="max-height: 6rem; overflow: auto; overflow-wrap: break-word"
-          >
-            {{ partner?.partner_company_description }}
+          <div class="col-md-8 col-sm-12">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">{{ partner?.partner_company_name }}</h5>
+              <p class="card-text">{{ partner?.partner_company_description }}</p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="row bg-info-subtle">
-        <div
-          class="col d-flex justify-content-center align-items-center fw-bold fs-3"
-        >
-          Contato
-        </div>
+
+      <div class="card bg-info-subtle mb-4">
+        <div class="card-header fw-bold fs-3">Contato</div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item" *ngIf="partner?.partner_number_contact">
+            <strong>Telefone:</strong> {{ partner?.partner_number_contact }}
+          </li>
+          <li class="list-group-item" *ngIf="partner?.partner_email_contact">
+            <strong>E-mail:</strong> {{ partner?.partner_email_contact }}
+          </li>
+        </ul>
       </div>
-      <div class="row bg-info-subtle" *ngIf="partner?.partner_number_contact">
-        <div
-          class="col d-flex justify-content-around align-items-center fw-bold"
-        >
-          Telefone:
-        </div>
-        <div class="col d-flex justify-content-center">
-          {{ partner?.partner_number_contact }}
-        </div>
-      </div>
-      <div class="row bg-info-subtle" *ngIf="partner?.partner_email_contact">
-        <div class="col fw-bold d-flex justify-content-center">E-mail:</div>
-        <div class="col d-flex justify-content-center">
-          {{ partner?.partner_email_contact }}
-        </div>
-      </div>
-      <div class="row bg-warning-subtle border-warning">
-        <div
-          class="col d-flex justify-content-center align-items-center fw-bold fs-3"
-        >
-          Endereço
-        </div>
-      </div>
-      <div class="row bg-warning-subtle" *ngIf="partner?.partner_email_contact">
-        <div class="col fw-bold d-flex justify-content-center">Rua:</div>
-        <div class="col d-flex justify-content-center">
-          {{ partner?.address_street }}
-        </div>
-      </div>
-      <div class="row bg-warning-subtle" *ngIf="partner?.partner_email_contact">
-        <div class="col fw-bold d-flex justify-content-center">CEP:</div>
-        <div class="col d-flex justify-content-center">
-          {{ partner?.cep }}
-        </div>
+
+      <div class="card bg-warning-subtle border-warning">
+        <div class="card-header fw-bold fs-3">Endereço</div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item" *ngIf="partner?.address_street">
+            <strong>Rua:</strong> {{ partner?.address_street }}
+          </li>
+          <li class="list-group-item" *ngIf="partner?.cep">
+            <strong>CEP:</strong> {{ partner?.cep }}
+          </li>
+        </ul>
       </div>
     </div>
   </div>
