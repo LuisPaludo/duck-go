@@ -56,7 +56,7 @@ export class UserPrizesComponent implements OnInit {
     if (this.isPartner) {
       this.apiRedeemedPrizes.getCreatedPrizes().subscribe({
         next: (data: Prizes[]) => {
-          if(data) {
+          if(data.length) {
             this.createdPrizes = data;
             this.noPrizes = false;
           }
@@ -69,7 +69,7 @@ export class UserPrizesComponent implements OnInit {
     } else {
       this.apiRedeemedPrizes.getRedeemedPrizes().subscribe({
         next: (data: PrizeResponse[]) => {
-          if(data) {
+          if(data.length) {
             this.noPrizes = false;
             this.redeemedPrizes = data;
           }
