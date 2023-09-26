@@ -33,7 +33,7 @@
     </div>
   </div>
 
-  <div *ngIf="!hasError" class="card text-center border-primary mb-3">
+  <div *ngIf="!hasError && !success" class="card text-center border-primary mb-3">
     <div class="card-header bg-primary text-white">Redefinição de Senha</div>
     <form [formGroup]="form">
       <div class="card-body">
@@ -63,7 +63,6 @@
             </ul>
           </div>
         </div>
-        <!-- Campo de confirmação de senha -->
         <div class="form-group">
           <label for="repeat">Confirme a senha</label>
           <input

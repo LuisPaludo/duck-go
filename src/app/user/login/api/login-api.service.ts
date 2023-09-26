@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Urls } from 'src/app/utils/urls';
 /**
- * LoginApiService - Serviço Angular que facilita a comunicação com a API relacionada ao login e reenvio de e-mails.
+ * LoginApiService - Serviço para autenticação e gerenciamento de senha.
+ *
+ * Este serviço centraliza as chamadas de API relacionadas à autenticação, como login, reenvio de e-mail,
+ * redefinição de senha e confirmação de redefinição de senha. Utiliza o HttpClient para fazer as requisições HTTP.
  *
  * Métodos:
- * - `Login(userData)`: Realiza uma solicitação POST para a API para autenticar o usuário com os dados fornecidos.
- * - `resendEmail(userData)`: Realiza uma solicitação POST para a API para reenviar o e-mail de verificação com base no e-mail fornecido.
+ * Login(userData): Faz uma chamada à API para autenticar o usuário com e-mail e senha fornecidos.
  *
- * Dependências:
- * - `http`: Cliente HTTP do Angular utilizado para fazer solicitações à API.
+ * resendEmail(userData): Faz uma chamada à API para reenviar um e-mail de confirmação para o usuário.
  *
- * Este serviço centraliza a lógica de chamada à API relacionada ao login e ao reenvio de e-mails de confirmação.
+ * reset(userData): Faz uma chamada à API para iniciar o processo de redefinição de senha, enviando um e-mail ao usuário com instruções.
+ *
+ * resetConfirm(userData, uid, token): Faz uma chamada à API para confirmar e completar a redefinição de senha
+ *   usando os dados fornecidos, incluindo a nova senha, repetição da senha, uid e token.
+ *
+ * Propriedades:
+ * urls: Uma instância da classe Urls que mantém os URLs de endpoint para as chamadas de API.
  */
 @Injectable({
   providedIn: 'root',
