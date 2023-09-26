@@ -47,4 +47,15 @@ export class LoginApiService {
 
     return this.http.post(this.urls.resetPassword, postData);
   }
+
+  resetConfirm(userData, uid:string, token:string): Observable<any> {
+    const postData = {
+      new_password1: userData.new,
+      new_password2: userData.repeat,
+      uid: uid,
+      token: token,
+    };
+
+    return this.http.post(this.urls.reserPasswordConfirm, postData);
+  }
 }

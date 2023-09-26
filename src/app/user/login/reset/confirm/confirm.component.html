@@ -1,1 +1,104 @@
-<p>confirm works!</p>
+<!-- Conteúdo principal quando não está carregando -->
+<div class="container d-flex justify-content-center">
+  <!-- Mensagem de sucesso -->
+  <div
+    *ngIf="success"
+    class="card text-center border-success mb-3"
+    style="max-width: 20rem"
+  >
+    <div class="card-header bg-success text-white">Recuperação de Senha</div>
+    <div class="card-body">
+      <h4 class="card-title">Sucesso!</h4>
+      <p class="card-text">
+        Sua senha foi recuperada com sucesso!
+      </p>
+    </div>
+    <div class="card-footer">
+      <a routerLink="/login" class="btn btn-success">Continuar para o Login</a>
+    </div>
+  </div>
+
+  <div
+    *ngIf="hasError"
+    class="card text-center border-danger mb-3"
+    style="max-width: 20rem"
+  >
+    <div class="card-header bg-danger text-white">Recuperação de Senha</div>
+    <div class="card-body">
+      <h4 class="card-title">Erro</h4>
+      <p class="card-text">
+        Seu token de recuperação expirou! Acesse novamente a página de recuperação de senha e solicite um novo token no seu e-mail!
+      </p>
+    </div>
+    <div class="card-footer">
+      <a routerLink="/login/reset" class="btn btn-danger">Recuperar Senha</a>
+    </div>
+  </div>
+
+  <div *ngIf="!hasError" class="card text-center border-primary mb-3">
+    <div class="card-header bg-primary text-white">Redefinição de Senha</div>
+    <form [formGroup]="form">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="password">Nova senha</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            formControlName="new"
+            [ngClass]="{
+              'is-invalid':
+                this.form.get('new')?.invalid &&
+                (this.form.get('new')?.touched || this.form.get('new')?.dirty),
+              'is-valid':
+                this.form.get('new')?.valid &&
+                (this.form.get('new')?.touched || this.form.get('new')?.dirty)
+            }"
+          />
+          <div *ngIf="this.form.get('new')?.invalid" class="invalid-feedback">
+            A senha deve conter:
+            <ul>
+              <li>A senha deve conter letras e números</li>
+              <li>Pelo menos um Caractere Especial (@,!. etc)</li>
+              <li>No mínimo 8 dígitos</li>
+              <li>No máximo 20 dígitos</li>
+            </ul>
+          </div>
+        </div>
+        <!-- Campo de confirmação de senha -->
+        <div class="form-group">
+          <label for="repeat">Confirme a senha</label>
+          <input
+            type="password"
+            class="form-control"
+            id="repeat"
+            formControlName="repeat"
+            [ngClass]="{
+              'is-invalid':
+                this.form.get('repeat')?.invalid &&
+                (this.form.get('repeat')?.touched ||
+                  this.form.get('repeat')?.dirty),
+              'is-valid':
+                this.form.get('repeat')?.valid &&
+                (this.form.get('repeat')?.touched ||
+                  this.form.get('repeat')?.dirty)
+            }"
+          />
+          <div
+            *ngIf="
+              this.form.get('repeat')?.invalid &&
+              !this.form.get('repeat')?.errors?.maxlength &&
+              !this.form.get('repeat')?.errors?.minlength
+            "
+            class="invalid-feedback"
+          >
+            As senhas digitadas não coincidem.
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary" [disabled]="changing" (click)="resetConfirm()">Enviar</button>
+      </div>
+    </form>
+  </div>
+</div>

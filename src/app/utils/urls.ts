@@ -30,4 +30,6 @@ export class Urls {
 
   changePassword: string = this.baseUrl + 'accounts/password/change/';
   resetPassword: string = this.baseUrl + 'accounts/password/reset/';
+  reserPasswordConfirm: string =
+    this.baseUrl + 'accounts/password/reset/confirm/';
 }
