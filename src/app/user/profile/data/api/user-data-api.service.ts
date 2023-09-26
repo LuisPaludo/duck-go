@@ -89,6 +89,7 @@ export class UserDataApiService {
 
   changePassword(data):Observable<any> {
     const postData = {
+      old_password: data.old,
       new_password1: data.new,
       new_password2: data.repeat,
     };

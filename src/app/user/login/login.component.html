@@ -75,8 +75,16 @@
               *ngIf="incorrect"
               class="alert alert-danger d-flex align-items-center mt-3"
               role="alert"
-            >
-              Usuário ou senha incorretos
+            ><span
+                >
+              Usuário ou senha incorretos.
+                <a
+                  style="cursor: pointer"
+                  (click)="redirectToReset()"
+                  class="text-danger-emphasis"
+                  >Esqueceu sua Senha?</a
+                ></span
+              >
             </div>
             <div
               *ngIf="success"

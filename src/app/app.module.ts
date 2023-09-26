@@ -25,6 +25,8 @@ import { NotFoundComponent } from './notFound/not-found/not-found.component';
 import { UserPrizesComponent } from './user/profile/user-prizes/user-prizes.component';
 import { LocationComponent } from './locations/location/location.component';
 import { ChangePasswordComponent } from './user/profile/data/change-password/change-password.component';
+import { ResetComponent } from './user/login/reset/reset.component';
+import { ConfirmComponent } from './user/login/reset/confirm/confirm.component';
 
 
 @NgModule({
@@ -49,6 +51,8 @@ import { ChangePasswordComponent } from './user/profile/data/change-password/cha
     UserPrizesComponent,
     LocationComponent,
     ChangePasswordComponent,
+    ResetComponent,
+    ConfirmComponent,
   ],
   imports: [
     BrowserModule,

@@ -29,4 +29,5 @@ export class Urls {
   qrCode: string = this.baseUrl + 'premios/premio/qr-code/?prize=';
 
   changePassword: string = this.baseUrl + 'accounts/password/change/';
+  resetPassword: string = this.baseUrl + 'accounts/password/reset/';
 }

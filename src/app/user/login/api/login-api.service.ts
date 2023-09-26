@@ -39,4 +39,12 @@ export class LoginApiService {
 
     return this.http.post(this.urls.resend, postData);
   }
+
+  reset(userData): Observable<any> {
+    const postData = {
+      email: userData.email,
+    };
+
+    return this.http.post(this.urls.resetPassword, postData);
+  }
 }

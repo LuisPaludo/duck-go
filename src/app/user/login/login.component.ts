@@ -124,4 +124,8 @@ export class LoginComponent implements OnInit {
     this.resend = true;
     this.router.navigate(['/login/reenviar']);
   }
+
+  redirectToReset() {
+    this.router.navigate(['/login/reset']);
+  }
 }

@@ -21,6 +21,8 @@ import { UserPrizesComponent } from './user/profile/user-prizes/user-prizes.comp
 import { PartnerGuard } from './guard/partner.guard';
 import { LocationComponent } from './locations/location/location.component';
 import { ChangePasswordComponent } from './user/profile/data/change-password/change-password.component';
+import { ResetComponent } from './user/login/reset/reset.component';
+import { ConfirmComponent } from './user/login/reset/confirm/confirm.component';
 
 const routes: Routes = [
   {
@@ -40,6 +42,11 @@ const routes: Routes = [
   {
     path: 'login/reenviar',
     component: ResendEmailComponent,
+    canActivate: [NegateAuthGuard],
+  },
+  {
+    path: 'login/reset',
+    component: ResetComponent,
     canActivate: [NegateAuthGuard],
   },
   {
@@ -73,8 +80,8 @@ const routes: Routes = [
       {
         path: 'dados/trocar-senha',
         component: ChangePasswordComponent,
-        canActivate: [AuthGuard]
-      }
+        canActivate: [AuthGuard],
+      },
     ],
     canActivate: [AuthGuard],
   },
@@ -99,6 +106,11 @@ const routes: Routes = [
   {
     path: 'verificacao-email/:key',
     component: VerifyEmailComponent,
+    canActivate: [NegateAuthGuard],
+  },
+  {
+    path: 'login/reset/confirmar/:uidb64/:token',
+    component: ConfirmComponent,
     canActivate: [NegateAuthGuard],
   },
   {
