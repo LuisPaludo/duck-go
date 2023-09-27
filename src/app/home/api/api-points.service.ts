@@ -97,18 +97,41 @@ export class ApiPointsService {
           const result = this.isWithinRadius(this.user, this.center);
 
           if (result) {
-            this.savePoints(points, locationName);
+            this.savePoints(points, locationName).subscribe({
+              next: (info: HistoryPost) => {
+                this.locationPoints = info.points;
+                this.locationDescription = info.description;
+                this.getPointSuccess = true;
+                this.isSaving = false;
+                this.waitingResult = false;
+                this.postRequest = false;
+                this.isLoading = false;
+              },
+              error: (e) => {
+                this.waitingResult = false;
+                this.postRequest = false;
+                this.isLoading = false;
+                this.isSaving = false;
+                if (e.status === 429) {
+                  this.manyGetPoints = true;
+                }
+              },
+            });
             this.locationPhoto = locationData[0].photo;
           } else {
             this.awayFromPoint = true;
+            this.postRequest = false;
+            this.isLoading = false;
+            this.waitingResult = false;
           }
         } else {
           this.invalidCode = true;
+          this.postRequest = false;
+          this.isLoading = false;
+          this.waitingResult = false;
         }
 
-        this.postRequest = false;
-        this.isLoading = false;
-        this.waitingResult = false;
+
       },
       error: (e) => {
         this.waitingResult = false;
@@ -146,7 +169,7 @@ export class ApiPointsService {
     return haversineDistance(user, center) <= radius;
   }
 
-  savePoints(points: number, name: string): void {
+  savePoints(points: number, name: string):Observable<any>{
     if (this.isSaving) {
       return;
     }
@@ -158,22 +181,7 @@ export class ApiPointsService {
     postData.points = points;
     postData.description = 'Ponto Turístico -> ' + name;
 
-    this.http.post(this.urls.history, postData).subscribe({
-      next: (info: HistoryPost) => {
-        this.locationPoints = info.points;
-        this.locationDescription = info.description;
-        this.getPointSuccess = true;
-        this.isSaving = false;
-        this.waitingResult = false;
-      },
-      error: (e) => {
-        this.waitingResult = false;
-        this.isSaving = false;
-        if (e.status === 429) {
-          this.manyGetPoints = true;
-        }
-      },
-    });
+    return this.http.post(this.urls.history, postData)
   }
 
   getUserHistory(): Observable<any> {
