@@ -154,17 +154,12 @@ export class HomeComponent implements OnInit {
             console.log(this.geolocationPermission);
             console.log(permission);
             this.geoReady = false;
-            // if (permission === 'granted') {
             this.buttonDisabler = false;
             console.log('vai chamar a API');
             this.locationRead = position.coords;
             this.apiPoints.waitingResult = true;
             this.apiPoints.verifyQRCode(this.cameraCodeRead, this.locationRead);
-            // } else {
-            console.log('Não chamou a API');
-            // this.buttonDisabler = false;
-            // this.apiPoints.waitingResult = true;
-            // }
+
           }, 100);
         }
       );
@@ -361,6 +356,7 @@ export class HomeComponent implements OnInit {
     this.apiPoints.checkPrize = false;
     this.cameraCodeRead = null;
     this.usePrizeSuccess = false;
+    this.apiPoints.invalidCode = false;
   }
 
   useUserPrize() {
@@ -375,6 +371,7 @@ export class HomeComponent implements OnInit {
       },
       error: (e) => {
         this.apiPoints.waitingResult = false;
+        this.usePrizeLoader = false;
         if (e instanceof HttpErrorResponse && e.status === 406) {
           this.apiPoints.notPrizePartner = true;
         }

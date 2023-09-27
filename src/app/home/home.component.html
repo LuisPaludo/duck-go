@@ -7,7 +7,9 @@
     !apiPoints.notPrizePartner &&
     !apiPoints.invalidPrize &&
     !apiPoints.expiredPrize &&
-    !apiPoints.waitingResult
+    !apiPoints.waitingResult &&
+    !apiPoints.invalidCode &&
+    !geoReady
   "
 >
   <div
@@ -363,6 +365,30 @@
           <p class="card-text">
             Verifique se você está no ponto turístico correto em nossa incrível
             cidade. Duck GO! está aqui para te guiar pelos melhores locais!
+          </p>
+          <p class="mt-1">
+            Se você acredita que está no local certo e ainda assim encontra
+            problemas, não hesite em contatar nosso suporte:
+            <a>duckgosuporte@gmail.com</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="apiPoints.invalidCode">
+  <button class="btn btn-primary mt-3 mx-3" (click)="goBack()">Voltar</button>
+  <div class="container">
+    <div class="container p-2">
+      <div class="card mt-2">
+        <div class="card-body">
+          <h2 class="card-title">Explorando Pato Branco com Duck GO!</h2>
+          <div class="alert alert-danger mt-2">
+            Você escaneou um código QR inválido!
+          </div>
+          <p class="card-text">
+            Verifique se você está escaneando um de nossos QR codes disponíves nos pontos turísticos dessa maravilhosa cidade!
           </p>
           <p class="mt-1">
             Se você acredita que está no local certo e ainda assim encontra

@@ -49,6 +49,7 @@ export class ApiPointsService {
   public notPrizePartner: boolean = false;
   public invalidPrize: boolean = false;
   public expiredPrize: boolean = false;
+  public invalidCode:boolean = false;
 
   postRequest: boolean = false;
   isLoading: boolean = false;
@@ -93,8 +94,6 @@ export class ApiPointsService {
             longitude: coords.longitude,
           };
 
-          console.log(this.user);
-
           const result = this.isWithinRadius(this.user, this.center);
 
           if (result) {
@@ -104,19 +103,16 @@ export class ApiPointsService {
             this.awayFromPoint = true;
           }
         } else {
-          console.error('Código inválido');
+          this.invalidCode = true;
         }
 
         this.postRequest = false;
         this.isLoading = false;
+        this.waitingResult = false;
       },
       error: (e) => {
         this.waitingResult = false;
         this.isLoading = false;
-
-        if (e.status === 401) {
-        } else {
-        }
       },
       complete: () => {
         this.center = null;
