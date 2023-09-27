@@ -79,6 +79,7 @@
       <div
         *ngIf="!prize.disabled"
         class="container border border-2 rounded mb-3 shadow-sm bg-white"
+        [class.bg-dark-subtle]="prizeIsRedeemed(prize)"
       >
         <div class="row p-4">
           <div

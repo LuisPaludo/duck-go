@@ -41,13 +41,16 @@ export class UserPrizesComponent implements OnInit {
   public qrCode: string;
   public loader: boolean = false;
   private prize: number;
-  public noPrizes:boolean = true;
+  public noPrizes: boolean = true;
 
   private isPartner: boolean = false;
 
   private index: number;
 
-  constructor(public apiRedeemedPrizes: UserPrizesService, private cdr: ChangeDetectorRef) {}
+  constructor(
+    public apiRedeemedPrizes: UserPrizesService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.apiRedeemedPrizes.loading = true;
@@ -56,7 +59,7 @@ export class UserPrizesComponent implements OnInit {
     if (this.isPartner) {
       this.apiRedeemedPrizes.getCreatedPrizes().subscribe({
         next: (data: Prizes[]) => {
-          if(data.length) {
+          if (data.length) {
             this.createdPrizes = data;
             this.noPrizes = false;
           }
@@ -69,7 +72,7 @@ export class UserPrizesComponent implements OnInit {
     } else {
       this.apiRedeemedPrizes.getRedeemedPrizes().subscribe({
         next: (data: PrizeResponse[]) => {
-          if(data.length) {
+          if (data.length) {
             this.noPrizes = false;
             this.redeemedPrizes = data;
           }
@@ -130,4 +133,6 @@ export class UserPrizesComponent implements OnInit {
     this.prize = prize;
     this.index = index;
   }
+
+
 }

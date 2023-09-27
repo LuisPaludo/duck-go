@@ -38,23 +38,18 @@ import { Urls } from 'src/app/utils/urls';
 export class ApiPointsService {
   private urls: Urls = new Urls();
 
-  public userHistorySubject = new BehaviorSubject<UserHistory[]>(null);
-  public userHistory$ = this.userHistorySubject.asObservable();
-
   public getPointSuccess: boolean = false;
   public manyGetPoints: boolean = false;
   public awayFromPoint: boolean = false;
   public checkPrize: boolean = false;
+  public invalidCode: boolean = false;
 
   public notPrizePartner: boolean = false;
   public invalidPrize: boolean = false;
   public expiredPrize: boolean = false;
-  public invalidCode:boolean = false;
+  public invalidUserCode: boolean = false;
 
-  postRequest: boolean = false;
-  isLoading: boolean = false;
   isSaving: boolean = false;
-  isGettingPoints: boolean = false;
 
   public locationName: string;
   public locationDescription: string;
@@ -68,13 +63,15 @@ export class ApiPointsService {
 
   constructor(private http: HttpClient) {}
 
-  verifyQRCode(qrIdNumber: string, coords: GeolocationCoordinates) {
-    if (this.isLoading) {
+  verifyTouristAttractionQrCode(
+    qrIdNumber: string,
+    userCoords: GeolocationCoordinates
+  ) {
+    if (this.waitingResult) {
       return;
     }
 
-    this.postRequest = true;
-    this.isLoading = true;
+    this.waitingResult = true;
 
     let fullUrl = this.urls.touristAttaction + qrIdNumber;
 
@@ -90,8 +87,8 @@ export class ApiPointsService {
           };
 
           this.user = {
-            latitude: coords.latitude,
-            longitude: coords.longitude,
+            latitude: userCoords.latitude,
+            longitude: userCoords.longitude,
           };
 
           const result = this.isWithinRadius(this.user, this.center);
@@ -104,14 +101,11 @@ export class ApiPointsService {
                 this.getPointSuccess = true;
                 this.isSaving = false;
                 this.waitingResult = false;
-                this.postRequest = false;
-                this.isLoading = false;
               },
               error: (e) => {
-                this.waitingResult = false;
-                this.postRequest = false;
-                this.isLoading = false;
                 this.isSaving = false;
+                this.waitingResult = false;
+
                 if (e.status === 429) {
                   this.manyGetPoints = true;
                 }
@@ -120,22 +114,15 @@ export class ApiPointsService {
             this.locationPhoto = locationData[0].photo;
           } else {
             this.awayFromPoint = true;
-            this.postRequest = false;
-            this.isLoading = false;
             this.waitingResult = false;
           }
         } else {
           this.invalidCode = true;
-          this.postRequest = false;
-          this.isLoading = false;
           this.waitingResult = false;
         }
-
-
       },
       error: (e) => {
         this.waitingResult = false;
-        this.isLoading = false;
       },
       complete: () => {
         this.center = null;
@@ -169,7 +156,7 @@ export class ApiPointsService {
     return haversineDistance(user, center) <= radius;
   }
 
-  savePoints(points: number, name: string):Observable<any>{
+  savePoints(points: number, name: string): Observable<any> {
     if (this.isSaving) {
       return;
     }
@@ -181,7 +168,7 @@ export class ApiPointsService {
     postData.points = points;
     postData.description = 'Ponto Turístico -> ' + name;
 
-    return this.http.post(this.urls.history, postData)
+    return this.http.post(this.urls.history, postData);
   }
 
   getUserHistory(): Observable<any> {

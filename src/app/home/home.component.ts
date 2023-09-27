@@ -4,34 +4,29 @@ import { ApiPointsService } from './api/api-points.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../api/authentication-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
-
 /**
- * HomeComponent - Componente responsável pela tela inicial do aplicativo 'duck-go'.
+ * HomeComponent - Componente da tela inicial do aplicativo 'duck-go'.
  *
- * Funções principais:
- * - Manipulação de permissões para câmera e geolocalização.
- * - Leitura de códigos QR via câmera.
- * - Comunicação com APIs de pontos e autenticação.
- * - Resgate de prêmios com base no código QR lido.
+ * Descrição:
+ * O componente serve como uma interface central para o aplicativo 'duck-go', permitindo aos usuários
+ * ler códigos QR, verificar e resgatar prêmios e gerenciar permissões para câmera e geolocalização.
  *
  * Métodos:
- * - `ngOnInit`: Inicializa o componente, verifica permissões e assina observáveis.
- * - `checkPermission`: Verifica as permissões dadas para a câmera ou geolocalização.
- * - `askCamera` e `dontGetCamera`: Manipulam o estado da permissão da câmera.
- * - `getGeolocation` e `deniedGeolocation`: Manipulam o estado da permissão da geolocalização.
- * - `getGeolocationPermission`: Solicita a permissão da geolocalização e lida com o retorno.
- * - `getCamera`: Solicita acesso à câmera e verifica permissão.
- * - `startReading`: Começa a leitura do código QR.
+ * - `ngOnInit`: Inicia o componente, verifica permissões e inscreve-se em observáveis.
+ * - `checkPermission`: Retorna o estado atual de uma permissão específica (câmera ou geolocalização).
+ * - `askCameraPermission` e `dontAllowCamera`: Manipulam a janela de solicitação de permissão da câmera.
+ * - `askGeoLocationPermission` e `dontAllowGeoLocation`: Manipulam a janela de solicitação de permissão de geolocalização.
+ * - `allowAndGetGeolocation`: Solicita a localização geográfica do usuário e lida com as respostas de sucesso/erro.
+ * - `allowAndGetCamera`: Solicita acesso à câmera, obtém a lista de dispositivos e configura o leitor de QR.
+ * - `startReading`: Inicia a leitura do código QR através da câmera.
  * - `stopReading`: Interrompe a leitura do código QR.
- * - `redeemUserPrize`: Verifica o prêmio do usuário baseado no código QR.
- * - `redirectToRegister` e `redirectToLogin`: Redireciona para as páginas de registro e login.
- * - `goBack`: Restabelece o estado inicial dos pontos e prêmios.
- * - `useUserPrize`: Resgata o prêmio do usuário.
+ * - `redeemUserPrize`: Verifica e exibe o prêmio correspondente ao código QR lido.
+ * - `redirectToRegister` e `redirectToLogin`: Redirecionam o usuário para as páginas de registro e login, respectivamente.
+ * - `goBack`: Redefine o estado de exibição dos prêmios e erros relacionados.
+ * - `useUserPrize`: Resgata o prêmio associado ao código QR lido.
  *
  * Observações:
- * Este componente serve como um hub para as principais funcionalidades do aplicativo,
- * permitindo que os usuários leiam códigos QR, verifiquem e resgatem prêmios, e lidem
- * com permissões de dispositivos.
+ * O componente interage com serviços de autenticação, pontos e roteamento para realizar as operações necessárias.
  */
 
 @Component({
@@ -45,9 +40,9 @@ export class HomeComponent implements OnInit {
   html5QrCode: Html5Qrcode;
   cameraId: string;
 
-  reading: boolean = false;
-  cameraReady: boolean = false;
-  geoReady: boolean = false;
+  isReading: boolean = false;
+  askCameraPermissionWindow: boolean = false;
+  askGeoLocationPermissionWindow: boolean = false;
   buttonDisabler: boolean = false;
 
   cameraButtonDisable: boolean = false;
@@ -72,7 +67,6 @@ export class HomeComponent implements OnInit {
   usePrizeSuccess: boolean = false;
 
   erroCode: boolean = false;
-  erroGeo: boolean = false;
 
   constructor(
     public apiPoints: ApiPointsService,
@@ -120,75 +114,47 @@ export class HomeComponent implements OnInit {
     return permissionStatus.state;
   }
 
-  askCamera() {
-    this.cameraReady = true;
+  askCameraPermission() {
+    this.askCameraPermissionWindow = true;
   }
 
-  dontGetCamera() {
+  dontAllowCamera() {
     this.permissionDenied = true;
-    this.cameraReady = false;
+    this.askCameraPermissionWindow = false;
   }
 
-  getGeolocation() {
-    this.geoReady = true;
+  askGeoLocationPermission() {
+    this.askGeoLocationPermissionWindow = true;
   }
 
-  deniedGeolocation() {
-    this.geoReady = false;
+  dontAllowGeoLocation() {
+    this.askGeoLocationPermissionWindow = false;
     this.permissionDenied = true;
   }
 
-  getGeolocationPermission() {
+  allowAndGetGeolocation() {
     this.buttonDisabler = true;
 
-    console.log('vai chamar a permissao pro geo');
-
     const successCallback = (position: GeolocationPosition) => {
-      console.log('success call back');
-      console.log(this.geolocationPermission);
       this.checkPermission(this.geolocationPermissionName).then(
-        (permission) => {
-          console.log('passou o check permission');
-          console.log(this.geolocationPermission);
+        () => {
           setTimeout(() => {
-            console.log(this.geolocationPermission);
-            console.log(permission);
-            this.geoReady = false;
+            this.askGeoLocationPermissionWindow = false;
             this.buttonDisabler = false;
-            console.log('vai chamar a API');
             this.locationRead = position.coords;
-            this.apiPoints.waitingResult = true;
-            this.apiPoints.verifyQRCode(this.cameraCodeRead, this.locationRead);
-
+            this.apiPoints.verifyTouristAttractionQrCode(
+              this.cameraCodeRead,
+              this.locationRead
+            );
           }, 100);
         }
       );
     };
 
-    const errorCallback = (error) => {
-      console.log('error call back');
-      console.log(error.code);
-      this.erroGeo = true;
-      this.apiPoints.waitingResult = true;
-      switch (error.code) {
-        case error.PERMISSION_DENIED:
-          console.log('O usuário não permitiu a geolocalização.');
-          break;
-        case error.POSITION_UNAVAILABLE:
-          console.log('Informação de localização não está disponível.');
-          break;
-        case error.TIMEOUT:
-          console.log(
-            'A solicitação para obter a localização do usuário expirou.'
-          );
-          break;
-        case error.UNKNOWN_ERROR:
-          console.log('Ocorreu um erro desconhecido.');
-          break;
-      }
+    const errorCallback = () => {
       this.buttonDisabler = false;
       this.permissionDenied = true;
-      this.geoReady = false;
+      this.askGeoLocationPermissionWindow = false;
     };
 
     navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
@@ -196,29 +162,28 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getCamera() {
+  allowAndGetCamera() {
     this.buttonDisabler = true;
     Html5Qrcode.getCameras()
       .then((devices) => {
         if (devices && devices.length) {
           this.html5QrCode = new Html5Qrcode('reader');
         }
-
         this.checkPermission(this.cameraPermissionName).then((permission) => {
           this.cameraPermission = permission;
 
           if (this.cameraPermission === 'granted') {
-            this.cameraReady = false;
             this.buttonDisabler = false;
           }
           if (this.cameraPermission === 'denied') {
             this.permissionDenied = true;
           }
+          this.askCameraPermissionWindow = false;
         });
       })
       .catch((err) => {
         this.permissionDenied = true;
-        this.cameraReady = false;
+        this.askCameraPermissionWindow = false;
         this.buttonDisabler = false;
       });
   }
@@ -228,12 +193,13 @@ export class HomeComponent implements OnInit {
       this.promptRegister = true;
       return;
     }
+
     this.cameraButtonDisable = true;
 
     this.checkPermission(this.cameraPermissionName).then((permission) => {
       this.cameraPermission = permission;
       if (this.cameraPermission != 'granted') {
-        this.askCamera();
+        this.askCameraPermission();
         this.cameraButtonDisable = false;
         return;
       }
@@ -241,70 +207,55 @@ export class HomeComponent implements OnInit {
       Html5Qrcode.getCameras()
         .then((devices) => {
           if (devices && devices.length) {
-            // this.cameraId = devices[0].id;
             this.html5QrCode = new Html5Qrcode('reader');
-            this.html5QrCode
-              .start(
-                { facingMode: 'environment' },
-                { fps: 10, qrbox: 250 },
-                (decodedText, decodedResult) => {
-                  this.cameraCodeRead = decodedText;
+            this.html5QrCode.start(
+              { facingMode: 'environment' },
+              { fps: 10, qrbox: 250 },
+              (decodedText, decodedResult) => {
+                this.cameraCodeRead = decodedText;
 
-                  console.log('code ' + decodedText);
-
-                  if (
-                    typeof +this.cameraCodeRead === 'number' &&
-                    !this.isPartner
-                  ) {
-                    this.stopReading();
-                  } else if (
-                    typeof this.cameraCodeRead === 'string' &&
-                    this.isPartner
-                  ) {
-                    this.redeemUserPrize();
-                  }
-                },
-                (errorMessage) => {}
-              )
-              .catch((err) => {
-                // Start failed, handle it.
-              });
-            this.reading = true;
+                if (
+                  typeof +this.cameraCodeRead === 'number' &&
+                  !this.isPartner
+                ) {
+                  this.stopReading();
+                } else if (
+                  typeof this.cameraCodeRead === 'string' &&
+                  this.isPartner
+                ) {
+                  this.redeemUserPrize();
+                }
+              },
+              (errorMessage) => {}
+            );
+            this.isReading = true;
           }
         })
-        .catch((err) => {
-          // handle err
-        });
+        .catch((err) => {});
     });
   }
 
   stopReading() {
     if (this.html5QrCode.getState() === 2) {
-      this.reading = false;
+      this.isReading = false;
       this.html5QrCode
         .stop()
         .then((ignore) => {
           this.cameraButtonDisable = false;
-          console.log(this.cameraCodeRead);
-          console.log(this.geolocationPermission);
-          if (this.cameraCodeRead) {
-            if (this.geolocationPermission === 'granted') {
-              this.apiPoints.waitingResult = true;
-              this.getGeolocationPermission();
-            } else {
-              this.getGeolocation();
-            }
+          if (this.cameraCodeRead && this.geolocationPermission === 'granted') {
+            this.allowAndGetGeolocation();
+          } else {
+            this.askGeoLocationPermission();
           }
         })
         .catch((err) => {
-          // Stop failed, handle it.
         });
     }
   }
 
   redeemUserPrize() {
     if (this.html5QrCode.getState() === 2) {
-      this.reading = false;
+      this.isReading = false;
       this.html5QrCode
         .stop()
         .then((ignore) => {
@@ -327,6 +278,9 @@ export class HomeComponent implements OnInit {
                 }
                 if (e instanceof HttpErrorResponse && e.status === 409) {
                   this.apiPoints.invalidPrize = true;
+                }
+                if (e instanceof HttpErrorResponse && e.status === 400) {
+                  this.apiPoints.invalidUserCode = true;
                 }
               },
             });
@@ -357,6 +311,7 @@ export class HomeComponent implements OnInit {
     this.cameraCodeRead = null;
     this.usePrizeSuccess = false;
     this.apiPoints.invalidCode = false;
+    this.apiPoints.invalidUserCode = false;
   }
 
   useUserPrize() {
@@ -367,7 +322,6 @@ export class HomeComponent implements OnInit {
         this.apiPoints.waitingResult = false;
         this.usePrizeLoader = false;
         this.usePrizeSuccess = true;
-        console.log(data);
       },
       error: (e) => {
         this.apiPoints.waitingResult = false;

@@ -81,7 +81,7 @@ export class CreateComponent implements OnInit {
     });
 
     this.today = new Date();
-    this.today.setDate(this.today.getDate() + 7);
+    this.today.setDate(this.today.getDate() + 8);
 
     this.dd = String(this.today.getDate()).padStart(2, '0');
     this.mm = String(this.today.getMonth() + 1).padStart(2, '0');

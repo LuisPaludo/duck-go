@@ -8,16 +8,17 @@
     !apiPoints.invalidPrize &&
     !apiPoints.expiredPrize &&
     !apiPoints.waitingResult &&
-    !apiPoints.invalidCode
+    !apiPoints.invalidCode &&
+    !apiPoints.invalidUserCode
   "
 >
   <div
-    *ngIf="!permissionDenied && !promptRegister && !geoReady"
+    *ngIf="!permissionDenied && !promptRegister && !askGeoLocationPermissionWindow"
     class="container d-flex flex-column justify-content-center"
   >
     <div class="container d-flex justify-content-center">
       <div
-        [hidden]="!reading"
+        [hidden]="!isReading"
         class="border border-5 rounded w-100 w-md-25 h-md-25"
         id="reader"
       ></div>
@@ -29,8 +30,8 @@
         title="start"
         class="btn btn-success"
         (click)="startReading()"
-        *ngIf="!reading"
-        [hidden]="cameraReady"
+        *ngIf="!isReading"
+        [hidden]="askCameraPermissionWindow"
         [disabled]="cameraButtonDisable"
         [ngClass]="{
           'btn-success': !isPartner,
@@ -79,7 +80,7 @@
         title="start"
         class="btn btn-danger"
         (click)="stopReading()"
-        *ngIf="reading"
+        *ngIf="isReading"
       >
         <svg
           width="40"
@@ -124,7 +125,7 @@
   <div
     class="row d-flex justify-content-center px-0 px-md-0 position-absolute top-50 start-50 translate-middle w-75"
   >
-    <div *ngIf="cameraReady" class="col col-md-10">
+    <div *ngIf="askCameraPermissionWindow" class="col col-md-10">
       <div class="card text-center">
         <div class="card-header">Precisamos do seu OK! 📸</div>
         <div class="card-body">
@@ -142,7 +143,7 @@
               <button
                 [disabled]="buttonDisabler"
                 class="btn btn-success w-100 h-100 accessButton"
-                (click)="getCamera()"
+                (click)="allowAndGetCamera()"
               >
                 Autorizar
               </button>
@@ -151,7 +152,7 @@
               <button
                 [disabled]="buttonDisabler"
                 class="btn btn-danger w-100 h-100 text-wrap accessButton"
-                (click)="dontGetCamera()"
+                (click)="dontAllowCamera()"
               >
                 Não Autorizar
               </button>
@@ -161,7 +162,7 @@
       </div>
     </div>
 
-    <div *ngIf="geoReady" class="col col-md-6">
+    <div *ngIf="askGeoLocationPermissionWindow" class="col col-md-6">
       <div class="card text-center">
         <div class="card-header">Permissão de Localização</div>
         <div class="card-body">
@@ -179,7 +180,7 @@
               <button
                 [disabled]="buttonDisabler"
                 class="btn btn-success w-100 h-100 accessButton"
-                (click)="getGeolocationPermission()"
+                (click)="allowAndGetGeolocation()"
               >
                 Autorizar
               </button>
@@ -188,7 +189,7 @@
               <button
                 [disabled]="buttonDisabler"
                 class="btn btn-danger w-100 h-100 text-wrap accessButton"
-                (click)="deniedGeolocation()"
+                (click)="dontAllowGeoLocation()"
               >
                 Não Autorizar
               </button>
@@ -492,6 +493,21 @@
     <div class="card-body">
       <p class="fw-semibold fs-4">Atenção!</p>
       <p>O prêmio só pode ser resgatado pela empresa que o criou.</p>
+    </div>
+    <div class="card-footer d-flex justify-content-center bg-warning-subtle">
+      <button class="btn btn-primary" (click)="goBack()">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="apiPoints.invalidUserCode" class="container">
+  <div class="card mt-2">
+    <h2 class="card-title card-header bg-danger-subtle">
+      Código Inválido!
+    </h2>
+    <div class="card-body">
+      <p class="fw-semibold fs-4">Atenção!</p>
+      <p>O código que você está tentando ler não representa nenhum prêmio.</p>
     </div>
     <div class="card-footer d-flex justify-content-center bg-warning-subtle">
       <button class="btn btn-primary" (click)="goBack()">Voltar</button>

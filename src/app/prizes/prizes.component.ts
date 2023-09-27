@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { PrizesService } from './api/prizes.service';
-import { Prizes } from './models/prizes';
+import { PrizeResponse, Prizes } from './models/prizes';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CreatePrizeService } from './create/api/create-prize.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { UserPrizesService } from '../user/profile/user-prizes/api/user-prizes.service';
 /**
- * PrizesComponent - Componente Angular que lida com a exibição e gerenciamento de prêmios.
+ * PrizesComponent - Componente que lida com a exibição e gerenciamento de prêmios.
  *
  * Propriedades:
  * - `prizes` e `filteredPrizes`: Listas de prêmios recuperados e filtrados.
@@ -16,6 +17,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
  * - `prizeId`, `prizeName`, `prizeCost`: Informações para confirmação de resgate de prêmio.
  * - `success`, `e402`, `e400`, `e406`, `end`, `noPrizes`: Flags para controle de estados e erros.
  * - `isPartner`: Indica se o usuário é um parceiro.
+ * - `redeemedPrizes`: Lista os prêmios já resgatados pelo usuário.
  *
  * Métodos:
  * - `ngOnInit`: Inicialização do componente, busca prêmios e define observáveis de formulário.
@@ -26,6 +28,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
  * - `confirmation`: Define os dados para a confirmação de resgate.
  * - `clearData`: Limpa dados relacionados à confirmação e erros de resgate.
  * - `navigateToPartner`: Navega para a página do parceiro.
+ * - `prizeIsRedeemed`: Verifica se um prêmio já foi resgatado pelo usuário
  *
  * O principal objetivo deste componente é fornecer uma interface para os usuários visualizarem, filtrarem e resgatarem prêmios.
  */
@@ -37,6 +40,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class PrizesComponent implements OnInit {
   public prizes: Prizes[];
   public filteredPrizes: Prizes[];
+  public redeemedPrizes: PrizeResponse[];
   public categorys: any;
   public loader: boolean = false;
   public filter!: FormGroup;
@@ -57,7 +61,8 @@ export class PrizesComponent implements OnInit {
     public apiPrizes: PrizesService,
     private router: Router,
     private apiCreatePrize: CreatePrizeService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private apiRedeemedPrizes: UserPrizesService
   ) {}
 
   ngOnInit(): void {
@@ -91,6 +96,22 @@ export class PrizesComponent implements OnInit {
         this.apiPrizes.loading = false;
       },
     });
+
+    if (!this.isPartner) {
+      this.apiRedeemedPrizes.getRedeemedPrizes().subscribe({
+        next: (data: PrizeResponse[]) => {
+          if (data.length) {
+            this.noPrizes = false;
+            this.redeemedPrizes = data;
+          }
+          this.apiRedeemedPrizes.loading = false;
+        },
+        error: (e) => {
+          this.apiRedeemedPrizes.loading = false;
+        },
+      });
+    }
+
     this.filter = this.formBuilder.group({
       filter: ['4'],
       order: ['2'],
@@ -189,7 +210,9 @@ export class PrizesComponent implements OnInit {
 
   search() {
     this.filteredPrizes = this.prizes.filter((prize) =>
-      prize.generated_by_company_name.toLowerCase().includes(this.filter.get('partner').value.toLowerCase())
+      prize.generated_by_company_name
+        .toLowerCase()
+        .includes(this.filter.get('partner').value.toLowerCase())
     );
   }
 
@@ -242,5 +265,10 @@ export class PrizesComponent implements OnInit {
 
   navigateToPartner(slug: string): void {
     this.router.navigate(['parceiros', slug]);
+  }
+
+  prizeIsRedeemed(prize): boolean {
+    if(this.isPartner) return false
+    return this.redeemedPrizes.some((p) => p.prize.id === prize.id);
   }
 }
