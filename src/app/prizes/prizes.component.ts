@@ -269,6 +269,7 @@ export class PrizesComponent implements OnInit {
 
   prizeIsRedeemed(prize): boolean {
     if(this.isPartner) return false
+    if(!this.redeemedPrizes) return false
     return this.redeemedPrizes.some((p) => p.prize.id === prize.id);
   }
 }

@@ -136,19 +136,17 @@ export class HomeComponent implements OnInit {
     this.buttonDisabler = true;
 
     const successCallback = (position: GeolocationPosition) => {
-      this.checkPermission(this.geolocationPermissionName).then(
-        () => {
-          setTimeout(() => {
-            this.askGeoLocationPermissionWindow = false;
-            this.buttonDisabler = false;
-            this.locationRead = position.coords;
-            this.apiPoints.verifyTouristAttractionQrCode(
-              this.cameraCodeRead,
-              this.locationRead
-            );
-          }, 100);
-        }
-      );
+      this.checkPermission(this.geolocationPermissionName).then(() => {
+        setTimeout(() => {
+          this.askGeoLocationPermissionWindow = false;
+          this.buttonDisabler = false;
+          this.locationRead = position.coords;
+          this.apiPoints.verifyTouristAttractionQrCode(
+            this.cameraCodeRead,
+            this.locationRead
+          );
+        }, 100);
+      });
     };
 
     const errorCallback = () => {
@@ -242,14 +240,15 @@ export class HomeComponent implements OnInit {
         .stop()
         .then((ignore) => {
           this.cameraButtonDisable = false;
-          if (this.cameraCodeRead && this.geolocationPermission === 'granted') {
-            this.allowAndGetGeolocation();
-          } else {
-            this.askGeoLocationPermission();
+          if (this.cameraCodeRead) {
+            if (this.geolocationPermission === 'granted') {
+              this.allowAndGetGeolocation();
+            } else {
+              this.askGeoLocationPermission();
+            }
           }
         })
-        .catch((err) => {
-        });
+        .catch((err) => {});
     }
   }
 
