@@ -4,7 +4,7 @@
   </div>
 </div>
 
-<div *ngIf="!apiLocation.loading" class="px-3">
+<!-- <div *ngIf="!apiLocation.loading" class="px-3">
   <div
     *ngFor="let location of apiLocation.locations"
     class="container border border-3 border-primary rounded my-2 location-summary"
@@ -27,39 +27,86 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
+<div *ngIf="!apiLocation.loading" class="py-5">
+  <div class="row">
+    <div class="col">
+      <ng-container
+        *ngFor="let location of apiLocation.locations; let i = index"
+      >
+        <div
+          [style.background-image]="'url(' + location.photo_1 + ')'"
+          *ngIf="i % 2 === 0"
+          class="mb-4 location"
+          (click)="redirect(location.slug_field)"
+        >
+          <p class="px-3 text-center fs-1 location-name">
+            {{ location.name }}
+          </p>
+        </div>
+      </ng-container>
+    </div>
+    <div class="col mt-5 pt-5">
+      <ng-container
+        *ngFor="let location of apiLocation.locations; let i = index"
+      >
+        <div
+          [style.background-image]="'url(' + location.photo_1 + ')'"
+          *ngIf="i % 2 === 1"
+          class="mb-4 location"
+          (click)="redirect(location.slug_field)"
+        >
+          <p class="px-3 text-center fs-1 location-name">
+            {{ location.name }}
+          </p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 
-
-<style>
-  .location-summary:hover {
-    background-color: rgba(0, 123, 255, 0.1);
-    cursor: pointer;
-  }
-
-  .location-details .carousel {
-    max-height: 400px;
-    overflow: hidden;
-  }
-
-  .icon-link {
-    color: #198744;
-  }
-
-  .icon-link-hover:hover {
-    color: #198744;
-    text-decoration: underline;
-  }
-  .carousel-img {
-    object-fit: cover;
-    max-height: 300px;
-    width: 100%;
-  }
-
-  @media (min-width: 768px) {
-    .carousel-img {
-      max-height: 500px;
-      object-fit: contain;
+  <style>
+    .location-summary:hover {
+      background-color: rgba(0, 123, 255, 0.1);
+      cursor: pointer;
     }
-  }
-</style>
+
+    .location {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 500px;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden; /* Para manter o pseudo-elemento dentro da borda arredondada */
+}
+
+.location::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  filter: brightness(100%);
+  transition: filter 0.3s ease; /* Suaviza a transição do escurecimento */
+  z-index: 0; /* Garante que o pseudo-elemento fique atrás do texto */
+}
+
+.location:hover::before {
+  filter: brightness(70%); /* Escurece a imagem de fundo ao passar o mouse */
+}
+.location-name {
+  position: relative;
+  top: 20%;
+  color: white; /* Cor do texto */
+  background-color: rgba(0, 0, 0, 0.5); /* Overlay preto com transparência */
+  width: 100%;
+  text-align: center;
+  font-family: "Cormorant Garamond", serif;
+  z-index: 1; /* Garante que o texto fique acima do pseudo-elemento */
+}
+
+  </style>
+</div>
