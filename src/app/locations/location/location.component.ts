@@ -61,5 +61,6 @@ export class LocationComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['locais']);
+    window.scroll(0, 0);
   }
 }

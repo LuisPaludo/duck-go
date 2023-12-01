@@ -47,5 +47,6 @@ export class LocationsComponent implements OnInit {
 
   redirect(slug: string) {
     this.router.navigate(['locais', slug]);
+    window.scroll(0, 0);
   }
 }

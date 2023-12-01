@@ -1,0 +1,60 @@
+.pictures {
+  border-radius: 50%;
+  overflow: hidden;
+  width: 500px;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  -webkit-box-shadow: 26px 25px 13px -4px rgba(204, 204, 204, 0.56);
+  -moz-box-shadow: 26px 25px 13px -4px rgba(204, 204, 204, 0.56);
+  box-shadow: 26px 25px 13px -4px rgba(204, 204, 204, 0.56);
+}
+
+.btn
+ {
+  position: sticky;
+  z-index: 10;
+  top: 79px;
+  }
+
+.carousel {
+  width: 100%;
+  height: 100%;
+}
+.carousel-img {
+  height: 100%;
+  width: 100%;
+}
+
+.carousel-inner {
+  height: 100%;
+}
+
+.carousel-item {
+  height: 100%;
+}
+
+.out-picture {
+  padding: 4px;
+  width: 510px;
+  border-radius: 50%;
+  background-color: #e7ebeeae;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.text {
+  font-family: "Montserrat", sans-serif;
+  color: #545454;
+}
+
+
+@media (max-width: 700px) {
+  .pictures {
+    width: 400px;
+  }
+
+  .out-picture {
+    width: 410px;
+  }
+}
